@@ -50,9 +50,14 @@
         select * from `ez_user_info_view`
         where id = #{userId}
     </select>
-    <select id="getUserPermissions" resultType="com.ezlinker.app.modules.permission.model.UserRolePermissionView">
 
-        select * from `ez_user_role_permission_view` where user_id = #{userId}
+
+
+    <select id="getUserPermissions" resultType="com.ezlinker.app.modules.user.model.UserRolePermissionView">
+
+        select *
+        from `ez_user_role_permission_view`
+        where user_id = #{userId}
 
     </select>
 

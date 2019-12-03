@@ -1,5 +1,6 @@
 package com.ezlinker.app.interceptor;
 
+import com.ezlinker.app.modules.user.model.PermissionDetail;
 import com.ezlinker.app.modules.user.model.UserDetail;
 import com.ezlinker.app.utils.UserTokenUtil;
 import com.ezlinker.common.exception.NotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @program: ezlinker
@@ -38,16 +41,17 @@ public class PermissionInterceptor implements HandlerInterceptor {
             if (userDetail.getPermissions().size() < 1) {
                 throw new XException(402, "No permission", "没有权限");
             }
-            String path = request.getServletPath();
+            String resource = request.getServletPath();
+            System.out.println("HttpMethod:" + httpMethod + " resource:" + resource);
 
-            // "[ALL], /products, [GET]"
-            for (String resource : userDetail.getPermissions()) {
-                String[] acl = resource.split("::");
-                System.out.print("资源路径:" + acl[1]);
-                System.out.print("资源权限:" + acl[2]);
-                System.out.println("用户权限:" + acl[0]);
+            Map<String, Object> allow = new HashMap<>();
+            Map<String, Object> methods = new HashMap<>();
 
+            for (PermissionDetail permissionDetail : userDetail.getPermissions()) {
+                allow.put(permissionDetail.getResource(), permissionDetail.getAllow());
+                methods.put(permissionDetail.getResource(), permissionDetail.getMethods());
             }
+
             return true;
 
 

@@ -2,6 +2,7 @@ package com.ezlinker.app.modules.user.service;
 
 import com.ezlinker.app.modules.permission.model.RolePermissionView;
 import com.ezlinker.app.modules.role.model.UserRoleView;
+import com.ezlinker.app.modules.user.model.PermissionDetail;
 import com.ezlinker.app.modules.user.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ezlinker.app.modules.user.model.UserInfoView;
@@ -40,7 +41,7 @@ public interface IUserService extends IService<User> {
      * @param userId
      * @return
      */
-    List<String> getAllPermissions(Long userId);
+    List<PermissionDetail> getAllPermissions(Long userId);
     /**
      * 查询用户详情
      * @param userId

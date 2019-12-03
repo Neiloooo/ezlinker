@@ -4,25 +4,33 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ezlinker.app.modules.permission.model.Permission">
-    <result column="id" property="id" />
-    <result column="record_version" property="recordVersion" />
-    <result column="x" property="x" />
-    <result column="create_time" property="createTime" />
-        <result column="label" property="label" />
-        <result column="name" property="name" />
-        <result column="resource" property="resource" />
-        <result column="type" property="type" />
-        <result column="parent" property="parent" />
-        <result column="description" property="description" />
+        <result column="id" property="id"/>
+        <result column="record_version" property="recordVersion"/>
+        <result column="x" property="x"/>
+        <result column="create_time" property="createTime"/>
+        <result column="label" property="label"/>
+        <result column="name" property="name"/>
+        <result column="resource" property="resource"/>
+        <result column="type" property="type"/>
+        <result column="parent" property="parent"/>
+        <result column="methods" property="methods"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result column="description" property="description"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id,
-        record_version,
-        x,
-        create_time,
-        label, name, resource, type, parent, description
+id,
+record_version,
+x,
+create_time,
+label,
+`name`,
+methods,
+resource,
+`type`,
+parent,
+description
     </sql>
 
 </mapper>

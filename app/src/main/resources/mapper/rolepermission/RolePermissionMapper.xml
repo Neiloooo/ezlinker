@@ -4,12 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ezlinker.app.modules.rolepermission.model.RolePermission">
-    <result column="id" property="id" />
-    <result column="record_version" property="recordVersion" />
-    <result column="x" property="x" />
-    <result column="create_time" property="createTime" />
-        <result column="role_id" property="roleId" />
-        <result column="permission_id" property="permissionId" />
+        <result column="id" property="id"/>
+        <result column="record_version" property="recordVersion"/>
+        <result column="x" property="x"/>
+        <result column="create_time" property="createTime"/>
+        <result column="role_id" property="roleId"/>
+        <result column="allow" property="allow"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"
+        />
+
+        <result column="permission_id" property="permissionId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->

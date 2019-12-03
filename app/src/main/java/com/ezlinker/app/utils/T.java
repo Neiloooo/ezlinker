@@ -1,10 +1,9 @@
 package com.ezlinker.app.utils;
 
-import com.alibaba.fastjson.JSONArray;
-
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @program: ezlinker
@@ -13,15 +12,35 @@ import java.util.List;
  * @create: 2019-11-13 09:52
  **/
 public class T {
+    interface I {
+        Integer foreach(Integer t);
+    }
+
+    static Set<Integer> filter(List<Integer> integers, I i) {
+        Set<Integer> r = new HashSet<>();
+        for (Integer num : integers) {
+            r.add(i.foreach(num));
+        }
+        return r;
+
+    }
+
     public static void main(String[] args) {
 
-        List<String> list = new ArrayList<>();
-        list.add("POST");
-        list.add("GET");
-        //
-        List<String> list1 = Collections.singletonList("POST, GET");
-        System.out.println(list.toString());
-        System.out.println(list1);
-        System.out.println(JSONArray.toJSONString(list));
+        List<Integer> integerList = new ArrayList<>();
+        integerList.add(1);
+        integerList.add(2);
+        integerList.add(3);
+        integerList.add(4);
+        integerList.add(5);
+        integerList.add(6);
+        Set<Integer> list = T.filter(integerList, t -> {
+            if (t > 3) {
+                return t;
+            } else {
+                return 0;
+            }
+        });
+
     }
 }

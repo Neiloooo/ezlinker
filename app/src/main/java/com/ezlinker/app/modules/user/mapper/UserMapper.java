@@ -2,10 +2,10 @@ package com.ezlinker.app.modules.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ezlinker.app.modules.permission.model.RolePermissionView;
-import com.ezlinker.app.modules.permission.model.UserRolePermissionView;
 import com.ezlinker.app.modules.role.model.UserRoleView;
 import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.model.UserInfoView;
+import com.ezlinker.app.modules.user.model.UserRolePermissionView;
 
 import java.util.List;
 

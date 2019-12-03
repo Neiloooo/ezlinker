@@ -1,12 +1,15 @@
 package com.ezlinker.app.modules.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ezlinker.app.modules.permission.model.RolePermissionView;
-import com.ezlinker.app.modules.permission.model.UserRolePermissionView;
 import com.ezlinker.app.modules.role.model.UserRoleView;
 import com.ezlinker.app.modules.user.mapper.UserMapper;
+import com.ezlinker.app.modules.user.model.PermissionDetail;
 import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.model.UserInfoView;
+import com.ezlinker.app.modules.user.model.UserRolePermissionView;
+import com.ezlinker.app.modules.user.service.IUserRolePermissionViewService;
 import com.ezlinker.app.modules.user.service.IUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +33,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Resource
     UserMapper userMapper;
+    @Resource
+    IUserRolePermissionViewService iUserRolePermissionViewService;
 
     @Override
     public List<UserRoleView> getRoles(Long userId) {
@@ -42,16 +47,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public List<String> getAllPermissions(Long userId) {
+    public List<PermissionDetail> getAllPermissions(Long userId) {
         // 筛选出所有的用户权限
-        List<UserRolePermissionView> userRolePermissionViews = userMapper.getUserPermissions(userId);
+        List<UserRolePermissionView> userRolePermissionViews = iUserRolePermissionViewService.list(new QueryWrapper<UserRolePermissionView>().eq("user_id", userId));
         // 构建授权列表
-        List<String> userPermissions = new ArrayList<>();
+        List<PermissionDetail> userPermissions = new ArrayList<>();
         for (UserRolePermissionView urp : userRolePermissionViews) {
-            if (urp.getAllow() == null || urp.getAllow().length() < 2) {
-                userPermissions.add("[ALL]::" + urp.getResource() + "::" + urp.getMethods());
-            } else {
-                userPermissions.add(urp.getAllow() + "::" + urp.getResource() + "::" + urp.getMethods());
+            if (urp.getAllow() == null || urp.getAllow().size() < 2) {
+                PermissionDetail permissionDetail = new PermissionDetail();
+                permissionDetail.setAllow(urp.getAllow());
+                permissionDetail.setMethods(urp.getMethods());
+                permissionDetail.setResource(urp.getResource());
+                userPermissions.add(permissionDetail);
             }
         }
         return userPermissions;

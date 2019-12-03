@@ -25,7 +25,7 @@ import java.util.Date;
  * @date 2019-11-30 16:09
  */
 @RestController
-@RequestMapping("/permission")
+@RequestMapping("/permissions")
 public class PermissionController extends AbstractXController<Permission> {
 
     private final IPermissionService iPermissionService;

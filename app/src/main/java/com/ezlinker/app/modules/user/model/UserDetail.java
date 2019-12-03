@@ -42,6 +42,6 @@ public class UserDetail {
     /**
      * 操作权限列表
      */
-    private List<String> permissions;
+    private List<PermissionDetail> permissions;
 
 }
