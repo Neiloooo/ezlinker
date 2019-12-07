@@ -129,8 +129,8 @@ public class FeatureController extends AbstractXController<Feature> {
         if (feature == null) {
             throw new BizException("Feature not exists!", "功能不存在");
         }
-
-        boolean ok = iFeatureService.save(feature);
+        form.setId(id);
+        boolean ok = iFeatureService.updateById(form);
         return ok ? data(feature) : fail();
     }
 
