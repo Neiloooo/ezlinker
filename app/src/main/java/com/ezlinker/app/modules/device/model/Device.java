@@ -3,6 +3,7 @@ package com.ezlinker.app.modules.device.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.ezlinker.app.modules.product.pojo.ProductParam;
 import com.ezlinker.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +11,6 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,10 +24,10 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName(value = "ez_device",autoResultMap = true)
+@TableName(value = "ez_device", autoResultMap = true)
 public class Device extends XEntity {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 项目
@@ -89,7 +89,7 @@ public class Device extends XEntity {
 
     @TableField(typeHandler = JacksonTypeHandler.class)
 
-    private List<HashMap<String, Object>> parameter;
+    private List<ProductParam> parameter;
 
 
     /**

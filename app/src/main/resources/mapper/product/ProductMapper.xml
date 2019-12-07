@@ -13,7 +13,7 @@
         <result column="logo" property="logo" />
         <result column="tag" property="tag" />
         <result column="type" property="type" />
-        <result column="parameter" property="parameter" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler" />
+        <result column="parameters" property="parameters" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler" />
         <result column="description" property="description" />
     </resultMap>
 
@@ -23,7 +23,7 @@
         record_version,
         x,
         create_time,
-        project_id, name, logo, tag, type, parameter, description
+        project_id, name, logo, tag, type, parameters, description
     </sql>
 
 </mapper>

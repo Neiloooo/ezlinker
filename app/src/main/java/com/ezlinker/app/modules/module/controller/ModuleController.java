@@ -7,14 +7,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.AbstractXController;
 import com.ezlinker.app.modules.module.model.Module;
+import com.ezlinker.app.modules.module.pojo.DataArea;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.ezlinker.app.utils.ComponentTokenUtil;
 import com.ezlinker.app.utils.IDKeyUtil;
-import com.ezlinker.common.exception.BadRequestException;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -115,25 +114,6 @@ public class ModuleController extends AbstractXController<Module> {
     @Override
     protected R add(@RequestBody @Valid Module module) throws XException {
 
-        if (module.getDataArea() != null) {
-            int length = module.getDataArea().size();
-            int require = 0;
-            for (Object o : module.getDataArea()) {
-                HashMap area = (HashMap) o;
-                if (area.containsKey("field") && area.containsKey("label")) {
-                    require++;
-                } else {
-                    throw new BadRequestException("DataAreas `field` and `label` fields required", "数据域 `name` and `label`字段必传");
-                }
-            }
-            if (length == require) {
-                module.setDataArea(module.getDataArea());
-            } else {
-                throw new BadRequestException("DataAreas `field` and `label` fields required", "数据域 `name` and `label`字段必传");
-            }
-
-        }
-
         String sn = IDKeyUtil.generateId().toString();
         String clientId = SecureUtil.sha1(sn);
         String username = SecureUtil.sha1(clientId);
@@ -141,10 +121,9 @@ public class ModuleController extends AbstractXController<Module> {
         // 生成给Token，格式：clientId::[field1,field2,field3······]
         // token里面包含了模块的字段名,这样在数据入口处可以进行过滤。
         List<String> fields = new ArrayList<>();
-        if (module.getDataArea() != null) {
-            for (Object o : module.getDataArea()) {
-                HashMap field = (HashMap) o;
-                fields.add(field.get("field").toString());
+        if (module.getDataAreas() != null) {
+            for (DataArea area : module.getDataAreas()) {
+                fields.add(area.getField());
             }
 
         }
@@ -174,36 +153,8 @@ public class ModuleController extends AbstractXController<Module> {
     @Override
     protected R update(@PathVariable Long id, @RequestBody Module form) throws XException {
         Module module = iModuleService.getById(id);
-        if (module == null) {
-            throw new BizException("Component not exists", "模块不存在");
-
-        }
-        if (!StringUtils.isEmpty(form.getType())) {
-            module.setType(form.getType());
-
-        }
-
-        if (!StringUtils.isEmpty(form.getName())) {
-            module.setName(form.getName());
-
-        }
-        if (!StringUtils.isEmpty(form.getProtocol())) {
-            module.setProtocol(form.getProtocol());
-
-        }
-        if (!StringUtils.isEmpty(form.getModel())) {
-            module.setModel(form.getModel());
-
-        }
-        if (form.getDataArea() != null) {
-            module.setDataArea(form.getDataArea());
-        }
-        if (!StringUtils.isEmpty(form.getDescription())) {
-            module.setDescription(form.getDescription());
-
-        }
-        boolean ok = iModuleService.updateById(module);
-
+        form.setId(module.getId());
+        boolean ok = iModuleService.updateById(form);
         module.setFeatureList(iModuleService.getFeatureList(module.getId()));
         return ok ? data(module) : fail();
     }

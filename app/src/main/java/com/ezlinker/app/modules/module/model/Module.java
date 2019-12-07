@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.ezlinker.app.modules.feature.model.Feature;
+import com.ezlinker.app.modules.module.pojo.DataArea;
 import com.ezlinker.common.model.XEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -89,8 +90,9 @@ public class Module extends XEntity {
     /**
      * 数据域
      */
+    @NotEmpty(message = "数据域不可为空")
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private List<HashMap<String, Object>> dataArea;
+    private List<DataArea> dataAreas;
 
     /**
      * 描述

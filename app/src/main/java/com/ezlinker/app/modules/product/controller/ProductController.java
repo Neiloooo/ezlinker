@@ -1,28 +1,20 @@
 package com.ezlinker.app.modules.product.controller;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.SimpleXController;
-import com.ezlinker.app.modules.product.form.AddProductForm;
-import com.ezlinker.app.modules.product.form.UpdateProductForm;
 import com.ezlinker.app.modules.product.model.Product;
 import com.ezlinker.app.modules.product.service.IProductService;
-import com.ezlinker.app.modules.tag.model.Tag;
-import com.ezlinker.app.modules.tag.service.ITagService;
-import com.ezlinker.common.exception.BadRequestException;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -46,51 +38,15 @@ public class ProductController extends SimpleXController {
         super(httpServletRequest);
     }
 
-    /**
-     * 检查参数合法性
-     *
-     * @param parameter
-     * @return
-     */
-    private boolean check(List<HashMap<String, Object>> parameter) {
-        if (parameter == null) return false;
-        try {
-            int parameterLength = parameter.size();
-            int accepted = 0;
-            for (HashMap map : parameter) {
-                if (map.keySet().size() == 2) {
-                    if ((map.containsKey("label") && map.containsKey("field"))) {
-                        accepted++;
-                    }
-                }
-            }
-            return parameterLength == accepted;
-
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
 
     /**
      * 创建产品
      *
-     * @param form 产品:必传
+     * @param product 产品:必传
      * @return
      */
     @PostMapping
-    protected R add(@RequestBody @Valid AddProductForm form) throws XException {
-        Product product = new Product();
-        if (form.getParameter() != null) {
-            if (!check(form.getParameter())) {
-                throw new BadRequestException("Parameter format invalid!", "Parameter 参数格式错误");
-            }
-
-        } else {
-            product.setParameter(new ArrayList<>());
-        }
-        BeanUtil.copyProperties(form, product);
-        product.setParameter((form.getParameter()));
+    protected R add(@RequestBody @Valid Product product) throws XException {
 
         boolean ok = iProductService.save(product);
         return ok ? data(product) : fail();
@@ -113,42 +69,16 @@ public class ProductController extends SimpleXController {
     /**
      * 更新产品信息
      *
-     * @param form 产品:必传
+     * @param newProduct 产品:必传
      * @return
      * @throws XException
      */
     @PutMapping("/{id}")
-    public R update(@PathVariable Long id, @RequestBody @Valid UpdateProductForm form) throws XException {
-
+    public R update(@PathVariable Long id, @RequestBody @Valid Product newProduct) throws XException {
 
         Product product = iProductService.getById(id);
-        if (product == null) {
-            throw new BizException("Product not exists!", "产品不存在");
-        }
-        if (!StringUtils.isEmpty(form.getName())) {
-
-            product.setName(form.getName());
-        }
-        if (!StringUtils.isEmpty(form.getLogo())) {
-
-            product.setLogo(form.getLogo());
-        }
-        if (!StringUtils.isEmpty(form.getType())) {
-
-            product.setType(form.getType());
-        }
-
-        if (!StringUtils.isEmpty(form.getDescription())) {
-
-            product.setDescription(form.getDescription());
-        }
-        if (form.getParameter() != null) {
-            check(form.getParameter());
-            product.setParameter((form.getParameter()));
-        }
-
-
-        boolean ok = iProductService.updateById(product);
+        newProduct.setId(product.getId());
+        boolean ok = iProductService.updateById(newProduct);
         return ok ? data(product) : fail();
     }
 

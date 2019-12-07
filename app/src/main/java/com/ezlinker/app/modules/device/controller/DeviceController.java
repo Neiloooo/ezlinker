@@ -89,7 +89,7 @@ public class DeviceController extends AbstractXController<Device> {
                 .setDescription(form.getDescription())
                 .setModel(form.getModel())
                 .setIndustry(form.getIndustry())
-                .setParameter(product.getParameter())
+                .setParameter(product.getParameters())
                 .setSn("SN" + IDKeyUtil.generateId().toString())
                 .setProductId(form.getProductId())
                 .setProjectId(form.getProjectId());

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.ezlinker.app.modules.product.pojo.ProductParam;
 import com.ezlinker.common.model.XEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -64,9 +65,9 @@ public class Product extends XEntity {
      */
 
 
+    @NotEmpty(message = "参数内容不可为空")
     @TableField(typeHandler = JacksonTypeHandler.class)
-
-    private List<HashMap<String, Object>> parameter;
+    private List<ProductParam> parameters;
 
     /**
      * 描述文字
