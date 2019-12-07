@@ -83,6 +83,21 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/feature/controller/FeatureController.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/feature/model/Feature.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/feature/pojo/CmdValue.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/internalmessage/controller/InternalMessageController.java">
           <value>
             <PaintGroupHighlightMap />

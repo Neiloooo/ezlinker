@@ -2,10 +2,14 @@ package com.ezlinker.app.modules.feature.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.ezlinker.app.modules.feature.pojo.CmdValue;
 import com.ezlinker.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  * <p>
@@ -50,7 +54,8 @@ public class Feature extends XEntity {
     /**
      * 命令Value
      */
-    private String cmdValue = "cmdValue";
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<CmdValue> cmdValue;
 
     @TableField(exist = false)
     private Long moduleId;

@@ -134,12 +134,6 @@ public class FeatureController extends AbstractXController<Feature> {
             iFeatureModuleService.save(featureModule);
 
         }
-        try {
-            JSONObject.parse(feature.getCmdValue());
-        } catch (Exception e) {
-            throw new BadRequestException("CmdValue must be json format", "命令内容必须为JSON格式");
-
-        }
 
         boolean ok = iFeatureService.save(feature);
         return ok ? data(feature) : fail();
