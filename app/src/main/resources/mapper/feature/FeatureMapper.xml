@@ -13,7 +13,7 @@
         <result column="type" property="type" />
         <result column="product_id" property="productId" />
         <result column="cmd_key" property="cmdKey" />
-        <result column="cmd_value" property="cmdValue" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result column="cmd_values" property="cmd_values" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -22,7 +22,7 @@
         record_version,
         x,
         create_time,
-        label, name, type, product_id, cmd_key, cmd_value
+        label, `name`, `type`, product_id, cmd_key, cmd_values
     </sql>
 
 </mapper>

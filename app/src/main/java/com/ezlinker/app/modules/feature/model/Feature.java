@@ -40,10 +40,13 @@ public class Feature extends XEntity {
     private String label;
     /**
      * 类型
+     * 1 Button
+     * 2 Switch
+     * .....可能还有别的
      */
-    @NotEmpty(message = "类型不可为空值")
+    @NotNull(message = "类型不可为空值")
 
-    private String type;
+    private Integer type;
 
     /**
      * 产品ID
@@ -63,7 +66,7 @@ public class Feature extends XEntity {
      */
     @NotEmpty(message = "指令内容不可为空")
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private List<CmdValue> cmdValue;
+    private List<CmdValue> cmdValues;
 
     @TableField(exist = false)
     private Long moduleId;
