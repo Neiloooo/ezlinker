@@ -57,7 +57,7 @@ public class UserInfoView implements Serializable {
     /**
      * 上次登陆时间
      */
-    private LocalDateTime lastLoginTime;
+    private String lastLoginTime;
 
     /**
      * 上次登录IP

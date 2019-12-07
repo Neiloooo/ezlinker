@@ -183,6 +183,11 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/user/model/UserInfoView.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/user/model/UserRolePermissionView.java">
           <value>
             <PaintGroupHighlightMap />
