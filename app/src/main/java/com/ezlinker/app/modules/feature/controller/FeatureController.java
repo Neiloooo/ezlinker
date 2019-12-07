@@ -1,7 +1,6 @@
 package com.ezlinker.app.modules.feature.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.AbstractXController;
@@ -9,7 +8,6 @@ import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.feature.service.IFeatureService;
 import com.ezlinker.app.modules.relation.model.FeatureModule;
 import com.ezlinker.app.modules.relation.service.IFeatureModuleService;
-import com.ezlinker.common.exception.BadRequestException;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
@@ -104,31 +102,8 @@ public class FeatureController extends AbstractXController<Feature> {
     @Override
     @Transactional(rollbackFor = Exception.class)
     protected R add(@RequestBody @Valid Feature feature) throws XException {
-        if (feature.getName() == null) {
-            throw new BadRequestException("Must specify a name", "必须指定名称");
-
-        }
-        if (feature.getLabel() == null) {
-            throw new BadRequestException("Must specify a label", "必须指定标签");
-
-        }
-
-
-        if (feature.getProductId() == null) {
-            throw new BadRequestException("Must specify a product", "必须指定产品");
-
-        }
-        if (feature.getCmdKey() == null) {
-            throw new BadRequestException("Must specify a key", "必须指定命令Key");
-
-        }
-        if (feature.getCmdValue() == null) {
-            throw new BadRequestException("Must specify cmdValue", "必须指定命令内容");
-
-        }
 
         if (feature.getModuleId() != null) {
-
             FeatureModule featureModule = new FeatureModule();
             featureModule.setFeatureId(feature.getId()).setModuleId(feature.getModuleId());
             iFeatureModuleService.save(featureModule);
@@ -148,23 +123,13 @@ public class FeatureController extends AbstractXController<Feature> {
      * @throws XException
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     protected R update(@PathVariable Long id, @RequestBody @Valid Feature form) throws XException {
         Feature feature = iFeatureService.getById(id);
         if (feature == null) {
             throw new BizException("Feature not exists!", "功能不存在");
         }
 
-        if (form.getName() != null) {
-            feature.setName(form.getName());
-        }
-        if (form.getLabel() != null) {
-
-            feature.setLabel(form.getLabel());
-        }
-
-        if (form.getCmdKey() != null) {
-            feature.setCmdKey(feature.getCmdKey());
-        }
         boolean ok = iFeatureService.save(feature);
         return ok ? data(feature) : fail();
     }

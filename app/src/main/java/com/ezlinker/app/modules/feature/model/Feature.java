@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -29,6 +31,7 @@ public class Feature extends XEntity {
     /**
      * 名称
      */
+    @NotEmpty(message = "名称不可为空值")
     private String name;
 
     /**
@@ -38,22 +41,27 @@ public class Feature extends XEntity {
     /**
      * 类型
      */
+    @NotEmpty(message = "类型不可为空值")
+
     private String type;
 
     /**
      * 产品ID
      */
+    @NotNull(message = "产品不可为空值")
+
     private Integer productId;
 
     /**
      * 命令Key
      */
-
+    @NotEmpty(message = "指令名不可为空值")
     private String cmdKey = "cmdKey";
 
     /**
      * 命令Value
      */
+    @NotEmpty(message = "指令内容不可为空")
     @TableField(typeHandler = JacksonTypeHandler.class)
     private List<CmdValue> cmdValue;
 
