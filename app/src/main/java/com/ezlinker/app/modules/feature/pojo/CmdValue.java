@@ -31,4 +31,8 @@ public class CmdValue {
      * 字段的默认值,默认为 :空
      */
     private String defaultValue;
+    /**
+     * 备注
+     */
+    private String description;
 }
