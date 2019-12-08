@@ -11,7 +11,6 @@
         <result column="project_id" property="projectId" />
         <result column="name" property="name" />
         <result column="logo" property="logo" />
-        <result column="tag" property="tag" />
         <result column="type" property="type" />
         <result column="parameters" property="parameters" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler" />
         <result column="description" property="description" />
@@ -23,7 +22,7 @@
         record_version,
         x,
         create_time,
-        project_id, name, logo, tag, type, parameters, description
+        project_id, `name`, logo, `type`, parameters, description
     </sql>
 
 </mapper>

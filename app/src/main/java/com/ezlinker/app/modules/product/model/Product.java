@@ -1,20 +1,16 @@
 package com.ezlinker.app.modules.product.model;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.ezlinker.app.modules.product.pojo.ProductParam;
 import com.ezlinker.common.model.XEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -58,7 +54,8 @@ public class Product extends XEntity {
     /**
      * 标签
      */
-    private String tag;
+    @TableField(exist = false)
+    private String[] tag;
 
     /**
      * 参数
