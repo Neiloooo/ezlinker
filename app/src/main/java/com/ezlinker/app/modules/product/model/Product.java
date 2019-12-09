@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -32,7 +33,7 @@ public class Product extends XEntity {
      * 项目ID
      */
     @NotNull(message = "项目不能为空")
-    private Integer projectId;
+    private Long projectId;
 
     /**
      * 产品名称
@@ -55,7 +56,7 @@ public class Product extends XEntity {
      * 标签
      */
     @TableField(exist = false)
-    private String[] tag;
+    private Set<String> tags;
 
     /**
      * 参数

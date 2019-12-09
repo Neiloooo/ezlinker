@@ -30,7 +30,7 @@ public class Tag extends XEntity {
     /**
      * Tag 作用的对象ID
      */
-    private Integer linkId;
+    private Long linkId;
 
 
 }

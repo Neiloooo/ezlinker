@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.SimpleXController;
 import com.ezlinker.app.modules.product.model.Product;
 import com.ezlinker.app.modules.product.service.IProductService;
+import com.ezlinker.app.modules.tag.model.Tag;
+import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
@@ -16,8 +18,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -45,10 +48,23 @@ public class ProductController extends SimpleXController {
      * @param product 产品:必传
      * @return
      */
+    @Resource
+    ITagService iTagService;
+
     @PostMapping
     protected R add(@RequestBody @Valid Product product) throws XException {
 
         boolean ok = iProductService.save(product);
+        if (ok) {
+            if (product.getTags() != null) {
+                for (String tag : product.getTags()) {
+                    Tag t = new Tag();
+                    t.setName(tag).setLinkId(product.getId());
+                    iTagService.save(t);
+                }
+            }
+
+        }
         return ok ? data(product) : fail();
 
     }
@@ -97,7 +113,13 @@ public class ProductController extends SimpleXController {
         if (product == null) {
             throw new BizException("Product not exists!", "产品不存在");
         }
+        List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", id));
+        Set<String> tags = new HashSet<>();
 
+        for (Tag tag : tagList) {
+            tags.add(tag.getName());
+        }
+        product.setTags(tags);
         return data(product);
     }
 
@@ -126,6 +148,17 @@ public class ProductController extends SimpleXController {
 
         queryWrapper.orderByDesc("create_time");
         IPage<Product> projectPage = iProductService.page(new Page<>(current, size), queryWrapper);
+
+        for (Product product : projectPage.getRecords()) {
+            List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", product.getId()));
+            Set<String> tags = new HashSet<>();
+
+            for (Tag tag : tagList) {
+                tags.add(tag.getName());
+            }
+            product.setTags(tags);
+
+        }
 
         return data(projectPage);
     }
