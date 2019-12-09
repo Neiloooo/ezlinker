@@ -14,11 +14,11 @@
         <result column="logo" property="logo" />
         <result column="location" property="location" />
         <result column="model" property="model" />
-        <result column="tag" property="tag" />
+        <result column="statuses" property="statuses" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler" />
         <result column="industry" property="industry" />
         <result column="sn" property="sn" />
         <result column="type" property="type" />
-        <result column="parameter" property="parameter" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result column="parameters" property="parameters" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
         <result column="description" property="description" />
     </resultMap>
 
@@ -28,7 +28,7 @@
         record_version,
         x,
         create_time,
-        project_id, product_id, name, logo, location, model, tag, industry, sn, type, parameter, description
+        project_id, product_id, `name`, logo, location, model, tag, industry, sn, `type`, statuses,parameters, description
     </sql>
 
 </mapper>

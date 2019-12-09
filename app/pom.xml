@@ -103,12 +103,19 @@
             <version>2.1</version>
         </dependency>
 
+
         <dependency>
             <groupId>org.luaj</groupId>
             <artifactId>luaj-jse</artifactId>
             <version>3.0.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.javadelight/delight-nashorn-sandbox -->
+        <dependency>
+            <groupId>org.javadelight</groupId>
+            <artifactId>delight-nashorn-sandbox</artifactId>
+            <version>0.1.27</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -3,6 +3,8 @@ package com.ezlinker.app.modules.device.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.ezlinker.app.modules.device.pojo.DeviceParam;
+import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.product.pojo.ProductParam;
 import com.ezlinker.common.model.XEntity;
 import lombok.Data;
@@ -12,6 +14,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -66,7 +69,7 @@ public class Device extends XEntity {
      * 标签
      */
     @TableField(exist = false)
-    private String[] tags;
+    private Set<String> tags;
 
     /**
      * 厂家
@@ -89,9 +92,14 @@ public class Device extends XEntity {
 
     @TableField(typeHandler = JacksonTypeHandler.class)
 
-    private List<ProductParam> parameter;
+    private List<DeviceParam> parameters;
 
 
+    /**
+     * 设备当前状态
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<DeviceStatus>statuses;
     /**
      * 描述
      */

@@ -1,9 +1,12 @@
 package com.ezlinker.app.config;
 
+import delight.nashornsandbox.NashornSandbox;
+import delight.nashornsandbox.NashornSandboxes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.script.ScriptEngineManager;
+import java.util.concurrent.Executors;
 
 /**
  * ezlinker
@@ -17,5 +20,16 @@ public class ScriptEngineConfig {
     @Bean
     ScriptEngineManager scriptEngineManager() {
         return new ScriptEngineManager();
+    }
+
+    @Bean(name = "jsSandBox")
+    NashornSandbox jsSandBox(){
+        NashornSandbox sandbox = NashornSandboxes.create();
+        sandbox.setMaxCPUTime(100);
+        sandbox.setMaxMemory(50 * 1024);
+        sandbox.allowNoBraces(false);
+        sandbox.setMaxPreparedStatements(30);
+        sandbox.setExecutor(Executors.newSingleThreadExecutor());
+        return sandbox;
     }
 }

@@ -4,9 +4,12 @@ package com.ezlinker.app.modules.device.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.AbstractXController;
 import com.ezlinker.app.modules.device.model.Device;
+import com.ezlinker.app.modules.device.pojo.DeviceParam;
+import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.service.IModuleService;
@@ -22,14 +25,15 @@ import com.ezlinker.app.utils.IDKeyUtil;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -60,6 +64,7 @@ public class DeviceController extends AbstractXController<Device> {
     @Resource
     IMqttTopicService iMqttTopicService;
 
+
     public DeviceController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
     }
@@ -88,8 +93,8 @@ public class DeviceController extends AbstractXController<Device> {
                 .setLocation(form.getLocation())
                 .setDescription(form.getDescription())
                 .setModel(form.getModel())
+                .setParameters(form.getParameters())
                 .setIndustry(form.getIndustry())
-                .setParameter(product.getParameters())
                 .setSn("SN" + IDKeyUtil.generateId().toString())
                 .setProductId(form.getProductId())
                 .setProjectId(form.getProjectId());
@@ -143,19 +148,6 @@ public class DeviceController extends AbstractXController<Device> {
 
         // 保存设备
         boolean ok = iDeviceService.save(device);
-        // 保存Tag
-        if (ok) {
-            String[] tags = form.getTags();
-            if (tags != null) {
-                for (String tag : tags) {
-                    Tag t = new Tag();
-                    t.setName(tag).setLinkId(product.getProjectId());
-                    iTagService.save(t);
-                }
-            }
-            device.setTags(tags);
-
-        }
 
         return ok ? data(device) : fail();
     }
@@ -173,17 +165,79 @@ public class DeviceController extends AbstractXController<Device> {
         if (device == null) {
             throw new BizException("Device not exist", "设备不存在");
         }
-        List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", id));
-        String[] tags = new String[tagList.size()];
-        for (int i = 0; i < tagList.size(); i++) {
-            tags[i] = tagList.get(i).getName();
+        List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", device.getProductId()));
+        Set<String> tags = new HashSet<>();
+        for (Tag tag : tagList) {
+            tags.add(tag.getName());
         }
         device.setTags(tags);
         return data(device);
     }
 
     /**
+     * 获取属性
+     *
+     * @param id
+     * @return
+     * @throws XException
+     */
+    @GetMapping("/status/{id}")
+    protected R getStatus(@PathVariable Long id) throws XException {
+        Device device = iDeviceService.getById(id);
+        if (device == null) {
+            throw new BizException("Device not exist", "设备不存在");
+        }
+        return data(device.getStatuses());
+    }
+
+    /**
+     * 设置状态
+     *
+     * @param id
+     * @param statuses
+     * @return
+     * @throws XException
+     */
+    @PutMapping("/status/{id}")
+    protected R setStatus(@PathVariable Long id,
+                          @Valid @RequestBody List<@Valid DeviceStatus> statuses,
+                          ObjectMapper objectMapper) throws XException {
+        Device device = iDeviceService.getById(id);
+        if (device == null) {
+            throw new BizException("Device not exist", "设备不存在");
+        }
+        /**
+         * 提取KeySet集合
+         */
+        //List<DeviceParam> deviceParamList = device.getParameters();
+        List<DeviceParam> deviceParamList = objectMapper.convertValue(device.getParameters(),
+                new TypeReference<List<DeviceParam>>() {
+                });
+
+        Set<String> fields = new HashSet<>();
+        for (DeviceParam deviceParam : deviceParamList) {
+            fields.add(deviceParam.getField());
+        }
+        /**
+         * 比对
+         */
+        List<DeviceStatus> deviceStatusList = new ArrayList<>();
+
+        for (DeviceStatus deviceStatus : statuses) {
+            if (fields.contains(deviceStatus.getField())) {
+                deviceStatusList.add(deviceStatus);
+            }
+        }
+        device.setStatuses(deviceStatusList);
+        boolean ok = iDeviceService.updateById(device);
+
+        return ok ? data(deviceStatusList) : fail();
+
+    }
+
+    /**
      * 删除
+     *
      * @param ids
      * @return
      * @throws XException
@@ -215,6 +269,7 @@ public class DeviceController extends AbstractXController<Device> {
             @RequestParam(required = false) String sn,
             @RequestParam(required = false) Integer type,
             @RequestParam(required = false) String model) {
+
         QueryWrapper<Device> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("project_id", projectId);
         queryWrapper.eq("product_id", productId);
@@ -224,8 +279,20 @@ public class DeviceController extends AbstractXController<Device> {
         queryWrapper.like(name != null, "name", name);
         queryWrapper.like(industry != null, "industry", industry);
         queryWrapper.orderByDesc("create_time");
-        return data(iDeviceService.page(new Page<>(current, size), queryWrapper));
+
+        IPage<Device> devicePage = iDeviceService.page(new Page<Device>(current, size), queryWrapper);
+        for (Device device : devicePage.getRecords()) {
+            List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", device.getProductId()));
+            Set<String> tags = new HashSet<>();
+            for (Tag tag : tagList) {
+                tags.add(tag.getName());
+            }
+            device.setTags(tags);
+        }
+
+        return data(devicePage);
     }
+
 
 }
 
