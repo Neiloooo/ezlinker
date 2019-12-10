@@ -1,15 +1,12 @@
 package com.ezlinker.app.scriptengine.jsengine;
 
 import com.ezlinker.app.scriptengine.EZScriptEngine;
+import delight.nashornsandbox.NashornSandbox;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author wangwenhai
@@ -20,23 +17,12 @@ import java.util.Map;
 @Log
 public class JsEngine extends EZScriptEngine {
 
-    @Override
-    protected boolean start() {
-        return false;
-    }
+    @Resource
+    NashornSandbox jsSandbox;
 
     @Override
     protected Object executeScript(String script) throws ScriptException {
-        return null;
+        return jsSandbox.eval(script);
     }
 
-    @Override
-    protected boolean stop() {
-        return false;
-    }
-
-    @Override
-    protected Map<String, Object> info() {
-        return null;
-    }
 }

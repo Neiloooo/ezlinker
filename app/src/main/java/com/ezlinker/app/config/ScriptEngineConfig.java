@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.script.ScriptEngineManager;
-import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ezlinker
@@ -22,14 +24,22 @@ public class ScriptEngineConfig {
         return new ScriptEngineManager();
     }
 
+    /**
+     * 配置Javascript 脚本引擎
+     *
+     * @return
+     */
     @Bean(name = "jsSandBox")
-    NashornSandbox jsSandBox(){
+    NashornSandbox jsSandBox() {
         NashornSandbox sandbox = NashornSandboxes.create();
         sandbox.setMaxCPUTime(100);
+        //50M内存
         sandbox.setMaxMemory(50 * 1024);
         sandbox.allowNoBraces(false);
         sandbox.setMaxPreparedStatements(30);
-        sandbox.setExecutor(Executors.newSingleThreadExecutor());
+        sandbox.setExecutor(new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                60L, TimeUnit.SECONDS,
+                new SynchronousQueue<>(), r -> new Thread()));
         return sandbox;
     }
 }

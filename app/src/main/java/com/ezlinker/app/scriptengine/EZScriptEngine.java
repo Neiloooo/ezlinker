@@ -11,11 +11,8 @@ import java.util.Map;
  */
 public abstract class EZScriptEngine {
 
-    protected abstract boolean start();
 
     protected abstract Object executeScript(String script) throws ScriptException;
 
-    protected abstract boolean stop();
 
-    protected abstract Map<String, Object> info();
 }
