@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,9 @@ import java.util.List;
 @RequestMapping("/entry")
 @Slf4j
 public class EntryController {
+
+    private static final String LOCAL_IPV4 = "127.0.0.1";
+    private static final String LOCAL_IPV6 = "0:0:0:0:0:0:0:1";
 
     @Resource
     IUserService iUserService;
@@ -136,31 +141,31 @@ public class EntryController {
     }
 
     private String getIp(HttpServletRequest request) {
-//        String ip;
-//        try {
-//            ip = request.getHeader("x-forwarded-for");
-//            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-//                ip = request.getHeader("Proxy-Client-IP");
-//            }
-//            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-//                ip = request.getHeader("WL-Proxy-Client-IP");
-//            }
-//            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-//                ip = request.getRemoteHost();
-//            }
-//            if (LOCAL_IPV4.equals(ip) || LOCAL_IPV6.equals(ip)) {
-//                InetAddress inetAddress;
-//                try {
-//                    inetAddress = InetAddress.getLocalHost();
-//                    ip = inetAddress.getHostAddress();
-//                } catch (UnknownHostException e) {
-//                    ip = LOCAL_IPV4;
-//                }
-//            }
-//        } catch (Exception e) {
-//            ip = "UN_KNOW";
-//        }
-        return request.getRemoteHost();
+        String ip;
+        try {
+            ip = request.getHeader("x-forwarded-for");
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("Proxy-Client-IP");
+            }
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getRemoteHost();
+            }
+            if (LOCAL_IPV4.equals(ip) || LOCAL_IPV6.equals(ip)) {
+
+                try {
+                    InetAddress inetAddress = InetAddress.getLocalHost();
+                    ip = inetAddress.getHostAddress();
+                } catch (UnknownHostException e) {
+                    ip = LOCAL_IPV4;
+                }
+            }
+        } catch (Exception e) {
+            ip = "UN_KNOW";
+        }
+        return ip;
 
     }
 
