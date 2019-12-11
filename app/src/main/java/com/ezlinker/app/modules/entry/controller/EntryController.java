@@ -5,8 +5,6 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ezlinker.app.modules.entry.form.UserLoginForm;
-import com.ezlinker.app.modules.permission.service.IPermissionService;
-import com.ezlinker.app.modules.role.service.IRoleService;
 import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.model.UserDetail;
 import com.ezlinker.app.modules.user.service.IUserService;
@@ -16,9 +14,7 @@ import com.ezlinker.app.utils.UserTokenUtil;
 import com.ezlinker.common.exception.AuthorizedFailedException;
 import com.ezlinker.common.exchange.R;
 import com.ezlinker.common.exchange.RCode;
-import com.ezlinker.common.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,18 +38,11 @@ import java.util.List;
 @Slf4j
 public class EntryController {
 
-    private static final String LOCAL_IPV4 = "127.0.0.1";
-    private static final String LOCAL_IPV6 = "0:0:0:0:0:0:0:1";
-
-
-    @Resource
-    RedisUtil redisUtil;
-
     @Resource
     IUserService iUserService;
 
     @Resource
-    IUserLoginLogService iUserLoginLogService;
+    IUserLoginLogService<UserLoginLog> iUserLoginLogService;
 
     /**
      * 用户登录
@@ -134,10 +121,6 @@ public class EntryController {
      */
 
     private String getLocationWithIp(String ip) {
-        if (ip.equals("UN_KNOW")) {
-            return "未知IP地址";
-        }
-
         try {
             String data = HttpUtil.get("http://ip.taobao.com/service/getIpInfo.php?ip=" + ip);
             JSONObject jsonObject = JSONObject.parseObject(data).getJSONObject("data");
@@ -146,37 +129,38 @@ public class EntryController {
                     + ",地区:" + jsonObject.getString("region")
                     + ",运营商:" + jsonObject.getString("isp");
         } catch (Exception e) {
-            log.error("IP获取失败，请检查接口是否正常.");
-            return "未知IP地址";
+            e.printStackTrace();
+            log.error("IP获取失败，请检查IP查询接口是否正常.");
+            return "IP详细信息获取失败";
         }
     }
 
     private String getIp(HttpServletRequest request) {
-        String ip;
-        try {
-            ip = request.getHeader("x-forwarded-for");
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("Proxy-Client-IP");
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("WL-Proxy-Client-IP");
-            }
-            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getRemoteHost();
-            }
-            if (LOCAL_IPV4.equals(ip) || LOCAL_IPV6.equals(ip)) {
-                InetAddress inetAddress;
-                try {
-                    inetAddress = InetAddress.getLocalHost();
-                    ip = inetAddress.getHostAddress();
-                } catch (UnknownHostException e) {
-                    ip = LOCAL_IPV4;
-                }
-            }
-        } catch (Exception e) {
-            ip = "UN_KNOW";
-        }
-        return ip;
+//        String ip;
+//        try {
+//            ip = request.getHeader("x-forwarded-for");
+//            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//                ip = request.getHeader("Proxy-Client-IP");
+//            }
+//            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//                ip = request.getHeader("WL-Proxy-Client-IP");
+//            }
+//            if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//                ip = request.getRemoteHost();
+//            }
+//            if (LOCAL_IPV4.equals(ip) || LOCAL_IPV6.equals(ip)) {
+//                InetAddress inetAddress;
+//                try {
+//                    inetAddress = InetAddress.getLocalHost();
+//                    ip = inetAddress.getHostAddress();
+//                } catch (UnknownHostException e) {
+//                    ip = LOCAL_IPV4;
+//                }
+//            }
+//        } catch (Exception e) {
+//            ip = "UN_KNOW";
+//        }
+        return request.getRemoteHost();
 
     }
 

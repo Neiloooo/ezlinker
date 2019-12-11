@@ -1,5 +1,6 @@
 package com.ezlinker.app.modules.userlog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -13,10 +14,10 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-//@TableName("ez_user_login_log")
 public class UserLoginLog {
 
     private String id;
+    @JsonIgnore
     private Long userId;
 
     private String status;

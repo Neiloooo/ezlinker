@@ -6,6 +6,9 @@ import com.ezlinker.app.modules.userlog.model.UserLoginLog;
 import com.ezlinker.app.modules.userlog.service.IUserLoginLogService;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +43,9 @@ public class UserLoginLogController extends AbstractXController<UserLoginLog> {
      */
     @GetMapping
     public R getLoginLog(@RequestParam Integer current, @RequestParam Integer size) throws XException {
-        return data("MongoDB 还没实现");
+        Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        return data(iUserLoginLogService.queryForPage(getUserDetail().getId(), pageable));
     }
 
 }
