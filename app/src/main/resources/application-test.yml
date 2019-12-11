@@ -2,7 +2,7 @@
 server:
   servlet:
     context-path: /ezlinker
-  port: 8080
+  port: 2500
 # Spring config
 spring:
   datasource:
@@ -24,26 +24,14 @@ spring:
       test-while-idle: true
       test-on-borrow: false
       test-on-return: false
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-        login-username: admin
-        login-password: password
-      filter:
-        stat:
-          log-slow-sql: true
-          slow-sql-millis: 1000
-          merge-sql: false
-        wall:
-          config:
-            multi-statement-allow: true
+
 
   redis:
     database: 0
-    host: 116.196.90.9
-    password: tinycoder332211
+    host: localhost
     port: 6379
     timeout: 300
+    password: redis
 
   data:
     mongodb:
@@ -59,14 +47,10 @@ spring:
   resources:
     add-mappings: false
 
-logging:
-  level:
-    root: info
-    org.springframework.data.mongodb.core: DEBUG
-    com.baomidou.mybatisplus.core.mapper: DEBUG
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
-# Aliyun Mail push
-# "cn-hangzhou", "ULw8nLnKBktSbOhI", "hgAj2F2KtaMvLuXZzpVyVWZ0rl4SXR"
 aliyun:
   mail:
     access-key: ULw8nLnKBktSbOhI
