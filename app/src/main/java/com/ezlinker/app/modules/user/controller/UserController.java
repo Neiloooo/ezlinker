@@ -73,19 +73,6 @@ public class UserController extends AbstractXController<User> {
         return data(iUserService.getUserInfo(getUserDetail().getId()));
     }
 
-    /**
-     * 获取用户的登录日志
-     *
-     * @return
-     * @throws XException
-     */
-    @GetMapping("/loginLog")
-    public R getLoginLog(@RequestParam Integer current, @RequestParam Integer size) throws XException {
-        QueryWrapper<UserLoginLog> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", getUserDetail().getId());
-        IPage<UserLoginLog> iPage = iUserLoginLogService.page(new Page<>(current, size), queryWrapper);
-        return data(iPage);
-    }
 
     /**
      * 重置密码

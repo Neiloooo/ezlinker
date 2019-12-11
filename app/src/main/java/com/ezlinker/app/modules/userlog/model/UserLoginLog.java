@@ -1,9 +1,6 @@
 package com.ezlinker.app.modules.userlog.model;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.ezlinker.common.model.XEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -15,13 +12,11 @@ import lombok.experimental.Accessors;
  * @since 2019-11-12
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("ez_user_login_log")
-public class UserLoginLog extends XEntity {
+//@TableName("ez_user_login_log")
+public class UserLoginLog {
 
-    private static final long serialVersionUID=1L;
-
+    private String id;
     private Long userId;
 
     private String status;

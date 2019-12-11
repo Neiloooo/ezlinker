@@ -1,6 +1,5 @@
 package com.ezlinker.app.modules.entry.controller;
 
-import cn.hutool.core.net.NetUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -48,20 +48,13 @@ public class EntryController {
     private static final String LOCAL_IPV6 = "0:0:0:0:0:0:0:1";
 
 
-    @Autowired
+    @Resource
     RedisUtil redisUtil;
 
-    @Autowired
+    @Resource
     IUserService iUserService;
 
-    @Autowired
-    IRoleService iRoleService;
-
-    @Autowired
-    IPermissionService iPermissionService;
-
-
-    @Autowired
+    @Resource
     IUserLoginLogService iUserLoginLogService;
 
     /**
@@ -144,13 +137,10 @@ public class EntryController {
         if (ip.equals("UN_KNOW")) {
             return "未知IP地址";
         }
-        if (NetUtil.isInnerIP(ip)) {
-            return "内网登陆,IP:" + ip;
-        }
 
         try {
             String data = HttpUtil.get("http://ip.taobao.com/service/getIpInfo.php?ip=" + ip);
-            JSONObject jsonObject = JSONObject.parseObject(data);
+            JSONObject jsonObject = JSONObject.parseObject(data).getJSONObject("data");
             return "IP:" + jsonObject.getString("ip")
                     + ",国家:" + jsonObject.getString("country")
                     + ",地区:" + jsonObject.getString("region")
