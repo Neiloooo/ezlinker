@@ -9,7 +9,7 @@ import com.ezlinker.app.common.AbstractXController;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.pojo.DataArea;
 import com.ezlinker.app.modules.module.service.IModuleService;
-import com.ezlinker.app.utils.ComponentTokenUtil;
+import com.ezlinker.app.utils.ModuleTokenUtil;
 import com.ezlinker.app.utils.IDKeyUtil;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
@@ -128,7 +128,7 @@ public class ModuleController extends AbstractXController<Module> {
 
         }
 
-        String token = ComponentTokenUtil.token(clientId + "::" + fields.toString());
+        String token = ModuleTokenUtil.token(clientId + "::" + fields.toString());
 
         module.setSn(sn)
                 .setClientId(clientId)
