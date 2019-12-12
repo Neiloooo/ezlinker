@@ -3,15 +3,13 @@ package com.ezlinker.app.modules.device.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.ezlinker.app.modules.device.pojo.DeviceParam;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;
-import com.ezlinker.app.modules.product.pojo.ProductParam;
+import com.ezlinker.app.modules.device.pojo.FieldParam;
 import com.ezlinker.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
@@ -35,19 +33,17 @@ public class Device extends XEntity {
     /**
      * 项目
      */
-    @NotNull(message = "必须指定所属项目")
-    private Integer projectId;
+    private Long projectId;
 
     /**
      * 产品
      */
-    @NotNull(message = "必须指定所属产品")
-    private Integer productId;
+    @NotNull(message = "产品不可为空值")
+    private Long productId;
 
     /**
      * 名称
      */
-    @NotEmpty(message = "必须指定设备名称")
     private String name;
 
     /**
@@ -92,14 +88,14 @@ public class Device extends XEntity {
 
     @TableField(typeHandler = JacksonTypeHandler.class)
 
-    private List<DeviceParam> parameters;
+    private List<FieldParam> parameters;
 
 
     /**
      * 设备当前状态
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private List<DeviceStatus>statuses;
+    private List<DeviceStatus> statuses;
     /**
      * 描述
      */

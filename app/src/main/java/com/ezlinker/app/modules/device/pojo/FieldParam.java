@@ -1,4 +1,4 @@
-package com.ezlinker.app.modules.product.pojo;
+package com.ezlinker.app.modules.device.pojo;
 
 import lombok.Data;
 
@@ -8,11 +8,11 @@ import javax.validation.constraints.NotEmpty;
  * ezlinker
  *
  * @author wangwenhai
- * @description 设备的参数
- * @create 2019-12-07 20:21
+ * @description 设备参数
+ * @create 2019-12-09 21:46
  **/
 @Data
-public class ProductParam {
+public class FieldParam   {
     /**
      * 字段名
      */

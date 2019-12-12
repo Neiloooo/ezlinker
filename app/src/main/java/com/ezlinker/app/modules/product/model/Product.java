@@ -3,7 +3,7 @@ package com.ezlinker.app.modules.product.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.ezlinker.app.modules.product.pojo.ProductParam;
+import com.ezlinker.app.modules.device.pojo.FieldParam;
 import com.ezlinker.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -67,7 +67,7 @@ public class Product extends XEntity {
 
     @NotEmpty(message = "参数内容不可为空")
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private List<ProductParam> parameters;
+    private List<FieldParam> parameters;
 
     /**
      * 描述文字

@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.AbstractXController;
 import com.ezlinker.app.modules.device.model.Device;
-import com.ezlinker.app.modules.device.pojo.DeviceParam;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;
+import com.ezlinker.app.modules.device.pojo.FieldParam;
 import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.service.IModuleService;
@@ -17,8 +17,6 @@ import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
 import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import com.ezlinker.app.modules.product.model.Product;
 import com.ezlinker.app.modules.product.service.IProductService;
-import com.ezlinker.app.modules.project.model.Project;
-import com.ezlinker.app.modules.project.service.IProjectService;
 import com.ezlinker.app.modules.tag.model.Tag;
 import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.app.utils.IDKeyUtil;
@@ -55,8 +53,7 @@ public class DeviceController extends AbstractXController<Device> {
     IModuleService iModuleService;
     @Resource
     IDeviceService iDeviceService;
-    @Resource
-    IProjectService iProjectService;
+
     @Resource
     IProductService iProductService;
     @Resource
@@ -79,25 +76,26 @@ public class DeviceController extends AbstractXController<Device> {
     @Override
     @Transactional(rollbackFor = Exception.class)
     protected R add(@RequestBody @Valid Device form) throws XException {
-        Project project = iProjectService.getById(form.getProjectId());
+
         Product product = iProductService.getById(form.getProductId());
-        if (project == null) {
-            throw new BizException("Project not exists", "该项目不存在!");
-        }
+
         if (product == null) {
             throw new BizException("Product not exists", "该产品不存在!");
         }
+
         Device device = new Device();
         device.setName(form.getName())
-                .setLogo(form.getLogo())
-                .setLocation(form.getLocation())
+                .setName(form.getName())
                 .setDescription(form.getDescription())
+                .setLocation(form.getLocation())
                 .setModel(form.getModel())
-                .setParameters(form.getParameters())
                 .setIndustry(form.getIndustry())
-                .setSn("SN" + IDKeyUtil.generateId().toString())
-                .setProductId(form.getProductId())
-                .setProjectId(form.getProjectId());
+                //继承
+                .setParameters(product.getParameters())
+                .setProductId(product.getId())
+                .setProjectId(product.getProjectId())
+                .setLogo(product.getLogo())
+                .setSn("SN" + IDKeyUtil.generateId().toString());
 
         // 建立 设备和模块的关系表
         List<Module> moduleList = iModuleService.list(new QueryWrapper<Module>().eq("product_id", product.getId()));
@@ -150,6 +148,32 @@ public class DeviceController extends AbstractXController<Device> {
         boolean ok = iDeviceService.save(device);
 
         return ok ? data(device) : fail();
+    }
+
+    /**
+     * 更新
+     * @param id
+     * @param newDevice
+     * @return
+     * @throws XException
+     */
+    @PutMapping("/{id}")
+    @Override
+    protected R update(@PathVariable Long id, @RequestBody Device newDevice) throws XException {
+        Device device = iDeviceService.getById(id);
+
+        if (device == null) {
+            throw new BizException("Device not exists", "该设备不存在!");
+        }
+        device.setName(newDevice.getName())
+                .setName(newDevice.getName())
+                .setDescription(newDevice.getDescription())
+                .setLocation(newDevice.getLocation())
+                .setModel(newDevice.getModel());
+
+        iDeviceService.updateById(device);
+
+        return data(device);
     }
 
     /**
@@ -210,12 +234,12 @@ public class DeviceController extends AbstractXController<Device> {
          * 提取KeySet集合
          */
         //List<DeviceParam> deviceParamList = device.getParameters();
-        List<DeviceParam> deviceParamList = objectMapper.convertValue(device.getParameters(),
-                new TypeReference<List<DeviceParam>>() {
+        List<FieldParam> deviceParamList = objectMapper.convertValue(device.getParameters(),
+                new TypeReference<List<FieldParam>>() {
                 });
 
         Set<String> fields = new HashSet<>();
-        for (DeviceParam deviceParam : deviceParamList) {
+        for (FieldParam deviceParam : deviceParamList) {
             fields.add(deviceParam.getField());
         }
         /**
