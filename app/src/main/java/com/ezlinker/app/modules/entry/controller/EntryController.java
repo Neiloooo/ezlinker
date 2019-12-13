@@ -124,9 +124,9 @@ public class EntryController {
 
     private String getLocationWithIp(String ip) {
         try {
-            String result = HttpUtil.get("http://whois.pconline.com.cn/ipJson.jsp?ip=" + ip);
+            String result = HttpUtil.get("http://whois.pconline.com.cn/ipJson.jsp?json=true&ip=" + ip);
 
-            JSONObject data = JSONObject.parseObject(result.trim().replace("if(window.IPCallBack) {IPCallBack(","").replace(");}",""));
+            JSONObject data = JSONObject.parseObject(result);
             return "IP地址:" + data.getString("ip")
                     + ";所在省:" + data.getString("pro")
                     + ";所在城市:" + data.getString("city")

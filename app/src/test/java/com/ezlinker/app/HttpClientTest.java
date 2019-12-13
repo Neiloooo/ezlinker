@@ -13,7 +13,7 @@ public class HttpClientTest {
     public static void main(String[] args) {
 
 
-        String result = HttpUtil.get("http://whois.pconline.com.cn/ipJson.jsp?ip=12.77.80.162");
+        String result = HttpUtil.get("http://whois.pconline.com.cn/ipJson.jsp?ip=12.77.80.162&json=true");
 
         JSONObject data = JSONObject.parseObject(result.trim().replace("if(window.IPCallBack) {IPCallBack(", "").replace(");}", ""));
         String a = "IP地址:" + data.getString("ip")
