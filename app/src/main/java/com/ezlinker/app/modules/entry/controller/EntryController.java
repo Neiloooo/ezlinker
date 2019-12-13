@@ -132,7 +132,6 @@ public class EntryController {
                     + ";所在城市:" + data.getString("city")
                     + ";运营商信息:" + data.getString("addr");
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("IP获取失败，请检查IP查询接口是否正常.");
             return "IP详细信息获取失败";
         }
