@@ -152,6 +152,7 @@ public class DeviceController extends AbstractXController<Device> {
 
     /**
      * 更新
+     *
      * @param id
      * @param newDevice
      * @return
@@ -189,13 +190,17 @@ public class DeviceController extends AbstractXController<Device> {
         if (device == null) {
             throw new BizException("Device not exist", "设备不存在");
         }
+        addTags(device);
+        return data(device);
+    }
+
+    private void addTags(Device device) {
         List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", device.getProductId()));
         Set<String> tags = new HashSet<>();
         for (Tag tag : tagList) {
             tags.add(tag.getName());
         }
         device.setTags(tags);
-        return data(device);
     }
 
     /**
@@ -206,7 +211,7 @@ public class DeviceController extends AbstractXController<Device> {
      * @throws XException
      */
     @GetMapping("/status/{id}")
-    protected R getStatus(@PathVariable Long id) throws XException {
+    public R getStatus(@PathVariable Long id) throws XException {
         Device device = iDeviceService.getById(id);
         if (device == null) {
             throw new BizException("Device not exist", "设备不存在");
@@ -223,7 +228,7 @@ public class DeviceController extends AbstractXController<Device> {
      * @throws XException
      */
     @PutMapping("/status/{id}")
-    protected R setStatus(@PathVariable Long id,
+    public R setStatus(@PathVariable Long id,
                           @Valid @RequestBody List<@Valid DeviceStatus> statuses,
                           ObjectMapper objectMapper) throws XException {
         Device device = iDeviceService.getById(id);
@@ -275,7 +280,6 @@ public class DeviceController extends AbstractXController<Device> {
     /**
      * 条件检索
      *
-     * @param projectId
      * @param current
      * @param size
      * @param name
@@ -284,15 +288,20 @@ public class DeviceController extends AbstractXController<Device> {
      */
     @GetMapping
     public R queryForPage(
-            @RequestParam Long projectId,
             @RequestParam Long productId,
+            @RequestParam Long projectId,
             @RequestParam Integer current,
             @RequestParam Integer size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String industry,
             @RequestParam(required = false) String sn,
             @RequestParam(required = false) Integer type,
-            @RequestParam(required = false) String model) {
+            @RequestParam(required = false) String model) throws BizException {
+//        Product product = iProductService.getById(productId);
+//
+//        if (product == null) {
+//            throw new BizException("Product not exists", "该产品不存在!");
+//        }
 
         QueryWrapper<Device> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("project_id", projectId);
@@ -304,14 +313,9 @@ public class DeviceController extends AbstractXController<Device> {
         queryWrapper.like(industry != null, "industry", industry);
         queryWrapper.orderByDesc("create_time");
 
-        IPage<Device> devicePage = iDeviceService.page(new Page<Device>(current, size), queryWrapper);
+        IPage<Device> devicePage = iDeviceService.page(new Page<>(current, size), queryWrapper);
         for (Device device : devicePage.getRecords()) {
-            List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", device.getProductId()));
-            Set<String> tags = new HashSet<>();
-            for (Tag tag : tagList) {
-                tags.add(tag.getName());
-            }
-            device.setTags(tags);
+            addTags(device);
         }
 
         return data(devicePage);
