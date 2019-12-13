@@ -12,6 +12,9 @@ import com.ezlinker.app.modules.userlog.model.UserLoginLog;
 import com.ezlinker.app.modules.userlog.service.IUserLoginLogService;
 import com.ezlinker.app.utils.UserTokenUtil;
 import com.ezlinker.common.exception.AuthorizedFailedException;
+import com.ezlinker.common.exception.PasswordInvalidException;
+import com.ezlinker.common.exception.UserNotFoundException;
+import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
 import com.ezlinker.common.exchange.RCode;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +61,7 @@ public class EntryController {
      */
     @Transactional(rollbackFor = Exception.class, noRollbackFor = AuthorizedFailedException.class)
     @PostMapping("/login")
-    public R login(@RequestBody UserLoginForm loginForm, HttpServletRequest request) throws AuthorizedFailedException {
+    public R login(@RequestBody UserLoginForm loginForm, HttpServletRequest request) throws XException {
         User user = iUserService.getOne(new QueryWrapper<User>().eq("username", loginForm.getUsername()));
         String ip = getIp(request);
 
@@ -67,14 +70,14 @@ public class EntryController {
             UserLoginLog userLoginLog = new UserLoginLog();
             userLoginLog.setIp(ip).setStatus("WARNING").setUserId(0L).setRemark("未知用户尝试登陆失败").setLocation(getLocationWithIp(ip));
             iUserLoginLogService.save(userLoginLog);
-            throw new AuthorizedFailedException("Login failure,user not exists!", "登陆失败,用户不存在");
+            throw new UserNotFoundException("Login failure,user not exists!", "登陆失败,用户不存在");
         }
 
         if (!user.getPassword().toUpperCase().equals(SecureUtil.md5(loginForm.getPassword()).toUpperCase())) {
             UserLoginLog userLoginLog = new UserLoginLog();
             userLoginLog.setIp(ip).setStatus("WARNING").setUserId(user.getId()).setRemark("尝试登陆失败").setLocation(getLocationWithIp(ip));
             iUserLoginLogService.save(userLoginLog);
-            throw new AuthorizedFailedException("Login failure,password invalid!", "登陆失败,密码错误");
+            throw new PasswordInvalidException("Login failure,password invalid!", "登陆失败,密码错误");
 
         }
         /**
@@ -103,22 +106,16 @@ public class EntryController {
 
     /**
      * {
-     * "code": 0,
-     * "data": {
-     * "area": "",
-     * "country": "中国",
-     * "isp_id": "100017",
-     * "city": "上海",
-     * "ip": "115.159.152.210",
-     * "isp": "电信",
-     * "county": "XX",
-     * "region_id": "310000",
-     * "area_id": "",
-     * "county_id": "xx",
-     * "region": "上海",
-     * "country_id": "CN",
-     * "city_id": "310100"
-     * }
+     * "ip": "156.77.80.16",
+     * "pro": "",
+     * "proCode": "999999",
+     * "city": "",
+     * "cityCode": "0",
+     * "region": "",
+     * "regionCode": "0",
+     * "addr": "* 美国",
+     * "regionNames": "",
+     * "err": "noprovince"
      * }
      *
      * @param ip
@@ -127,12 +124,13 @@ public class EntryController {
 
     private String getLocationWithIp(String ip) {
         try {
-            String data = HttpUtil.get("http://ip.taobao.com/service/getIpInfo.php?ip=" + ip);
-            JSONObject jsonObject = JSONObject.parseObject(data).getJSONObject("data");
-            return "IP:" + jsonObject.getString("ip")
-                    + ",国家:" + jsonObject.getString("country")
-                    + ",地区:" + jsonObject.getString("region")
-                    + ",运营商:" + jsonObject.getString("isp");
+            String result = HttpUtil.get("http://whois.pconline.com.cn/ipJson.jsp?ip=" + ip);
+
+            JSONObject data = JSONObject.parseObject(result.trim().replace("if(window.IPCallBack) {IPCallBack(","").replace(");}",""));
+            return "IP地址:" + data.getString("ip")
+                    + ";所在省:" + data.getString("pro")
+                    + ";所在城市:" + data.getString("city")
+                    + ";运营商信息:" + data.getString("addr");
         } catch (Exception e) {
             e.printStackTrace();
             log.error("IP获取失败，请检查IP查询接口是否正常.");
