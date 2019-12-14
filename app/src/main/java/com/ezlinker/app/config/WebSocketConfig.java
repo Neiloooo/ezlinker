@@ -32,6 +32,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // WS连接点
         registry.addEndpoint("/stomp")
                 .setAllowedOrigins("*")
                 .setHandshakeHandler(principalHandshakeHandler)

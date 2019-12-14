@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -100,5 +101,16 @@ public class Device extends XEntity {
      * 描述
      */
     private String description;
+
+
+    /**
+     * 活跃时间
+     */
+    private Date lastActive;
+
+    /**
+     * 状态
+     */
+    private Integer state;
 
 }
