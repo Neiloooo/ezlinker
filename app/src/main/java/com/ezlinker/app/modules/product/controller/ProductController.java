@@ -163,6 +163,14 @@ public class ProductController extends SimpleXController {
         return data(projectPage);
     }
 
+    private void addTags(Product product) {
+        List<Tag> tagList =iTagService.list(new QueryWrapper<Tag>().eq("link_id", product.getId()));
+        Set<String> tags = new HashSet<>();
+        for (Tag tag : tagList) {
+            tags.add(tag.getName());
+        }
+        product.setTags(tags);
+    }
 
 }
 
