@@ -29,8 +29,6 @@ public class Project extends XEntity {
     private String name;
 
     private String logo;
-    @NotNull(message = "用户不可为空")
-
     private Long userId;
 
     private String description;
