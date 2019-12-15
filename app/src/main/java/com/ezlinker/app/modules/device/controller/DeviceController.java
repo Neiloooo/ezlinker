@@ -63,6 +63,9 @@ public class DeviceController extends AbstractXController<Device> {
     @Resource
     IMqttTopicService iMqttTopicService;
 
+    @Resource
+    IDKeyUtil idKeyUtil;
+
 
     public DeviceController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
@@ -97,7 +100,7 @@ public class DeviceController extends AbstractXController<Device> {
                 .setProductId(product.getId())
                 .setProjectId(product.getProjectId())
                 .setLogo(product.getLogo())
-                .setSn("SN" + IDKeyUtil.generateId().toString());
+                .setSn("SN" + idKeyUtil.nextId());
 
         // 建立 设备和模块的关系表
         List<Module> moduleList = iModuleService.list(new QueryWrapper<Module>().eq("product_id", product.getId()));

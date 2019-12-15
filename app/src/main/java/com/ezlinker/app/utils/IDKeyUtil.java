@@ -20,10 +20,11 @@ package com.ezlinker.app.utils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.springframework.stereotype.Component;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
-
+@Component
 public class IDKeyUtil {
 
 
@@ -101,18 +102,13 @@ public class IDKeyUtil {
     private static IDKeyUtil idKeyUtil;
 
     static {
-        idKeyUtil = new IDKeyUtil(getWorkId(), getDataCenterId());
+        idKeyUtil = new IDKeyUtil();
     }
 
     //==============================Constructors=====================================
 
-    /**
-     * 构造函数
-     *
-     * @param workerId     工作ID (0~31)
-     * @param dataCenterId 数据中心ID (0~31)
-     */
-    public IDKeyUtil(long workerId, long dataCenterId) {
+    public IDKeyUtil() {
+        Long workerId = 1L,dataCenterId=1L;
         if (workerId > maxWorkerId || workerId < 0) {
             throw new IllegalArgumentException(String.format("workerId can't be greater than %d or less than 0", maxWorkerId));
         }
@@ -221,11 +217,13 @@ public class IDKeyUtil {
     }
 
     public static void main(String[] args) {
-        IDKeyUtil idWorker = new IDKeyUtil(0, 0);
+        IDKeyUtil idWorker = new IDKeyUtil();
         for (int i = 0; i < 10; i++) {
             long id = idWorker.nextId();
             System.out.println(Long.toBinaryString(id));
             System.out.println(id);
         }
     }
+
+
 }
