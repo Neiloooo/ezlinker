@@ -1,5 +1,6 @@
 package com.ezlinker.app.modules.websocket.model;
 
+import com.ezlinker.app.modules.module.pojo.DataArea;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,10 +15,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class ClientMessage {
 
-    private String name;
-
-    public ClientMessage() {
-
-    }
+    private String clientId;
+    private boolean debug;
+    private DataArea dataArea;
 
 }

@@ -21,15 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class DataEntryController {
     @PostMapping("/connected")
     public R connected(@RequestBody ConnectedMessage message) {
-
-        System.out.println("RMQ Data:" + message);
+        System.out.println("设备 Clientid is:"+message.getClientid()+" Username is:"+message.getUsername() +" 上线");
         return new R();
     }
 
     @PostMapping("/disconnected")
     public R disconnected(@RequestBody DisconnectedMessage message) {
-
-        System.out.println("RMQ Data:" + message);
+        System.out.println("设备 Clientid is:"+message.getClientid()+" Username is:"+message.getUsername() +" 下线");
         return new R();
     }
 

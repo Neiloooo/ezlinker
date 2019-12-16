@@ -20,7 +20,7 @@ public class DisconnectedMessage extends EMQWebHookMessage{
     /**
      * 客户端ID
      */
-    private String clientId;
+    private String clientid;
     /**
      * MQTT Username
      */
@@ -38,7 +38,7 @@ public class DisconnectedMessage extends EMQWebHookMessage{
     public String toString() {
         return "DisconnectedMessage{" +
                 "action='" + action + '\'' +
-                ", clientId='" + clientId + '\'' +
+                ", clientId='" + clientid + '\'' +
                 ", username='" + username + '\'' +
                 ", reason='" + reason + '\'' +
                 ", ip='" + ip + '\'' +

@@ -87,3 +87,16 @@ aliyun:
     from-alias: EZLinker
     address-type: 1
     tag-name: EZLinker
+
+# EMQ Config
+emqx:
+  host: localhost
+  tcp-port: 1883
+  api-port: 8080
+
+
+
+
+
+
+

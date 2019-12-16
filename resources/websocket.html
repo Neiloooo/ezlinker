@@ -1,67 +1,61 @@
 <!DOCTYPE html>
-<html lang="cn" xml:th="http://www.thymeleaf.org" xmlns:link="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Title</title>
-    <script src="http://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
-    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.js"></script>
-    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>app</title>
+    <script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.slim.js"></script>
 </head>
-<body onload="disconnect()">
-
-<div>
-    <button id="connect" onclick="connect()">连接</button>
-    <button id="disconnect" disabled="disabled" onclick="disconnect()">断开连接</button>
-
-</div>
-
-<div id="conversationDiv">
-    <label>输入你的名字</label>
-    <input type="text" id="name"/>
-    <button id="sendName" onclick="sendName()">发送</button>
-    <p id="response"></p>
-</div>
-
+<body>
+<input type="text" id="input">
+<button id="btn">send</button>
+<div id="content-wrap"></div>
 </body>
 <script>
-    var stompClient = null;
-    function  setConnected(connected) {
-        document.getElementById("connect").disabled = connected;
-        document.getElementById('disconnect').disabled = !connected;
-        document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
-        $('#response').html();
-    }
+    window.onload = () => {
+        let inputValue = null
 
-    function  connect() {
-        var socket = new SockJS('http://localhost:2501');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({},function (frame) {
-            setConnected(true);
-            console.log('connected'+ frame);
-            stompClient.subscribe('/topic/getResponse',function (response) {
-                showResponse(JSON.parse(response.body).responseMessage);
-            });
-        });
-    }
+        let socket = io('http://localhost:2501')
+        /**
+         * 来自客户端的消息
+         */
+        socket.on('c2s', data => {
+            let content = document.createElement('p')
+            content.innerHTML = data
+            document.querySelector('#content-wrap').appendChild(content)
+        })
 
-    function disconnect() {
-        if(stompClient!=null){
-            stompClient.disconnect();
+        /**
+         * 服务端的消息
+         */
+        socket.on('echo', data => {
+            let content = document.createElement('p')
+            content.innerHTML = data
+            document.querySelector('#content-wrap').appendChild(content)
+        })
+
+
+        let inputChangeHandle = (ev) => {
+            inputValue = ev.target.value
         }
-        setConnected(false);
-        console.log('disconnected')
-    }
+        let inputDom = document.querySelector("#input")
+        inputDom.addEventListener('input', inputChangeHandle, false)
+
+        let sendHandle = () => {
+            socket.emit('s2c', {
+                "clientId": "str",
+                "debug": true,
+                "dataArea": {"field": "K", "value": "V"}
+            })
+        }
+        let btnDom = document.querySelector("#btn")
+        btnDom.addEventListener('click', sendHandle, false)
 
 
-    function  sendName() {
-        var name = $('#name').val();
-        stompClient.send('/welcome',{},JSON.stringify({'name':name}));
+        window.onunload = () => {
+            btnDom.removeEventListener('click', sendHandle, false)
+            inputDom.removeEventListener('input', inputChangeHandle, false)
+        }
     }
-    function  showResponse(message) {
-        var response = $('#response');
-        response.html(message);
-    }
-
 </script>
+
 </html>
