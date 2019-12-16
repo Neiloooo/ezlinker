@@ -158,6 +158,12 @@
             <version>1.7.7</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-mqtt</artifactId>
+            <version>3.8.4</version>
+        </dependency>
+
     </dependencies>
     <profiles>
         <profile>

@@ -3,6 +3,7 @@ package com.ezlinker.app.modules.device.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.ezlinker.app.constants.DeviceState;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.device.pojo.FieldParam;
 import com.ezlinker.common.model.XEntity;
@@ -111,6 +112,6 @@ public class Device extends XEntity {
     /**
      * 状态
      */
-    private Integer state;
+    private Integer state = DeviceState.UN_ACTIVE;
 
 }

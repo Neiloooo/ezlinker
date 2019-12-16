@@ -7,9 +7,9 @@ package com.ezlinker.app.constants;
  */
 public interface DeviceState {
     //正在运行
-    Integer RUNNING = 1;
+    Integer ONLINE = 1;
     //停止运行
-    Integer STOP = 2;
+    Integer OFFLINE = 2;
     //未激活
     Integer UN_ACTIVE = 3;
 

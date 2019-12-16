@@ -7,53 +7,68 @@
 </head>
 <body>
 <input type="text" id="input">
-<button id="btn">send</button>
+<button id="sendBtn">发送数据</button>
+<button id="testBtn">测试下</button>
+
 <div id="content-wrap"></div>
 </body>
 <script>
     window.onload = () => {
-        let inputValue = null
+        let inputValue = "null";
 
-        let socket = io('http://localhost:2501')
+        let socket = io('http://localhost:2501');
         /**
          * 来自客户端的消息
          */
         socket.on('c2s', data => {
-            let content = document.createElement('p')
-            content.innerHTML = data
+            let content = document.createElement('p');
+            content.innerHTML = data;
             document.querySelector('#content-wrap').appendChild(content)
         })
 
         /**
-         * 服务端的消息
+         * 服务端回复的消息
          */
         socket.on('echo', data => {
-            let content = document.createElement('p')
+            let content = document.createElement('p');
             content.innerHTML = data
             document.querySelector('#content-wrap').appendChild(content)
-        })
+        });
 
 
-        let inputChangeHandle = (ev) => {
-            inputValue = ev.target.value
-        }
-        let inputDom = document.querySelector("#input")
-        inputDom.addEventListener('input', inputChangeHandle, false)
-
+        /**
+         * 给客户端推送消息
+         */
         let sendHandle = () => {
-            socket.emit('s2c', {
-                "clientId": "str",
-                "debug": true,
-                "dataArea": {"field": "K", "value": "V"}
-            })
-        }
-        let btnDom = document.querySelector("#btn")
-        btnDom.addEventListener('click', sendHandle, false)
+            socket.emit('s2c', {"dataArea": {"field": "str", "type": 0, "defaultValue": "str", "description": "str"}})
+        };
+
+        /**
+         * 简单测试
+         */
+        let testHandle = () => {
+            socket.emit('test', "Test string")
+        };
+
+        /**
+         * 按钮事件
+         * @type {Element}
+         */
+        let sendBtn = document.querySelector("#sendBtn");
+        sendBtn.addEventListener('click', sendHandle, false);
+
+
+        /**
+         * 按钮事件
+         * @type {Element}
+         */
+        let testBtn = document.querySelector("#testBtn");
+        testBtn.addEventListener('click', testHandle, false);
 
 
         window.onunload = () => {
-            btnDom.removeEventListener('click', sendHandle, false)
-            inputDom.removeEventListener('input', inputChangeHandle, false)
+            sendBtn.removeEventListener('click', sendHandle, false);
+            testBtn.removeEventListener('click', testHandle, false);
         }
     }
 </script>

@@ -1,16 +1,24 @@
 package com.ezlinker.app.config;
 
+import com.alibaba.fastjson.JSONObject;
 import com.corundumstudio.socketio.MultiTypeAckCallback;
 import com.corundumstudio.socketio.MultiTypeArgs;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.annotation.SpringAnnotationScanner;
+import com.ezlinker.app.config.socketio.C2SMessage;
+import com.ezlinker.app.config.socketio.EchoMessage;
+import com.ezlinker.app.config.socketio.S2CMessage;
+import com.ezlinker.app.modules.module.pojo.DataAreaValue;
+import io.netty.channel.AbstractChannel;
+import io.vertx.mqtt.MqttClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Map;
+import javax.annotation.Resource;
+import java.net.ConnectException;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -22,16 +30,22 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @Slf4j
 public class SocketServerConfig {
-
-    private static ConcurrentHashMap<String, SocketIOClient> socketIoClientStore = new ConcurrentHashMap<>();
-
-    private static SocketIOClient socketIoClient;
     @Value("${emqx.host}")
     String emqxHost;
     @Value("${emqx.tcp-port}")
     Integer tcpPort;
     @Value("${emqx.api-port}")
     Integer apiPort;
+
+    private static ConcurrentHashMap<String, SocketIOClient> socketIoClientStore = new ConcurrentHashMap<>();
+
+    private static SocketIOClient socketIoClient;
+
+    /**
+     * MQTT代理
+     */
+    @Resource
+    MqttClient mqttClient;
 
     @Bean
     public SocketIOServer socketIoServer() {
@@ -54,20 +68,51 @@ public class SocketServerConfig {
                 socketIoClient = client;
                 socketIoClientStore.put(client.getSessionId().toString(), client);
             }
+            /**
+             * 构造消息
+             */
+            EchoMessage echoMessage = new EchoMessage();
+            echoMessage.setCode(201);
+            echoMessage.setDebug(true);
+            echoMessage.setPayload("client connected!");
+            echo(echoMessage);
+            /**
+             * 开始连接MQTT
+             */
+            try {
+                mqttClient.connect(tcpPort, emqxHost, mqttConnAckMessageAsyncResult -> {
+                    EchoMessage e = new EchoMessage();
 
-            socketIoClient.sendEvent("onEcho", new MultiTypeAckCallback() {
+                    if (mqttConnAckMessageAsyncResult.succeeded()) {
+                        e.setCode(201);
+                        e.setDebug(true);
+                        e.setPayload("proxy connected!");
+                    } else {
+                        e.setCode(400);
+                        e.setDebug(true);
+                        e.setPayload("proxy connect error!");
 
-                @Override
-                public void onSuccess(MultiTypeArgs objects) {
+                    }
+                    echo(e);
 
-                }
-            }, "来自服务器的消息:连接成功!");
+                });
+            } catch (Exception ee) {
+
+                EchoMessage e = new EchoMessage();
+                e.setCode(400);
+                e.setDebug(true);
+                e.setPayload("proxy connect error!");
+                echo(e);
+                log.error("EMQX 连接失败");
+            }
+
+
         });
         server.addDisconnectListener(client -> {
             if (!socketIoClientStore.contains(client)) {
                 socketIoClientStore.remove(client.getSessionId().toString());
                 socketIoClient = null;
-                log.info("SocketIo客户端离线成功" + client.getSessionId());
+                log.info("SocketIo客户端离线" + client.getSessionId());
 
             }
 
@@ -76,17 +121,43 @@ public class SocketServerConfig {
         /**
          * 服务端给客户端推送消息
          */
-        server.addEventListener("s2c", Map.class, (client, payload, ackRequest) -> {
+        server.addEventListener("s2c", S2CMessage.class, (client, payload, ackRequest) -> {
 
             System.out.println("消息到达:" + payload.toString());
             /**
              * WS的消息
              */
-            echo("来自服务器的ECHO:消息发送成功:" + payload);
+            EchoMessage echoMessage = new EchoMessage();
+            echoMessage.setCode(201);
+            echoMessage.setDebug(true);
+            echoMessage.setPayload("send success!");
+            echo(echoMessage);
+
             /**
              * 模拟设备推送
              */
-            c2s("我是来自客户端的消息:Hello I am Client001");
+            C2SMessage c2SMessage = new C2SMessage();
+            c2SMessage.setCode(201);
+            c2SMessage.setDebug(true);
+            DataAreaValue dataAreaValue = new DataAreaValue();
+            dataAreaValue.setField("name");
+            dataAreaValue.setValue("www");
+            c2SMessage.setDataAreaValue(dataAreaValue);
+            c2s(c2SMessage);
+        });
+
+        /**
+         *
+         */
+        server.addEventListener("test", Object.class, (client, payload, ackRequest) -> {
+            /**
+             * WS的消息
+             */
+            EchoMessage echoMessage = new EchoMessage();
+            echoMessage.setCode(201);
+            echoMessage.setDebug(true);
+            echoMessage.setPayload("test success!");
+            echo(echoMessage);
 
         });
 
@@ -97,32 +168,35 @@ public class SocketServerConfig {
 
     /**
      * 回复消息
+     *
      * @param message
      */
-    private void echo(Object message) {
+    private void echo(EchoMessage message) {
         socketIoClient.sendEvent("echo", new MultiTypeAckCallback() {
 
             @Override
             public void onSuccess(MultiTypeArgs objects) {
 
             }
-        }, message);
+        }, JSONObject.toJSONString(message));
     }
 
     /**
      * 客户端来的消息
+     *
      * @param message
      */
 
-    private void c2s(Object message) {
+    private void c2s(C2SMessage message) {
         socketIoClient.sendEvent("c2s", new MultiTypeAckCallback() {
 
             @Override
             public void onSuccess(MultiTypeArgs objects) {
 
             }
-        }, message);
+        }, JSONObject.toJSONString(message));
     }
+
     @Bean
     public SpringAnnotationScanner springAnnotationScanner(SocketIOServer socketServer) {
         return new SpringAnnotationScanner(socketServer);
