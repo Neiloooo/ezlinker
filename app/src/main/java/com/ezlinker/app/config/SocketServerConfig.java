@@ -197,9 +197,5 @@ public class SocketServerConfig {
         }, JSONObject.toJSONString(message));
     }
 
-    @Bean
-    public SpringAnnotationScanner springAnnotationScanner(SocketIOServer socketServer) {
-        return new SpringAnnotationScanner(socketServer);
-    }
 
 }

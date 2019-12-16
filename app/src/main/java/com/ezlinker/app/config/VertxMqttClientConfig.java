@@ -1,7 +1,8 @@
 package com.ezlinker.app.config;
 
 import io.vertx.core.Vertx;
-import io.vertx.mqtt.MqttClient;
+import io.vertx.mqtt.MqttClientOptions;
+import io.vertx.mqtt.impl.MqttClientImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,9 +25,9 @@ public class VertxMqttClientConfig {
      */
 
     @Bean
-    public MqttClient mqttClient() {
-
-        return MqttClient.create(Vertx.vertx());
+    public MqttClientImpl mqttClient() {
+        MqttClientOptions mqttClientOptions = new MqttClientOptions();
+        return new MqttClientImpl(Vertx.vertx(), mqttClientOptions);
     }
 
 }
