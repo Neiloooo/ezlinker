@@ -17,6 +17,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class C2SMessage extends XWSMsg{
 
-    private DataAreaValue dataAreaValue;
+    private Object data;
 
 }

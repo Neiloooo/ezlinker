@@ -75,7 +75,7 @@ public class MqttTopic extends XEntity {
     /**
      * 设备的ID
      */
-    private Long deviceId;
+    private Long moduleId;
     /**
      * 类型
      * 类型 1：S2C；2：C2S；3：STATUS；4：GROUP

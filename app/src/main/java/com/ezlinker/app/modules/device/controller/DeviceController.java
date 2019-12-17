@@ -101,6 +101,8 @@ public class DeviceController extends AbstractXController<Device> {
                 .setProjectId(product.getProjectId())
                 .setLogo(product.getLogo())
                 .setSn("SN" + idKeyUtil.nextId());
+        // 保存设备
+        iDeviceService.save(device);
 
         // 建立 设备和模块的关系表
         List<Module> moduleList = iModuleService.list(new QueryWrapper<Module>().eq("product_id", product.getId()));
@@ -119,17 +121,17 @@ public class DeviceController extends AbstractXController<Device> {
             s2cTopic.setAccess(TOPIC_SUB)
                     .setType(MqttTopic.S2C)
                     .setClientId(clientId)
-                    .setDeviceId(device.getId())
-                    .setTopic("mqtt/out/" + device.getId() + "/" + clientId + "/s2c")
+                    .setModuleId(device.getId())
+                    .setTopic("mqtt/out/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/s2c")
                     .setUsername(username)
                     .setDescription("服务端消息入口");
             // 数据下行
             MqttTopic c2sTopic = new MqttTopic();
             c2sTopic.setAccess(TOPIC_PUB)
                     .setType(MqttTopic.C2S)
-                    .setDeviceId(device.getId())
+                    .setModuleId(device.getId())
                     .setClientId(clientId)
-                    .setTopic("mqtt/in/" + device.getId() + "/" + clientId + "/c2s")
+                    .setTopic("mqtt/in/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/c2s")
                     .setUsername(username)
                     .setDescription("服务端消息出口");
             // 状态上报
@@ -138,8 +140,8 @@ public class DeviceController extends AbstractXController<Device> {
                     .setType(MqttTopic.STATUS)
                     .setUsername(username)
                     .setClientId(clientId)
-                    .setDeviceId(device.getId())
-                    .setTopic("mqtt/in/" + device.getId() + "/" + clientId + "/status")
+                    .setModuleId(device.getId())
+                    .setTopic("mqtt/in/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/status")
                     .setDescription("状态上报入口");
             //生成
             iMqttTopicService.save(s2cTopic);
@@ -149,10 +151,7 @@ public class DeviceController extends AbstractXController<Device> {
         }
 
 
-        // 保存设备
-        boolean ok = iDeviceService.save(device);
-
-        return ok ? data(device) : fail();
+        return data(device);
     }
 
     /**
@@ -324,6 +323,7 @@ public class DeviceController extends AbstractXController<Device> {
 
     /**
      * 初始化设备
+     *
      * @return
      */
     @PutMapping("/init/{id}")
@@ -345,7 +345,7 @@ public class DeviceController extends AbstractXController<Device> {
      */
 
     @PostMapping("/s2c")
-    public R s2c(@RequestBody @Valid S2CMessage s2CMessage){
+    public R s2c(@RequestBody @Valid S2CMessage s2CMessage) {
         //TODO
         //此处细节较多，等其他地方调通以后再来处理
 

@@ -3,74 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>app</title>
-    <script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.slim.js"></script>
-</head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script></head>
 <body>
-<input type="text" id="input">
-<button id="sendBtn">发送数据</button>
-<button id="testBtn">测试下</button>
+
+<button id="sendBtn" onclick="send()">发送</button>
+<button id="testBtn" onclick="test()">测试</button>
 
 <div id="content-wrap"></div>
 </body>
 <script>
-    window.onload = () => {
-        let inputValue = "null";
+    const socket = io('http://localhost:2501?token=32dassw4fd3r&moduleId=1');
 
-        let socket = io('http://localhost:2501');
-        /**
-         * 来自客户端的消息
-         */
-        socket.on('c2s', data => {
-            let content = document.createElement('p');
-            content.innerHTML = data;
-            document.querySelector('#content-wrap').appendChild(content)
-        })
-
-        /**
-         * 服务端回复的消息
-         */
-        socket.on('echo', data => {
-            let content = document.createElement('p');
-            content.innerHTML = data
-            document.querySelector('#content-wrap').appendChild(content)
-        });
-
-
-        /**
-         * 给客户端推送消息
-         */
-        let sendHandle = () => {
-            socket.emit('s2c', {"dataArea": {"field": "str", "type": 0, "defaultValue": "str", "description": "str"}})
-        };
-
-        /**
-         * 简单测试
-         */
-        let testHandle = () => {
-            socket.emit('test', "Test string")
-        };
-
-        /**
-         * 按钮事件
-         * @type {Element}
-         */
-        let sendBtn = document.querySelector("#sendBtn");
-        sendBtn.addEventListener('click', sendHandle, false);
-
-
-        /**
-         * 按钮事件
-         * @type {Element}
-         */
-        let testBtn = document.querySelector("#testBtn");
-        testBtn.addEventListener('click', testHandle, false);
-
-
-        window.onunload = () => {
-            sendBtn.removeEventListener('click', sendHandle, false);
-            testBtn.removeEventListener('click', testHandle, false);
-        }
+    function send() {
+        socket.emit('s2c', Math.round(Math.random()*1000))
     }
+
+    function test() {
+        socket.emit('test', "HelloWorld")
+    }
+
+    /**
+     * 来自客户端的消息
+     */
+    socket.on('c2s', data => {
+        window.console.log("来自客户端的的回应:", data);
+
+    })
+
+    /**
+     * 服务端回复的消息
+     */
+    socket.on('echo', data => {
+        window.console.log("来自服务器的回应:", data);
+    });
+
+
 </script>
 
 </html>

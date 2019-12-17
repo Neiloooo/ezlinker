@@ -12,7 +12,7 @@
         <result column="ip" property="ip"/>
         <result column="username" property="username"/>
         <result column="client_id" property="clientId"/>
-        <result column="device_id" property="deviceId"/>
+        <result column="module_id" property="moduleId"/>
         <result column="access" property="access"/>
         <result column="topic" property="topic"/>
     </resultMap>
@@ -27,7 +27,7 @@ allow,
 ip,
 username,
 client_id,
-device_id,
+module_id,
 access,
 topic
     </sql>

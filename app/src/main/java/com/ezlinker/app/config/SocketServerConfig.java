@@ -1,51 +1,54 @@
 package com.ezlinker.app.config;
 
 import com.alibaba.fastjson.JSONObject;
-import com.corundumstudio.socketio.MultiTypeAckCallback;
-import com.corundumstudio.socketio.MultiTypeArgs;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.corundumstudio.socketio.annotation.SpringAnnotationScanner;
+import com.ezlinker.app.config.mqtt.MqttProxyClient;
 import com.ezlinker.app.config.socketio.C2SMessage;
 import com.ezlinker.app.config.socketio.EchoMessage;
-import com.ezlinker.app.config.socketio.S2CMessage;
-import com.ezlinker.app.modules.module.pojo.DataAreaValue;
-import io.netty.channel.AbstractChannel;
-import io.vertx.mqtt.MqttClient;
+import com.ezlinker.app.modules.module.model.Module;
+import com.ezlinker.app.modules.module.service.IModuleService;
+import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
+import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
-import java.net.ConnectException;
+import java.nio.charset.Charset;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @program: ezlinker
- * @description: SocketServer
+ * @description: SocketServer:提供Websocket服务.注意:本类目前还没有抽象出来,代码结构搅乱,以后再提取.
  * @author: wangwenhai
  * @create: 2019-12-16 15:09
  **/
 @Configuration
 @Slf4j
 public class SocketServerConfig {
-    @Value("${emqx.host}")
-    String emqxHost;
-    @Value("${emqx.tcp-port}")
-    Integer tcpPort;
-    @Value("${emqx.api-port}")
-    Integer apiPort;
 
+    @Resource
+    IModuleService iModuleService;
+    @Resource
+    IMqttTopicService iMqttTopicService;
     private static ConcurrentHashMap<String, SocketIOClient> socketIoClientStore = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, String> publishMqttTopicStore = new ConcurrentHashMap<>();
 
-    private static SocketIOClient socketIoClient;
+    private static boolean isConnectToEmqx = false;
 
     /**
      * MQTT代理
      */
     @Resource
-    MqttClient mqttClient;
+    MqttProxyClient emqClient;
+    @Resource
+    MqttConnectOptions mqttConnectOptions;
 
     @Bean
     public SocketIOServer socketIoServer() {
@@ -59,109 +62,95 @@ public class SocketServerConfig {
         socketIoConfig.setPingTimeout(180000);
         socketIoConfig.setPingInterval(60000);
         // 认证
-        socketIoConfig.setAuthorizationListener(data -> true);
-        final SocketIOServer server = new SocketIOServer(socketIoConfig);
+        socketIoConfig.setAuthorizationListener(data -> {
+            // TODO 这里做个安全拦截器,WS必须带上颁发的随机Token才能连接
+            return true;
+        });
+        SocketIOServer server = new SocketIOServer(socketIoConfig);
+        server.startAsync();
+        /**
+         * 当WS连接进来以后
+         */
         server.addConnectListener(client -> {
 
-            if (client != null) {
-                log.info("SocketIo连接成功:" + client.getSessionId().toString());
-                socketIoClient = client;
-                socketIoClientStore.put(client.getSessionId().toString(), client);
-            }
-            /**
-             * 构造消息
-             */
+            Long moduleId = Long.valueOf(client.getHandshakeData().getUrlParams().get("moduleId").get(0));
+
+            socketIoClientStore.put(client.getSessionId().toString(), client);
             EchoMessage echoMessage = new EchoMessage();
-            echoMessage.setCode(201);
+            echoMessage.setCode(200);
             echoMessage.setDebug(true);
-            echoMessage.setPayload("client connected!");
-            echo(echoMessage);
+            echoMessage.setPayload("client connect successfully!");
+            echo(client, echoMessage);
+
+
             /**
-             * 开始连接MQTT
+             * 当WS连接成功以后,开始连接EMQX
              */
-            try {
-                mqttClient.connect(tcpPort, emqxHost, mqttConnAckMessageAsyncResult -> {
-                    EchoMessage e = new EchoMessage();
-
-                    if (mqttConnAckMessageAsyncResult.succeeded()) {
-                        e.setCode(201);
-                        e.setDebug(true);
-                        e.setPayload("proxy connected!");
-                    } else {
-                        e.setCode(400);
-                        e.setDebug(true);
-                        e.setPayload("proxy connect error!");
-
-                    }
-                    echo(e);
-
-                });
-            } catch (Exception ee) {
-
-                EchoMessage e = new EchoMessage();
-                e.setCode(400);
-                e.setDebug(true);
-                e.setPayload("proxy connect error!");
-                echo(e);
-                log.error("EMQX 连接失败");
-            }
-
-
-        });
-        server.addDisconnectListener(client -> {
-            if (!socketIoClientStore.contains(client)) {
-                socketIoClientStore.remove(client.getSessionId().toString());
-                socketIoClient = null;
-                log.info("SocketIo客户端离线" + client.getSessionId());
-
+            connectToEmqx(moduleId, client);
+            if (isConnectToEmqx) {
+                EchoMessage m0 = new EchoMessage();
+                m0.setCode(200);
+                m0.setDebug(true);
+                m0.setPayload("proxy connect successfully!");
+                echo(client, m0);
+            } else {
+                EchoMessage m1 = new EchoMessage();
+                m1.setCode(400);
+                m1.setDebug(true);
+                m1.setPayload("proxy connect failure!");
+                echo(client, m1);
             }
 
         });
-
         /**
-         * 服务端给客户端推送消息
+         * 离线回调
          */
-        server.addEventListener("s2c", S2CMessage.class, (client, payload, ackRequest) -> {
+        server.addDisconnectListener(client -> {
+            String sessionId = client.getSessionId().toString();
+            socketIoClientStore.remove(sessionId);
+            if (emqClient.isConnected()) {
+                try {
+                    emqClient.disconnect();
+                } catch (MqttException e) {
+                    log.error("内部错误:" + e.getMessage());
+                }
+            }
+            if (isConnectToEmqx) {
+                isConnectToEmqx = false;
+            }
 
-            System.out.println("消息到达:" + payload.toString());
-            /**
-             * WS的消息
-             */
-            EchoMessage echoMessage = new EchoMessage();
-            echoMessage.setCode(201);
-            echoMessage.setDebug(true);
-            echoMessage.setPayload("send success!");
-            echo(echoMessage);
-
-            /**
-             * 模拟设备推送
-             */
-            C2SMessage c2SMessage = new C2SMessage();
-            c2SMessage.setCode(201);
-            c2SMessage.setDebug(true);
-            DataAreaValue dataAreaValue = new DataAreaValue();
-            dataAreaValue.setField("name");
-            dataAreaValue.setValue("www");
-            c2SMessage.setDataAreaValue(dataAreaValue);
-            c2s(c2SMessage);
         });
-
+        /**
+         * test
+         */
         /**
          *
          */
         server.addEventListener("test", Object.class, (client, payload, ackRequest) -> {
-            /**
-             * WS的消息
-             */
-            EchoMessage echoMessage = new EchoMessage();
-            echoMessage.setCode(201);
-            echoMessage.setDebug(true);
-            echoMessage.setPayload("test success!");
-            echo(echoMessage);
+            EchoMessage testMsg = new EchoMessage();
+            testMsg.setCode(201);
+            testMsg.setDebug(true);
+            testMsg.setPayload("test success!:" + payload.toString());
+            echo(client, testMsg);
 
         });
 
-        server.startAsync();
+        /**
+         * 只有EMQ连接成功以后,WS才能推送
+         */
+        server.addEventListener("s2c", Object.class, (client, payload, ackRequest) -> {
+            String publishTopic = publishMqttTopicStore.get(client.getSessionId().toString());
+            if (isConnectToEmqx) {
+                MqttMessage mqttMessage = new MqttMessage();
+                mqttMessage.setQos(2);
+                mqttMessage.setRetained(false);
+                mqttMessage.setId((int) System.nanoTime());
+                mqttMessage.setPayload(payload.toString().getBytes());
+                emqClient.publish(publishTopic, mqttMessage);
+            }
+
+        });
+
         return server;
     }
 
@@ -171,14 +160,8 @@ public class SocketServerConfig {
      *
      * @param message
      */
-    private void echo(EchoMessage message) {
-        socketIoClient.sendEvent("echo", new MultiTypeAckCallback() {
-
-            @Override
-            public void onSuccess(MultiTypeArgs objects) {
-
-            }
-        }, JSONObject.toJSONString(message));
+    private void echo(SocketIOClient socketIoClient, EchoMessage message) {
+        socketIoClient.sendEvent("echo", JSONObject.toJSONString(message));
     }
 
     /**
@@ -187,15 +170,89 @@ public class SocketServerConfig {
      * @param message
      */
 
-    private void c2s(C2SMessage message) {
-        socketIoClient.sendEvent("c2s", new MultiTypeAckCallback() {
-
-            @Override
-            public void onSuccess(MultiTypeArgs objects) {
-
-            }
-        }, JSONObject.toJSONString(message));
+    private void c2s(SocketIOClient socketIoClient, C2SMessage message) {
+        socketIoClient.sendEvent("c2s", JSONObject.toJSONString(message));
     }
 
 
+    /**
+     * 上报状态的消息
+     *
+     * @param socketIoClient
+     * @param message
+     */
+    private void status(SocketIOClient socketIoClient, C2SMessage message) {
+        socketIoClient.sendEvent("status", JSONObject.toJSONString(message));
+    }
+
+    /**
+     * 代理客户端
+     *
+     * @param moduleId
+     * @param socketIOClient
+     * @return
+     */
+    private void connectToEmqx(Long moduleId, SocketIOClient socketIOClient) {
+        /**
+         * 暂时1
+         */
+        Module module = iModuleService.getById(moduleId);
+        if (module == null) {
+            isConnectToEmqx = false;
+        }
+
+        /**
+         * 开始连接MQTT
+         */
+
+        try {
+            /**
+             * 把前一个给踢下去
+             */
+            if (emqClient.isConnected()) {
+                emqClient.disconnect();
+            } else {
+                emqClient.connect(mqttConnectOptions);
+
+            }
+        } catch (MqttException e) {
+            log.error("连接EMQX失败" + e.getMessage());
+            isConnectToEmqx = false;
+        }
+        if (emqClient.isConnected()) {
+            isConnectToEmqx = true;
+
+            List<MqttTopic> mqttTopics = iMqttTopicService.list(new QueryWrapper<MqttTopic>().eq("module_id", module.getId()));
+
+            for (MqttTopic topic : mqttTopics) {
+                /**
+                 * 用SessionID来记录Socket和Topic的关系,当转发的时候,从Map里面获取sessionId对应的 pub Topic
+                 */
+                if (topic.getType() == MqttTopic.S2C) {
+                    publishMqttTopicStore.put(socketIOClient.getSessionId().toString(), topic.getTopic());
+                }
+                /**
+                 * 代理首先接管客户端的数据,
+                 * 因为100%确定客户端传上来的数据格式是正确的,所以这里不做格式检查
+                 */
+                if (topic.getType() == MqttTopic.C2S) {
+                    try {
+                        emqClient.subscribe(topic.getTopic(), 2, (s, mqttMessage) -> {
+                            System.out.println("来自MQTT客户端的消息:" + new String(mqttMessage.getPayload(), Charset.forName("utf-8")));
+                            C2SMessage message = new C2SMessage();
+                            message.setCode(200);
+                            message.setMsgId(mqttMessage.getId() + "");
+                            message.setDebug(true);
+                            message.setData(new String(mqttMessage.getPayload(), Charset.forName("utf-8")));
+                            c2s(socketIOClient, message);
+                        });
+                    } catch (MqttException e) {
+                        log.error("监听客户端[C2S]的topic时出现错误:" + e.getMessage());
+                    }
+                }
+            }
+        } else {
+            isConnectToEmqx = false;
+        }
+    }
 }

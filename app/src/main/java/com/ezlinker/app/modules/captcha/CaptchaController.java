@@ -1,5 +1,6 @@
 package com.ezlinker.app.modules.captcha;
 
+import cn.hutool.core.util.RandomUtil;
 import com.ezlinker.common.exception.InternalServerException;
 import com.ezlinker.common.exchange.R;
 import com.ezlinker.common.utils.RedisUtil;
@@ -7,7 +8,8 @@ import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class CaptchaController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("/captcha")
+    @GetMapping("/captcha")
     public R captcha() throws Exception {
         SpecCaptcha captcha = new SpecCaptcha(130, 48, 5);
         captcha.setFont(Captcha.FONT_9);
@@ -54,4 +56,18 @@ public class CaptchaController {
         }
 
     }
+
+    /**
+     * 获取WS的连接Token
+     *
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("/wsToken/{uuid}")
+    public R wsToken(@PathVariable String uuid) {
+        String token = RandomUtil.randomStringUpper(20);
+        redisUtil.set("WS_TOKEN:" + uuid, token);
+        return new R(200, "Token generate success", "Token获取成功", token);
+    }
+
 }

@@ -8,10 +8,18 @@ package com.ezlinker.app.config.socketio;
  * @create 2019-12-16 22:21
  **/
 public class XWSMsg {
+    private String msgId;
     private Integer code;
 
     private boolean debug;
 
+    public String getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
+    }
 
     public boolean isDebug() {
         return debug;
