@@ -34,6 +34,6 @@ public class MqttProxyClientConfig {
     @Bean
     public MqttProxyClient mqttClient() throws MqttException {
 
-        return new MqttProxyClient("tcp://localhost:1883", "ezlinker");
+        return new MqttProxyClient("tcp://" + emqxHost + ":" + tcpPort, "ezlinker");
     }
 }

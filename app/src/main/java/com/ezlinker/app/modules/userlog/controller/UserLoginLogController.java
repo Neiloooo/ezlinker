@@ -1,7 +1,7 @@
 package com.ezlinker.app.modules.userlog.controller;
 
 
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.userlog.model.UserLoginLog;
 import com.ezlinker.app.modules.userlog.service.IUserLoginLogService;
 import com.ezlinker.common.exception.XException;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/userLogs")
-public class UserLoginLogController extends AbstractXController<UserLoginLog> {
+public class UserLoginLogController extends CurdController<UserLoginLog> {
     @Resource
     IUserLoginLogService iUserLoginLogService;
 

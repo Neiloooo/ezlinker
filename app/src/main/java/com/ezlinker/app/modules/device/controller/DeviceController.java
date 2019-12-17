@@ -6,7 +6,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.config.socketio.S2CMessage;
 import com.ezlinker.app.constants.DeviceState;
 import com.ezlinker.app.modules.device.model.Device;
@@ -45,7 +45,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/devices")
-public class DeviceController extends AbstractXController<Device> {
+public class DeviceController extends CurdController<Device> {
     // 发布权限
     private static final int TOPIC_PUB = 1;
     // 订阅权限

@@ -3,7 +3,7 @@ package com.ezlinker.app.modules.internalmessage.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.internalmessage.model.InternalMessage;
 import com.ezlinker.app.modules.internalmessage.service.InternalMessageService;
 import com.ezlinker.common.exception.XException;
@@ -24,7 +24,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("/internalMessages")
-public class InternalMessageController extends AbstractXController<InternalMessage> {
+public class InternalMessageController extends CurdController<InternalMessage> {
 
     private InternalMessageService internalMessageService;
 

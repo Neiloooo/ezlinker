@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,24 +31,42 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 @Configuration
 @Slf4j
-public class SocketServerConfig {
-
-    @Resource
-    IModuleService iModuleService;
-    @Resource
-    IMqttTopicService iMqttTopicService;
-    private static ConcurrentHashMap<String, SocketIOClient> socketIoClientStore = new ConcurrentHashMap<>();
-    private static ConcurrentHashMap<String, String> publishMqttTopicStore = new ConcurrentHashMap<>();
-
-    private static boolean isConnectToEmqx = false;
-
+public class SocketIOServerConfig {
     /**
      * MQTT代理
      */
     @Resource
     MqttProxyClient emqClient;
+    /**
+     * MQTT 配置
+     */
     @Resource
     MqttConnectOptions mqttConnectOptions;
+
+    /**
+     * 模块DAO
+     */
+    @Resource
+    IModuleService iModuleService;
+    @Resource
+    IMqttTopicService iMqttTopicService;
+    /**
+     * 记录连接进来的WS,支持多个客户端同时连接
+     * K:SessionId
+     * V:SocketIOClient
+     */
+    private static ConcurrentHashMap<String, SocketIOClient> socketIoClientStore = new ConcurrentHashMap<>();
+    /**
+     * K:sessionId
+     * V:PublishTopic
+     */
+    private static ConcurrentHashMap<String, String> publishMqttTopicStore = new ConcurrentHashMap<>();
+
+    /**
+     * 状态标识:用来标识代理是否连接成功
+     */
+    private static boolean isConnectToEmqx = false;
+
 
     @Bean
     public SocketIOServer socketIoServer() {
@@ -56,7 +74,13 @@ public class SocketServerConfig {
          * 创建Socket，并设置监听端口
          */
         com.corundumstudio.socketio.Configuration socketIoConfig = new com.corundumstudio.socketio.Configuration();
+        /**
+         * 目前只允许本地WS连接
+         */
         socketIoConfig.setHostname("127.0.0.1");
+        /**
+         * WS端口
+         */
         socketIoConfig.setPort(2501);
         socketIoConfig.setUpgradeTimeout(10000);
         socketIoConfig.setPingTimeout(180000);
@@ -64,12 +88,13 @@ public class SocketServerConfig {
         // 认证
         socketIoConfig.setAuthorizationListener(data -> {
             // TODO 这里做个安全拦截器,WS必须带上颁发的随机Token才能连接
+
             return true;
         });
         SocketIOServer server = new SocketIOServer(socketIoConfig);
         server.startAsync();
         /**
-         * 当WS连接进来以后
+         * WS 连接处理
          */
         server.addConnectListener(client -> {
 
@@ -222,6 +247,9 @@ public class SocketServerConfig {
         if (emqClient.isConnected()) {
             isConnectToEmqx = true;
 
+            /**
+             * 查询Topic
+             */
             List<MqttTopic> mqttTopics = iMqttTopicService.list(new QueryWrapper<MqttTopic>().eq("module_id", module.getId()));
 
             for (MqttTopic topic : mqttTopics) {
@@ -233,17 +261,17 @@ public class SocketServerConfig {
                 }
                 /**
                  * 代理首先接管客户端的数据,
-                 * 因为100%确定客户端传上来的数据格式是正确的,所以这里不做格式检查
+                 * 因为100%确定客户端传上来的数据格式是正确的,所以这里不对[mqttMessage.getPayload()]做格式检查
+                 * 直接进行转发
                  */
                 if (topic.getType() == MqttTopic.C2S) {
                     try {
                         emqClient.subscribe(topic.getTopic(), 2, (s, mqttMessage) -> {
-                            System.out.println("来自MQTT客户端的消息:" + new String(mqttMessage.getPayload(), Charset.forName("utf-8")));
                             C2SMessage message = new C2SMessage();
                             message.setCode(200);
                             message.setMsgId(mqttMessage.getId() + "");
                             message.setDebug(true);
-                            message.setData(new String(mqttMessage.getPayload(), Charset.forName("utf-8")));
+                            message.setData(new String(mqttMessage.getPayload(), StandardCharsets.UTF_8));
                             c2s(socketIOClient, message);
                         });
                     } catch (MqttException e) {

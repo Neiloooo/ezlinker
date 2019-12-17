@@ -3,9 +3,7 @@ package com.ezlinker.app.modules.user.controller;
 
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.user.form.AddUserForm;
 import com.ezlinker.app.modules.user.form.ResetPasswordForm;
 import com.ezlinker.app.modules.user.form.UserUpdateForm;
@@ -13,7 +11,6 @@ import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.model.UserProfile;
 import com.ezlinker.app.modules.user.service.IUserProfileService;
 import com.ezlinker.app.modules.user.service.IUserService;
-import com.ezlinker.app.modules.userlog.model.UserLoginLog;
 import com.ezlinker.app.modules.userlog.service.IUserLoginLogService;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
@@ -36,7 +33,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/users")
-public class UserController extends AbstractXController<User> {
+public class UserController extends CurdController<User> {
 
     @Autowired
     IUserService iUserService;

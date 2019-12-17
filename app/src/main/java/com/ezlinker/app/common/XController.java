@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author: wangwenhai
  * @create: 2019-11-04 17:10
  **/
-public abstract class SimpleXController {
+public abstract class XController {
 
 
     /**
@@ -28,7 +28,7 @@ public abstract class SimpleXController {
      */
     private HttpServletRequest httpServletRequest;
 
-    public SimpleXController(HttpServletRequest httpServletRequest) {
+    public XController(HttpServletRequest httpServletRequest) {
         this.httpServletRequest = httpServletRequest;
     }
 

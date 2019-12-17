@@ -4,7 +4,7 @@ package com.ezlinker.app.modules.dictionary.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.dictionary.model.DictionaryValue;
 import com.ezlinker.app.modules.dictionary.service.IDictionaryValueService;
 import com.ezlinker.common.exception.XException;
@@ -26,7 +26,7 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("/dictionaries/values")
-public class DictionaryValueController extends AbstractXController<DictionaryValue> {
+public class DictionaryValueController extends CurdController<DictionaryValue> {
 
     @Autowired
     IDictionaryValueService iDictionaryValueService;

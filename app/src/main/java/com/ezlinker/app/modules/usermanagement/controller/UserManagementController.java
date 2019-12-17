@@ -4,9 +4,8 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.constants.UserAccountActionConstant;
-import com.ezlinker.app.modules.user.form.AddUserForm;
 import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.model.UserProfile;
 import com.ezlinker.app.modules.user.service.IUserProfileService;
@@ -36,7 +35,7 @@ import javax.validation.constraints.NotNull;
 @Validated
 @RestController
 @RequestMapping("/management/users")
-public class UserManagementController extends AbstractXController<User> {
+public class UserManagementController extends CurdController<User> {
 
     private final IUserService iUserService;
     private final IUserProfileService iUserProfileService;

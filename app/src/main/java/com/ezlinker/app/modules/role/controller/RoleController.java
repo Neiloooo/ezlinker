@@ -3,7 +3,6 @@ package com.ezlinker.app.modules.role.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.modules.role.model.Role;
 import com.ezlinker.app.modules.role.service.IRoleService;
@@ -11,11 +10,10 @@ import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
 import org.springframework.web.bind.annotation.*;
 
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * <p>Title: RoleController</p>
@@ -27,7 +25,7 @@ import java.util.Collections;
  */
 @RestController
 @RequestMapping("/role")
-public class RoleController extends AbstractXController<Role> {
+public class RoleController extends CurdController<Role> {
 
     private final IRoleService iRoleService;
 

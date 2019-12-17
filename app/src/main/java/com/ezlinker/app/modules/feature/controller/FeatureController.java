@@ -3,7 +3,7 @@ package com.ezlinker.app.modules.feature.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.feature.service.IFeatureService;
 import com.ezlinker.app.modules.relation.model.FeatureModule;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/features")
-public class FeatureController extends AbstractXController<Feature> {
+public class FeatureController extends CurdController<Feature> {
     @Resource
     IFeatureService iFeatureService;
 

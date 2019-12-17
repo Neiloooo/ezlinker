@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.analyse.controller;
 
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.product.service.IProductService;
 import com.ezlinker.app.modules.project.service.IProjectService;
 import com.ezlinker.app.modules.user.service.IUserService;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/analyse")
-public class AnalyseController extends AbstractXController {
+public class AnalyseController extends CurdController {
     public AnalyseController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
     }

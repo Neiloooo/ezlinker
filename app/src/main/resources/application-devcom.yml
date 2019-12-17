@@ -93,10 +93,3 @@ emqx:
   host: localhost
   tcp-port: 1883
   api-port: 8080
-
-
-
-
-
-
-

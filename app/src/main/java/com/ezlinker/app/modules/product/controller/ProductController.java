@@ -4,7 +4,7 @@ package com.ezlinker.app.modules.product.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.SimpleXController;
+import com.ezlinker.app.common.XController;
 import com.ezlinker.app.modules.product.model.Product;
 import com.ezlinker.app.modules.product.service.IProductService;
 import com.ezlinker.app.modules.tag.model.Tag;
@@ -32,7 +32,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/products")
-public class ProductController extends SimpleXController {
+public class ProductController extends XController {
 
     @Resource
     IProductService iProductService;

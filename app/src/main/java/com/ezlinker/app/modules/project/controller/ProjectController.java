@@ -4,24 +4,17 @@ package com.ezlinker.app.modules.project.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.AbstractXController;
-import com.ezlinker.app.modules.product.model.Product;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.project.model.Project;
 import com.ezlinker.app.modules.project.service.IProjectService;
-import com.ezlinker.app.modules.tag.model.Tag;
-import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * <p>
@@ -33,7 +26,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/projects")
-public class ProjectController extends AbstractXController<Project> {
+public class ProjectController extends CurdController<Project> {
     @Autowired
     IProjectService iProjectService;
 

@@ -5,7 +5,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.pojo.DataArea;
 import com.ezlinker.app.modules.module.service.IModuleService;
@@ -39,7 +39,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/modules")
-public class ModuleController extends AbstractXController<Module> {
+public class ModuleController extends CurdController<Module> {
 
 
     @Resource

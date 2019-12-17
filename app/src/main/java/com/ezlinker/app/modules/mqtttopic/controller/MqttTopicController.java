@@ -2,7 +2,7 @@ package com.ezlinker.app.modules.mqtttopic.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
 import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import com.ezlinker.common.exception.XException;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/mqtttopics")
-public class MqttTopicController extends AbstractXController<MqttTopic> {
+public class MqttTopicController extends CurdController<MqttTopic> {
 
     @Autowired
     IMqttTopicService iMqttTopicService;

@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletRequest;
  * @author: wangwenhai
  * @create: 2019-11-04 17:10
  **/
-public abstract class AbstractXController<T> extends SimpleXController {
+public abstract class CurdController<T> extends XController {
 
 
-    public AbstractXController(HttpServletRequest httpServletRequest) {
+    public CurdController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
     }
 

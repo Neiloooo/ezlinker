@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.system.controller;
 
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.common.utils.SystemPropertiesUtil;
 import com.ezlinker.common.exchange.R;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @RestController
 @RequestMapping("/system")
-public class SystemController extends AbstractXController {
+public class SystemController extends CurdController {
     public SystemController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
     }

@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.tag.controller;
 
-import com.ezlinker.app.common.AbstractXController;
+import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.tag.model.Tag;
 import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.common.exception.XException;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/tags")
-public class TagController extends AbstractXController<Tag> {
+public class TagController extends CurdController<Tag> {
     @Resource
     ITagService iTagService;
 
