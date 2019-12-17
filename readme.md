@@ -4,6 +4,8 @@
 ---
 ## 当前进度
 0I==>[1%]===========================================I100
+
+目前还在填坑,问题很大.不建议尝试.
 ## 前端地址
 https://github.com/ssloth/ezlinker-frontend.git
 ## 其他
@@ -25,3 +27,7 @@ https://github.com/ssloth/ezlinker-frontend.git
 ### 表名规范
 - 表名用名词单数形式,比如User,Student;
 - 中间关系表用 `relation`开头,后面跟关联的主表,从表,比如用户和博客的关系表:`relation_user_blog`,统一放进relation模块.
+
+### 内置基本类
+- CurdController:有统一CURD业务场景时继承
+- XController:简单接口继承
