@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 
-@Component
+//@Component
 public class LoggingFilter implements Filter {
     Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
 

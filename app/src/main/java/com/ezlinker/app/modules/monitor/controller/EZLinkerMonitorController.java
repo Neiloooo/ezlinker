@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  * ezlinker
  *
  * @author wangwenhai
- * @description EZlinker监控
+ * @description EZLinker监控
  * @create 2019-12-17 21:21
  **/
 @RestController
