@@ -11,6 +11,9 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
  * 系统用户
@@ -32,6 +35,7 @@ public class User extends XEntity {
     /**
      * 用户名
      */
+    @NotEmpty(message = "用户名不可为空")
     private String username;
 
     /**

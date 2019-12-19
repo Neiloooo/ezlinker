@@ -15,6 +15,7 @@ import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
 import com.ezlinker.common.utils.AliyunEmailUtil;
 import lombok.Data;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,7 +60,7 @@ public class UserManagementController extends CurdController<User> {
      */
     @GetMapping
     public R queryForPage(@RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
-                           @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+                          @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
 
         /**
          * TODO 后期增加过滤条件，如：用户类型、账号状态、用户名等
@@ -116,6 +117,7 @@ public class UserManagementController extends CurdController<User> {
         boolean result = iUserService.updateById(user);
         return result ? success() : fail();
     }
+
     /**
      * 添加用户账户
      *
@@ -125,8 +127,9 @@ public class UserManagementController extends CurdController<User> {
      */
 
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    protected R add(User userForm) throws XException {
+    protected R add(@RequestBody User userForm) throws XException {
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>()
                 .eq(User.Fields.username, userForm.getUsername())
                 .or()
@@ -136,6 +139,7 @@ public class UserManagementController extends CurdController<User> {
         }
 
         User user = new User()
+                .setAvatar("1")
                 .setUsername(userForm.getUsername())
                 .setPassword(SecureUtil.md5("12345678"))
                 .setPhone(userForm.getPhone())
@@ -144,9 +148,8 @@ public class UserManagementController extends CurdController<User> {
         iUserProfileService.save(userProfile);
         user.setUserProfileId(userProfile.getId());
         boolean result = iUserService.save(user);
-        return result ? success() : fail();
+        return result ? data(user) : fail();
     }
-
 
 
     /**
