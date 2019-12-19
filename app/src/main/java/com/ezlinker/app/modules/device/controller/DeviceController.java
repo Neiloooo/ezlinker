@@ -341,21 +341,6 @@ public class DeviceController extends CurdController<Device> {
         return success();
     }
 
-    /**
-     * 推送消息
-     *
-     * @param s2CMessage
-     * @return
-     */
-
-    @PostMapping("/s2c")
-    public R s2c(@RequestBody @Valid S2CMessage s2CMessage) {
-        //TODO
-        //此处细节较多，等其他地方调通以后再来处理
-
-        return success();
-    }
-
 
 }
 

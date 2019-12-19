@@ -5,6 +5,7 @@ import com.ezlinker.common.model.XEntity;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -36,6 +37,7 @@ public class User extends XEntity {
     /**
      * 密码
      */
+    @JsonIgnore
     private String password;
 
     /**

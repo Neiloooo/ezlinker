@@ -58,7 +58,7 @@ public class UserManagementController extends CurdController<User> {
      * @return
      */
     @GetMapping
-    public R queryUserList(@RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
+    public R queryForPage(@RequestParam(value = "current", required = false, defaultValue = "1") Integer current,
                            @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
 
         /**
@@ -132,7 +132,7 @@ public class UserManagementController extends CurdController<User> {
                 .or()
                 .eq(User.Fields.email, userForm.getEmail());
         if (iUserService.getOne(queryWrapper) != null) {
-            throw new BadRequestException("User Does Not Exists", "用户已存在");
+            throw new BadRequestException("User Already Exists", "用户已存在");
         }
 
         User user = new User()
