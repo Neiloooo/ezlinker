@@ -1,16 +1,12 @@
 package com.ezlinker.app.config;
 
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.convert.CustomConversions;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.core.convert.DbRefResolver;
-import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
-import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
+
+import javax.annotation.Resource;
 
 /**
  * @program: ezlinker
@@ -19,20 +15,14 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
  * @create: 2019-12-13 15:07
  **/
 @Configuration
-public class MongoDbConfig {
+public class MongoDbConfig implements InitializingBean {
 
-//    @Bean
-//    MappingMongoConverter mappingMongoConverter(MongoDbFactory factory, MongoMappingContext context, BeanFactory beanFactory) {
-//        DbRefResolver dbRefResolver = new DefaultDbRefResolver(factory);
-//        MappingMongoConverter mappingConverter = new MappingMongoConverter(dbRefResolver, context);
-//        try {
-//            mappingConverter.setCustomConversions(beanFactory.getBean(CustomConversions.class));
-//        } catch (NoSuchBeanDefinitionException e) {
-//            e.printStackTrace();
-//        }
-//        // Don't save _class to mongo
-//        mappingConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
-//
-//        return mappingConverter;
-//    }
+    @Resource
+    @Lazy
+    private MappingMongoConverter mappingMongoConverter;
+
+    @Override
+    public void afterPropertiesSet() {
+        mappingMongoConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
+    }
 }

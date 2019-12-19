@@ -3,6 +3,8 @@ package com.ezlinker.emqintegeration.message;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * @program: ezlinker
  * @description: 离线消息
@@ -11,7 +13,7 @@ import lombok.EqualsAndHashCode;
  **/
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class DisconnectedMessage extends EMQWebHookMessage{
+public class DisconnectedMessage extends EMQWebHookMessage {
 
     /**
      * 触发的动作
@@ -20,6 +22,7 @@ public class DisconnectedMessage extends EMQWebHookMessage{
     /**
      * 客户端ID
      */
+    @NotEmpty(message = "clientid can't null")
     private String clientid;
     /**
      * MQTT Username

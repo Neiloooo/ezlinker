@@ -3,6 +3,8 @@ package com.ezlinker.emqintegeration.message;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * @program: ezlinker
  * @description: mqtt客户端连接成功
@@ -17,10 +19,12 @@ public class ConnectedMessage extends EMQWebHookMessage{
     /**
      * 触发的动作
      */
+
     private String action;
     /**
      * 客户端ID
      */
+    @NotEmpty(message = "clientid can't null")
     private String clientid;
     /**
      * MQTT Username

@@ -3,6 +3,8 @@ package com.ezlinker.emqintegeration.message;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * @program: ezlinker
  * @description: 消息发送成功
@@ -15,6 +17,8 @@ import lombok.EqualsAndHashCode;
 public class PublishMessage extends EMQWebHookMessage {
     private String messageid;
     private String action;
+    @NotEmpty(message = "clientid can't null")
+
     private String clientid;
     private String username;
     private String topic;

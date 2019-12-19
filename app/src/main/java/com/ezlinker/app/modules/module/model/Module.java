@@ -14,6 +14,7 @@ import lombok.experimental.FieldNameConstants;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -113,4 +114,9 @@ public class Module extends XEntity {
      */
     @TableField(exist = false)
     private List<Feature> featureList;
+
+    /**
+     * 最后在线时间
+     */
+    private Date lastActiveTime;
 }

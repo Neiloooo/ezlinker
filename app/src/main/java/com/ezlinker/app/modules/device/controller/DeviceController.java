@@ -356,5 +356,6 @@ public class DeviceController extends CurdController<Device> {
         return success();
     }
 
+
 }
 

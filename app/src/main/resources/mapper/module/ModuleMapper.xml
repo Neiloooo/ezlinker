@@ -16,6 +16,7 @@
         <result column="model" property="model"/>
         <result column="sn" property="sn"/>
         <result column="token" property="token"/>
+        <result column="last_active_time" property="lastActiveTime"/>
         <result column="is_superuser" property="isSuperuser"/>
         <result column="data_areas" property="dataAreas"
                 typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
@@ -28,6 +29,7 @@
         record_version,
         x,
         create_time,
+        last_active_time,
         product_id, `type`, `name`, protocol, model, sn, token, is_superuser, data_areas, description
     </sql>
 
