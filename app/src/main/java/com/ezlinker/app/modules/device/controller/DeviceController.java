@@ -1,7 +1,6 @@
 package com.ezlinker.app.modules.device.controller;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -15,10 +14,13 @@ import com.ezlinker.app.modules.device.pojo.FieldParam;
 import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.service.IModuleService;
+import com.ezlinker.app.modules.moduletemplate.model.ModuleTemplate;
+import com.ezlinker.app.modules.moduletemplate.service.IModuleTemplateService;
 import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
 import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import com.ezlinker.app.modules.product.model.Product;
 import com.ezlinker.app.modules.product.service.IProductService;
+import com.ezlinker.app.modules.relation.service.IRelationProductModuleService;
 import com.ezlinker.app.modules.tag.model.Tag;
 import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.app.utils.IDKeyUtil;
@@ -66,6 +68,11 @@ public class DeviceController extends CurdController<Device> {
     @Resource
     IDKeyUtil idKeyUtil;
 
+    @Resource
+    IRelationProductModuleService iRelationProductModuleService;
+
+    @Resource
+    IModuleTemplateService iModuleTemplateService;
 
     public DeviceController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
@@ -104,15 +111,16 @@ public class DeviceController extends CurdController<Device> {
         // 保存设备
         iDeviceService.save(device);
 
-        // 建立 设备和模块的关系表
-        List<Module> moduleList = iModuleService.list(new QueryWrapper<Module>().eq("product_id", product.getId()));
-        for (Module module : moduleList) {
-            // Clone 新的Module
+
+        List<ModuleTemplate> moduleTemplates = iModuleTemplateService.list(new QueryWrapper<ModuleTemplate>().eq("product_id", product.getId()));
+
+
+        for (ModuleTemplate moduleTemplate : moduleTemplates) {
             Module newModule = new Module();
-            BeanUtil.copyProperties(module, newModule);
             String clientId = IDKeyUtil.generateId().toString();
             String username = SecureUtil.md5(clientId);
             String password = SecureUtil.md5(username);
+            newModule.setName(moduleTemplate.getName()).setDataAreas(moduleTemplate.getDataAreas());
             newModule.setClientId(clientId).setUsername(username).setPassword(password);
             iModuleService.save(newModule);
             // 给新的Module创建Topic
@@ -123,8 +131,7 @@ public class DeviceController extends CurdController<Device> {
                     .setClientId(clientId)
                     .setModuleId(device.getId())
                     .setTopic("mqtt/out/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/s2c")
-                    .setUsername(username)
-                    .setDescription("服务端消息入口");
+                    .setUsername(username);
             // 数据下行
             MqttTopic c2sTopic = new MqttTopic();
             c2sTopic.setAccess(TOPIC_PUB)
@@ -132,8 +139,7 @@ public class DeviceController extends CurdController<Device> {
                     .setModuleId(device.getId())
                     .setClientId(clientId)
                     .setTopic("mqtt/in/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/c2s")
-                    .setUsername(username)
-                    .setDescription("服务端消息出口");
+                    .setUsername(username);
             // 状态上报
             MqttTopic statusTopic = new MqttTopic();
             statusTopic.setAccess(TOPIC_PUB)
@@ -141,8 +147,7 @@ public class DeviceController extends CurdController<Device> {
                     .setUsername(username)
                     .setClientId(clientId)
                     .setModuleId(device.getId())
-                    .setTopic("mqtt/in/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/status")
-                    .setDescription("状态上报入口");
+                    .setTopic("mqtt/in/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/status");
             //生成
             iMqttTopicService.save(s2cTopic);
             iMqttTopicService.save(c2sTopic);
@@ -242,7 +247,6 @@ public class DeviceController extends CurdController<Device> {
         /**
          * 提取KeySet集合
          */
-        //List<DeviceParam> deviceParamList = device.getParameters();
         List<FieldParam> deviceParamList = objectMapper.convertValue(device.getParameters(),
                 new TypeReference<List<FieldParam>>() {
                 });
@@ -276,7 +280,7 @@ public class DeviceController extends CurdController<Device> {
      * @throws XException
      */
     @Override
-    protected R delete(@PathVariable Integer[] ids) throws XException {
+    protected R delete(@PathVariable Integer[] ids) {
         boolean ok = iDeviceService.removeByIds(Arrays.asList(ids));
         return ok ? success() : fail();
     }

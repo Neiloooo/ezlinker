@@ -8,24 +8,24 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author wangwenhai
- * @since 2019-11-30
+ * @since 2019-12-19
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("ez_feature_module")
-public class FeatureModule extends XEntity {
+@TableName("ez_relation_product_module")
+public class RelationProductModule extends XEntity {
 
     private static final long serialVersionUID=1L;
 
     /**
-     * 功能
+     * 设备
      */
-    private Long featureId;
+    private Long productId;
 
     /**
      *  模块
@@ -33,7 +33,7 @@ public class FeatureModule extends XEntity {
     private Long moduleId;
 
 
-    public static final String FEATURE_ID = "feature_id";
+    public static final String PRODUCT_ID = "product_id";
 
     public static final String MODULE_ID = "module_id";
 

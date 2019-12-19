@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.XController;
 import com.ezlinker.app.modules.product.model.Product;
 import com.ezlinker.app.modules.product.service.IProductService;
+import com.ezlinker.app.modules.relation.model.RelationProductTag;
+import com.ezlinker.app.modules.relation.service.IRelationProductTagService;
 import com.ezlinker.app.modules.tag.model.Tag;
 import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.common.exception.BizException;
@@ -41,6 +43,10 @@ public class ProductController extends XController {
         super(httpServletRequest);
     }
 
+    @Resource
+    ITagService iTagService;
+    @Resource
+    IRelationProductTagService iRelationProductTagService;
 
     /**
      * 创建产品
@@ -48,11 +54,9 @@ public class ProductController extends XController {
      * @param product 产品:必传
      * @return
      */
-    @Resource
-    ITagService iTagService;
 
     @PostMapping
-    protected R add(@RequestBody @Valid Product product) throws XException {
+    protected R add(@RequestBody @Valid Product product) {
 
         boolean ok = iProductService.save(product);
         if (ok) {
@@ -61,6 +65,9 @@ public class ProductController extends XController {
                     Tag t = new Tag();
                     t.setName(tag).setLinkId(product.getId());
                     iTagService.save(t);
+                    RelationProductTag productTag = new RelationProductTag();
+                    productTag.setProductId(product.getId()).setTagId(t.getId());
+                    iRelationProductTagService.save(productTag);
                 }
             }
 
@@ -90,7 +97,7 @@ public class ProductController extends XController {
      * @throws XException
      */
     @PutMapping("/{id}")
-    public R update(@PathVariable Long id, @RequestBody @Valid Product newProduct) throws XException {
+    public R update(@PathVariable Long id, @RequestBody @Valid Product newProduct) {
 
         Product product = iProductService.getById(id);
         newProduct.setId(product.getId());
@@ -150,21 +157,16 @@ public class ProductController extends XController {
         IPage<Product> projectPage = iProductService.page(new Page<>(current, size), queryWrapper);
 
         for (Product product : projectPage.getRecords()) {
-            List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", product.getId()));
-            Set<String> tags = new HashSet<>();
-
-            for (Tag tag : tagList) {
-                tags.add(tag.getName());
-            }
-            product.setTags(tags);
+            addTags(product);
 
         }
 
         return data(projectPage);
     }
 
+
     private void addTags(Product product) {
-        List<Tag> tagList =iTagService.list(new QueryWrapper<Tag>().eq("link_id", product.getId()));
+        List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", product.getId()));
         Set<String> tags = new HashSet<>();
         for (Tag tag : tagList) {
             tags.add(tag.getName());

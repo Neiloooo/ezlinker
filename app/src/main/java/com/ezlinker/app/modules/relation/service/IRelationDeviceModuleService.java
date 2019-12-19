@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.relation.service;
 
-import com.ezlinker.app.modules.relation.model.ProductModule;
+import com.ezlinker.app.modules.relation.model.RelationDeviceModule;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author wangwenhai
- * @since 2019-11-24
+ * @since 2019-12-19
  */
-public interface IProductModuleService extends IService<ProductModule> {
+public interface IRelationDeviceModuleService extends IService<RelationDeviceModule> {
 
 }

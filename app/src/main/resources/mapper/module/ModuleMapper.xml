@@ -43,4 +43,10 @@ WHERE
 	FS.module_id = #{moduleId};
     </select>
 
+
+    <select id="listByProduct" resultType="com.ezlinker.app.modules.module.model.Module">
+
+
+    </select>
+
 </mapper>

@@ -68,11 +68,6 @@ public class MqttTopic extends XEntity {
     private String topic;
 
     /**
-     * 备注信息
-     */
-    private String description;
-
-    /**
      * 设备的ID
      */
     private Long moduleId;

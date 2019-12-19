@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.feature.service.IFeatureService;
-import com.ezlinker.app.modules.relation.model.FeatureModule;
-import com.ezlinker.app.modules.relation.service.IFeatureModuleService;
+import com.ezlinker.app.modules.relation.model.RelationFeatureModule;
+import com.ezlinker.app.modules.relation.service.IRelationFeatureModuleService;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
@@ -37,7 +37,7 @@ public class FeatureController extends CurdController<Feature> {
     IFeatureService iFeatureService;
 
     @Resource
-    IFeatureModuleService iFeatureModuleService;
+    IRelationFeatureModuleService iRelationFeatureModuleService;
 
     public FeatureController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
@@ -104,9 +104,9 @@ public class FeatureController extends CurdController<Feature> {
     protected R add(@RequestBody @Valid Feature feature) throws XException {
 
         if (feature.getModuleId() != null) {
-            FeatureModule featureModule = new FeatureModule();
+            RelationFeatureModule featureModule = new RelationFeatureModule();
             featureModule.setFeatureId(feature.getId()).setModuleId(feature.getModuleId());
-            iFeatureModuleService.save(featureModule);
+            iRelationFeatureModuleService.save(featureModule);
 
         }
 

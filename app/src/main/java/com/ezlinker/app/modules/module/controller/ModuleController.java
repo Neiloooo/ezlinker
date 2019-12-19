@@ -1,16 +1,13 @@
 package com.ezlinker.app.modules.module.controller;
 
 
-import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.module.model.Module;
-import com.ezlinker.app.modules.module.pojo.DataArea;
 import com.ezlinker.app.modules.module.service.IModuleService;
-import com.ezlinker.app.utils.ModuleTokenUtil;
-import com.ezlinker.app.utils.IDKeyUtil;
+import com.ezlinker.app.modules.relation.service.IRelationProductModuleService;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,6 +40,8 @@ public class ModuleController extends CurdController<Module> {
 
     @Resource
     IModuleService iModuleService;
+    @Resource
+    IRelationProductModuleService iRelationProductModuleService;
 
     public ModuleController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
@@ -104,43 +102,47 @@ public class ModuleController extends CurdController<Module> {
         return data(list);
     }
 
-    /**
-     * 创建模块
-     *
-     * @param module
-     * @return
-     * @throws XException
-     */
-    @Override
-    protected R add(@RequestBody @Valid Module module) throws XException {
-
-        String sn = IDKeyUtil.generateId().toString();
-        String clientId = SecureUtil.sha1(sn);
-        String username = SecureUtil.sha1(clientId);
-        String password = SecureUtil.sha1(username);
-        // 生成给Token，格式：clientId::[field1,field2,field3······]
-        // token里面包含了模块的字段名,这样在数据入口处可以进行过滤。
-        List<String> fields = new ArrayList<>();
-        if (module.getDataAreas() != null) {
-            for (DataArea area : module.getDataAreas()) {
-                fields.add(area.getField());
-            }
-
-        }
-
-        String token = ModuleTokenUtil.token(clientId + "::" + fields.toString());
-
-        module.setSn(sn)
-                .setClientId(clientId)
-                .setUsername(username)
-                .setPassword(password)
-                .setToken(token);
-        boolean ok = iModuleService.save(module);
-        module.setFeatureList(iModuleService.getFeatureList(module.getId()));
-        return ok ? data(module) : fail();
-
-
-    }
+//    /**
+//     * 创建模块
+//     *
+//     * @param module
+//     * @return
+//     * @throws XException
+//     */
+//    @Override
+//    protected R add(@RequestBody @Valid Module module) throws XException {
+//
+//        String sn = IDKeyUtil.generateId().toString();
+//        String clientId = SecureUtil.sha1(sn);
+//        String username = SecureUtil.sha1(clientId);
+//        String password = SecureUtil.sha1(username);
+//
+//        List<String> fields = new ArrayList<>();
+//        if (module.getDataAreas() != null) {
+//            for (DataArea area : module.getDataAreas()) {
+//                fields.add(area.getField());
+//            }
+//
+//        }
+//        // 生成给Token，格式：clientId::[field1,field2,field3······]
+//        // token里面包含了模块的字段名,这样在数据入口处可以进行过滤。
+//        String token = ModuleTokenUtil.token(clientId + "::" + fields.toString());
+//
+//        module.setSn(sn)
+//                .setClientId(clientId)
+//                .setUsername(username)
+//                .setPassword(password)
+//                .setToken(token);
+//        iModuleService.save(module);
+//        // 构建引用关系表
+//        RelationProductModule relationProductModule = new RelationProductModule();
+//        relationProductModule.setProductId(module.getProductId()).setModuleId(module.getId());
+//        iRelationProductModuleService.save(relationProductModule);
+//        module.setFeatureList(iModuleService.getFeatureList(module.getId()));
+//        return data(module);
+//
+//
+//    }
 
     /**
      * 更新
@@ -151,66 +153,65 @@ public class ModuleController extends CurdController<Module> {
      * @throws XException
      */
     @Override
-    protected R update(@PathVariable Long id, @RequestBody Module form) throws XException {
+    protected R update(@PathVariable Long id, @RequestBody Module form) {
         Module module = iModuleService.getById(id);
-        form.setId(module.getId());
-        boolean ok = iModuleService.updateById(form);
+        module.setName(form.getName()).setModel(form.getModel()).setDescription(form.getDescription());
+        boolean ok = iModuleService.updateById(module);
         module.setFeatureList(iModuleService.getFeatureList(module.getId()));
         return ok ? data(module) : fail();
     }
 
-    /**
-     * 删除模块
-     *
-     * @param ids
-     * @return
-     * @throws XException
-     */
-    @Override
-    protected R delete(@PathVariable Integer[] ids) throws XException {
-        boolean ok = iModuleService.removeByIds(Arrays.asList(ids));
-        return ok ? success() : fail();
-    }
-
-    /**
-     * 获取字典项列表
-     *
-     * @param current
-     * @param size
-     * @param productId
-     * @param type
-     * @param name
-     * @param protocol
-     * @param model
-     * @param sn
-     * @return
-     */
-    @GetMapping
-    public R queryForPage(
-            @RequestParam Long current,
-            @RequestParam Long size,
-            @RequestParam Long productId,
-            @RequestParam(required = false) Integer type,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) Integer protocol,
-            @RequestParam(required = false) String model,
-            @RequestParam(required = false) String sn) {
-        QueryWrapper<Module> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("product_id", productId)
-                .eq(type != null, Module.Fields.type, type)
-                .eq(protocol != null, Module.Fields.protocol, protocol)
-                .eq(model != null, Module.Fields.model, model)
-                .eq(sn != null, Module.Fields.sn, sn)
-                .like(name != null, Module.Fields.name, name);
-
-        queryWrapper.orderByDesc("create_time");
-        IPage<Module> iPage = iModuleService.page(new Page<>(current, size), queryWrapper);
-        for (Module module : iPage.getRecords()) {
-            module.setFeatureList(iModuleService.getFeatureList(module.getId()));
-        }
-
-        return data(iPage);
-    }
+//    /**
+//     * 删除模块
+//     *
+//     * @param ids
+//     * @return
+//     */
+//    @Override
+//    protected R delete(@PathVariable Integer[] ids) {
+//        boolean ok = iModuleService.removeByIds(Arrays.asList(ids));
+//        return ok ? success() : fail();
+//    }
+//
+//    /**
+//     * 获取字典项列表
+//     *
+//     * @param current
+//     * @param size
+//     * @param productId
+//     * @param type
+//     * @param name
+//     * @param protocol
+//     * @param model
+//     * @param sn
+//     * @return
+//     */
+//    @GetMapping
+//    public R queryForPage(
+//            @RequestParam Long current,
+//            @RequestParam Long size,
+//            @RequestParam Long productId,
+//            @RequestParam(required = false) Integer type,
+//            @RequestParam(required = false) String name,
+//            @RequestParam(required = false) Integer protocol,
+//            @RequestParam(required = false) String model,
+//            @RequestParam(required = false) String sn) {
+//        QueryWrapper<Module> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("product_id", productId)
+//                .eq(type != null, Module.Fields.type, type)
+//                .eq(protocol != null, Module.Fields.protocol, protocol)
+//                .eq(model != null, Module.Fields.model, model)
+//                .eq(sn != null, Module.Fields.sn, sn)
+//                .like(name != null, Module.Fields.name, name);
+//
+//        queryWrapper.orderByDesc("create_time");
+//        IPage<Module> iPage = iModuleService.page(new Page<>(current, size), queryWrapper);
+//        for (Module module : iPage.getRecords()) {
+//            module.setFeatureList(iModuleService.getFeatureList(module.getId()));
+//        }
+//
+//        return data(iPage);
+//    }
 
     /**
      * 获取详情

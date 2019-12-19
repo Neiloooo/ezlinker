@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.relation.mapper;
 
-import com.ezlinker.app.modules.relation.model.DeviceModule;
+import com.ezlinker.app.modules.relation.model.RelationDeviceModule;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author wangwenhai
- * @since 2019-11-24
+ * @since 2019-12-19
  */
-public interface DeviceModuleMapper extends BaseMapper<DeviceModule> {
+public interface RelationDeviceModuleMapper extends BaseMapper<RelationDeviceModule> {
 
 }

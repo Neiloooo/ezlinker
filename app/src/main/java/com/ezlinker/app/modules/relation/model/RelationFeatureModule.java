@@ -8,27 +8,33 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * Tag 产品关联
+ *
  * </p>
  *
  * @author wangwenhai
- * @since 2019-12-14
+ * @since 2019-12-19
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("ez_relation_product_tag")
-public class RelationProductTag extends XEntity {
+@TableName("ez_relation_feature_module")
+public class RelationFeatureModule extends XEntity {
 
     private static final long serialVersionUID=1L;
 
-    private Long tagId;
+    /**
+     * 功能
+     */
+    private Long featureId;
 
-    private Long productId;
+    /**
+     *  模块
+     */
+    private Long moduleId;
 
 
-    public static final String TAG_ID = "tag_id";
+    public static final String FEATURE_ID = "feature_id";
 
-    public static final String PRODUCT_ID = "product_id";
+    public static final String MODULE_ID = "module_id";
 
 }
