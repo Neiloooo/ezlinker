@@ -16,7 +16,6 @@ import com.ezlinker.common.exchange.R;
 import com.ezlinker.common.utils.AliyunEmailUtil;
 import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +32,6 @@ import javax.validation.constraints.NotNull;
  * @version: V1.0.0
  * @date: 2019-11-26 15:08
  */
-@Validated
 @RestController
 @RequestMapping("/management/users")
 public class UserManagementController extends CurdController<User> {
