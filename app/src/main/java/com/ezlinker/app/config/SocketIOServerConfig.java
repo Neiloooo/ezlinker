@@ -101,11 +101,11 @@ public class SocketIOServerConfig {
             Long moduleId = Long.valueOf(client.getHandshakeData().getUrlParams().get("moduleId").get(0));
 
             socketIoClientStore.put(client.getSessionId().toString(), client);
-            EchoMessage echoMessage = new EchoMessage();
-            echoMessage.setCode(200);
-            echoMessage.setDebug(true);
-            echoMessage.setPayload("client connect successfully!");
-            echo(client, echoMessage);
+//            EchoMessage echoMessage = new EchoMessage();
+//            echoMessage.setCode(200);
+//            echoMessage.setDebug(true);
+//            echoMessage.setMsg("client connect successfully!");
+//            echo(client, echoMessage);
 
 
             /**
@@ -116,13 +116,13 @@ public class SocketIOServerConfig {
                 EchoMessage m0 = new EchoMessage();
                 m0.setCode(200);
                 m0.setDebug(true);
-                m0.setPayload("proxy connect successfully!");
+                m0.setMsg("proxy connect successfully!");
                 echo(client, m0);
             } else {
                 EchoMessage m1 = new EchoMessage();
                 m1.setCode(400);
                 m1.setDebug(true);
-                m1.setPayload("proxy connect failure!");
+                m1.setMsg("proxy connect failure!");
                 echo(client, m1);
             }
 
@@ -155,7 +155,7 @@ public class SocketIOServerConfig {
             EchoMessage testMsg = new EchoMessage();
             testMsg.setCode(201);
             testMsg.setDebug(true);
-            testMsg.setPayload("test success!:" + payload.toString());
+            testMsg.setMsg("test success!:" + payload.toString());
             echo(client, testMsg);
 
         });

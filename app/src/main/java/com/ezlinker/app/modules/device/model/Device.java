@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.ezlinker.app.constants.DeviceState;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.device.pojo.FieldParam;
+import com.ezlinker.app.modules.feature.model.Feature;
+import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -114,4 +116,12 @@ public class Device extends XEntity {
      */
     private Integer state = DeviceState.UN_ACTIVE;
 
+    /**
+     * 模块
+     */
+    @TableField(exist = false)
+    private List<Module> modules;
+    @TableField(exist = false)
+
+    List<Feature> features;
 }

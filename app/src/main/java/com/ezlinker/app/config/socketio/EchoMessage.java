@@ -1,6 +1,5 @@
 package com.ezlinker.app.config.socketio;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -16,5 +15,5 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class EchoMessage extends XWSMsg {
-    private String payload;
+    private String msg;
 }

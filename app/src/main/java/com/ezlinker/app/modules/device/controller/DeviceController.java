@@ -6,12 +6,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.CurdController;
-import com.ezlinker.app.config.socketio.S2CMessage;
 import com.ezlinker.app.constants.DeviceState;
 import com.ezlinker.app.modules.device.model.Device;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.device.pojo.FieldParam;
 import com.ezlinker.app.modules.device.service.IDeviceService;
+import com.ezlinker.app.modules.feature.model.Feature;
+import com.ezlinker.app.modules.feature.service.IFeatureService;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.ezlinker.app.modules.moduletemplate.model.ModuleTemplate;
@@ -200,6 +201,8 @@ public class DeviceController extends CurdController<Device> {
             throw new BizException("Device not exist", "设备不存在");
         }
         addTags(device);
+        addModules(device);
+        addFeatures(device);
         return data(device);
     }
 
@@ -319,11 +322,25 @@ public class DeviceController extends CurdController<Device> {
         IPage<Device> devicePage = iDeviceService.page(new Page<>(current, size), queryWrapper);
         for (Device device : devicePage.getRecords()) {
             addTags(device);
+            addModules(device);
+            addFeatures(device);
         }
 
         return data(devicePage);
     }
 
+    private void addModules(Device device) {
+        List<Module> modules = iModuleService.list(new QueryWrapper<Module>().eq("device_id", device.getId()));
+        device.setModules(modules);
+    }
+
+    @Resource
+    IFeatureService iFeatureService;
+
+    private void addFeatures(Device device) {
+        List<Feature> features = iFeatureService.list(new QueryWrapper<Feature>().eq("product_id", device.getProductId()));
+        device.setFeatures(features);
+    }
 
     /**
      * 初始化设备
