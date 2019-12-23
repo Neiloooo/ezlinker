@@ -1,8 +1,5 @@
 package com.ezlinker.app.config.socketio;
 
-import com.ezlinker.app.modules.module.pojo.DataArea;
-import com.ezlinker.app.modules.module.pojo.DataAreaValue;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,8 +12,10 @@ import lombok.EqualsAndHashCode;
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class C2SMessage extends XWSMsg{
+public class C2SMessage extends XWSMsg {
 
+    private String from;
+    private Long moduleId;
     private Object data;
 
 }

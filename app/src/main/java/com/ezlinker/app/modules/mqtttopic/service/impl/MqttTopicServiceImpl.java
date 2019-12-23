@@ -1,10 +1,13 @@
 package com.ezlinker.app.modules.mqtttopic.service.impl;
 
-import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
-import com.ezlinker.app.modules.mqtttopic.mapper.MqttTopicMapper;
-import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ezlinker.app.modules.mqtttopic.mapper.MqttTopicMapper;
+import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
+import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +19,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MqttTopicServiceImpl extends ServiceImpl<MqttTopicMapper, MqttTopic> implements IMqttTopicService {
+    @Resource
+    MqttTopicMapper mqttTopicMapper;
 
+    @Override
+    public List<MqttTopic> listByDevice(Long deviceId) {
+        return mqttTopicMapper.listByDevice(deviceId);
+    }
 }

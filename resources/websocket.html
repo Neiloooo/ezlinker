@@ -12,10 +12,13 @@
 <div id="content-wrap"></div>
 </body>
 <script>
-    const socket = io('http://39.108.214.107:12001?token=32dassw4fd3r&moduleId=1');
+    // const socket = io('http://39.108.214.107:12001?token=32dassw4fd3r&deviceId=1');
+     const socket = io('http://localhost:2501?token=32dassw4fd3r&deviceId=2');
 
     function send() {
-        socket.emit('s2c', Math.round(Math.random()*1000))
+        socket.emit('s2c', "helloworld")
+        console.log("发送数据:")
+
     }
 
     function test() {

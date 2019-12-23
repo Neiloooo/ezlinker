@@ -1,14 +1,13 @@
 package com.ezlinker.app.config;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.ezlinker.app.config.mqtt.MqttProxyClient;
 import com.ezlinker.app.config.socketio.C2SMessage;
 import com.ezlinker.app.config.socketio.EchoMessage;
-import com.ezlinker.app.modules.module.model.Module;
-import com.ezlinker.app.modules.module.service.IModuleService;
+import com.ezlinker.app.modules.device.model.Device;
+import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
 import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -43,11 +43,6 @@ public class SocketIOServerConfig {
     @Resource
     MqttConnectOptions mqttConnectOptions;
 
-    /**
-     * 模块DAO
-     */
-    @Resource
-    IModuleService iModuleService;
     @Resource
     IMqttTopicService iMqttTopicService;
     /**
@@ -60,7 +55,12 @@ public class SocketIOServerConfig {
      * K:sessionId
      * V:PublishTopic
      */
-    private static ConcurrentHashMap<String, String> publishMqttTopicStore = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<UUID, String> publishMqttTopicStore = new ConcurrentHashMap<>();
+    /**
+     *
+     */
+    private static ConcurrentHashMap<String, Long> moduleMqttTopicStore = new ConcurrentHashMap<>();
+
 
     /**
      * 状态标识:用来标识代理是否连接成功
@@ -98,7 +98,7 @@ public class SocketIOServerConfig {
          */
         server.addConnectListener(client -> {
 
-            Long moduleId = Long.valueOf(client.getHandshakeData().getUrlParams().get("moduleId").get(0));
+            Long deviceId = Long.valueOf(client.getHandshakeData().getUrlParams().get("deviceId").get(0));
 
             socketIoClientStore.put(client.getSessionId().toString(), client);
 
@@ -106,7 +106,7 @@ public class SocketIOServerConfig {
             /**
              * 当WS连接成功以后,开始连接EMQX
              */
-            connectToEmqx(moduleId, client);
+            connectToEmqx(deviceId, client);
             if (isConnectToEmqx) {
                 EchoMessage m0 = new EchoMessage();
                 m0.setCode(200);
@@ -127,7 +127,9 @@ public class SocketIOServerConfig {
          */
         server.addDisconnectListener(client -> {
             String sessionId = client.getSessionId().toString();
-            socketIoClientStore.remove(sessionId);
+            socketIoClientStore.clear();
+            publishMqttTopicStore.clear();
+            moduleMqttTopicStore.clear();
             if (emqClient.isConnected()) {
                 try {
                     emqClient.disconnect();
@@ -159,7 +161,7 @@ public class SocketIOServerConfig {
          * 只有EMQ连接成功以后,WS才能推送
          */
         server.addEventListener("s2c", Object.class, (client, payload, ackRequest) -> {
-            String publishTopic = publishMqttTopicStore.get(client.getSessionId().toString());
+            String publishTopic = publishMqttTopicStore.get(client.getSessionId());
             if (isConnectToEmqx) {
                 MqttMessage mqttMessage = new MqttMessage();
                 mqttMessage.setQos(2);
@@ -208,17 +210,22 @@ public class SocketIOServerConfig {
     /**
      * 代理客户端
      *
-     * @param moduleId
-     * @param socketIOClient
+     * @param deviceId
+     * @param ioClient
      * @return
      */
-    private void connectToEmqx(Long moduleId, SocketIOClient socketIOClient) {
+    @Resource
+    IDeviceService iDeviceService;
+
+    private void connectToEmqx(Long deviceId, SocketIOClient ioClient) {
         /**
          * 暂时1
          */
-        Module module = iModuleService.getById(moduleId);
-        if (module == null) {
+        Device device = iDeviceService.getById(deviceId);
+        if (device == null) {
             isConnectToEmqx = false;
+            log.info("设备 不存在");
+            return;
         }
 
         /**
@@ -244,29 +251,17 @@ public class SocketIOServerConfig {
 
             /**
              * 查询Topic
-             * SELECT
-             * 	module_id,
-             * 	topic
-             * FROM
-             * 	ez_mqtt_topic
-             * WHERE
-             * 	client_id IN (
-             * 		SELECT
-             * 			client_id
-             * 		FROM
-             * 			ez_module
-             * 		WHERE
-             * 			device_id = 1
-             * 	)
+             *
              */
-            List<MqttTopic> mqttTopics = iMqttTopicService.list(new QueryWrapper<MqttTopic>().eq("client_id", module.getClientId()));
+            // List<MqttTopic> mqttTopics = iMqttTopicService.list(new QueryWrapper<MqttTopic>().eq("client_id", module.getClientId()));
 
+            List<MqttTopic> mqttTopics = iMqttTopicService.listByDevice(deviceId);
             for (MqttTopic topic : mqttTopics) {
                 /**
                  * 用SessionID来记录Socket和Topic的关系,当转发的时候,从Map里面获取sessionId对应的 pub Topic
                  */
                 if (topic.getType() == MqttTopic.S2C) {
-                    publishMqttTopicStore.put(socketIOClient.getSessionId().toString(), topic.getTopic());
+                    publishMqttTopicStore.put(ioClient.getSessionId(), topic.getTopic());
                 }
                 /**
                  * 代理首先接管客户端的数据,
@@ -274,14 +269,18 @@ public class SocketIOServerConfig {
                  * 直接进行转发
                  */
                 if (topic.getType() == MqttTopic.C2S) {
+                    moduleMqttTopicStore.put(topic.getTopic(), topic.getModuleId());
+
                     try {
                         emqClient.subscribe(topic.getTopic(), 2, (s, mqttMessage) -> {
                             C2SMessage message = new C2SMessage();
+                            message.setFrom(topic.getTopic());
                             message.setCode(200);
+                            message.setModuleId(moduleMqttTopicStore.get(topic.getTopic()));
                             message.setMsgId(mqttMessage.getId() + "");
                             message.setDebug(true);
                             message.setData(new String(mqttMessage.getPayload(), StandardCharsets.UTF_8));
-                            c2s(socketIOClient, message);
+                            c2s(ioClient, message);
                         });
                     } catch (MqttException e) {
                         log.error("监听客户端[C2S]的topic时出现错误:" + e.getMessage());

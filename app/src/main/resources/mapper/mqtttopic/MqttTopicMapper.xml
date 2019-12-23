@@ -32,4 +32,24 @@ access,
 topic
     </sql>
 
+
+    <select id="listByDevice" resultType="com.ezlinker.app.modules.mqtttopic.model.MqttTopic">
+
+        <if test="deviceId!=null">
+            SELECT
+            *
+            FROM
+            ez_mqtt_topic
+            WHERE
+            client_id IN (
+            SELECT
+            client_id
+            FROM
+            ez_module
+            WHERE
+            device_id = #{deviceId}
+            )
+        </if>
+    </select>
+
 </mapper>
