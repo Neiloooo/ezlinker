@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -49,6 +50,12 @@ public class ModuleTemplate extends XEntity {
      * 描述
      */
     private String description;
+    /**
+     * 协议
+     */
+    @NotNull(message = "协议不可为空")
+
+    private Long protocol;
 
 
     public static final String PRODUCT_ID = "product_id";

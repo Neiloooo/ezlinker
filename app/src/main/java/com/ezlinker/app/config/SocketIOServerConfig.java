@@ -101,11 +101,6 @@ public class SocketIOServerConfig {
             Long moduleId = Long.valueOf(client.getHandshakeData().getUrlParams().get("moduleId").get(0));
 
             socketIoClientStore.put(client.getSessionId().toString(), client);
-//            EchoMessage echoMessage = new EchoMessage();
-//            echoMessage.setCode(200);
-//            echoMessage.setDebug(true);
-//            echoMessage.setMsg("client connect successfully!");
-//            echo(client, echoMessage);
 
 
             /**
@@ -249,8 +244,22 @@ public class SocketIOServerConfig {
 
             /**
              * 查询Topic
+             * SELECT
+             * 	module_id,
+             * 	topic
+             * FROM
+             * 	ez_mqtt_topic
+             * WHERE
+             * 	client_id IN (
+             * 		SELECT
+             * 			client_id
+             * 		FROM
+             * 			ez_module
+             * 		WHERE
+             * 			device_id = 1
+             * 	)
              */
-            List<MqttTopic> mqttTopics = iMqttTopicService.list(new QueryWrapper<MqttTopic>().eq("module_id", module.getId()));
+            List<MqttTopic> mqttTopics = iMqttTopicService.list(new QueryWrapper<MqttTopic>().eq("client_id", module.getClientId()));
 
             for (MqttTopic topic : mqttTopics) {
                 /**

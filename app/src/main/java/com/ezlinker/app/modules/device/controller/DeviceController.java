@@ -122,7 +122,7 @@ public class DeviceController extends CurdController<Device> {
             String username = SecureUtil.md5(clientId);
             String password = SecureUtil.md5(username);
             newModule.setName(moduleTemplate.getName()).setDataAreas(moduleTemplate.getDataAreas());
-            newModule.setClientId(clientId).setUsername(username).setPassword(password);
+            newModule.setClientId(clientId).setUsername(username).setPassword(password).setDeviceId(device.getId()).setProtocol(moduleTemplate.getProtocol());
             iModuleService.save(newModule);
             // 给新的Module创建Topic
             // 数据上行
@@ -130,14 +130,14 @@ public class DeviceController extends CurdController<Device> {
             s2cTopic.setAccess(TOPIC_SUB)
                     .setType(MqttTopic.S2C)
                     .setClientId(clientId)
-                    .setModuleId(device.getId())
+                    .setModuleId(newModule.getId())
                     .setTopic("mqtt/out/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/s2c")
                     .setUsername(username);
             // 数据下行
             MqttTopic c2sTopic = new MqttTopic();
             c2sTopic.setAccess(TOPIC_PUB)
                     .setType(MqttTopic.C2S)
-                    .setModuleId(device.getId())
+                    .setModuleId(newModule.getId())
                     .setClientId(clientId)
                     .setTopic("mqtt/in/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/c2s")
                     .setUsername(username);
@@ -147,7 +147,7 @@ public class DeviceController extends CurdController<Device> {
                     .setType(MqttTopic.STATUS)
                     .setUsername(username)
                     .setClientId(clientId)
-                    .setModuleId(device.getId())
+                    .setModuleId(newModule.getId())
                     .setTopic("mqtt/in/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/status");
             //生成
             iMqttTopicService.save(s2cTopic);

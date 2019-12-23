@@ -9,6 +9,7 @@
     <result column="x" property="x" />
     <result column="create_time" property="createTime" />
         <result column="product_id" property="productId" />
+        <result column="protocol" property="protocol"/>
         <result column="name" property="name" />
         <result column="data_areas" property="dataAreas" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
         <result column="description" property="description" />
