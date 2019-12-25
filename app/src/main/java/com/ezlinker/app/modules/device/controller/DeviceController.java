@@ -14,6 +14,7 @@ import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.feature.service.IFeatureService;
 import com.ezlinker.app.modules.module.model.Module;
+import com.ezlinker.app.modules.module.pojo.DataArea;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.ezlinker.app.modules.moduletemplate.model.ModuleTemplate;
 import com.ezlinker.app.modules.moduletemplate.service.IModuleTemplateService;
@@ -25,6 +26,7 @@ import com.ezlinker.app.modules.relation.service.IRelationProductModuleService;
 import com.ezlinker.app.modules.tag.model.Tag;
 import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.app.utils.IDKeyUtil;
+import com.ezlinker.app.utils.ModuleTokenUtil;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
@@ -123,9 +125,27 @@ public class DeviceController extends CurdController<Device> {
             String password = SecureUtil.md5(username);
             newModule.setName(moduleTemplate.getName()).setDataAreas(moduleTemplate.getDataAreas());
             newModule.setClientId(clientId).setUsername(username).setPassword(password).setDeviceId(device.getId()).setProtocol(moduleTemplate.getProtocol());
+            // Token
+            List<DataArea> dataAreas = moduleTemplate.getDataAreas();
+
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<DataArea> dataAreasList = objectMapper.convertValue(moduleTemplate.getDataAreas(), new TypeReference<List<DataArea>>() {
+            });
+
+            //
+            List<String> fields = new ArrayList<>();
+            for (DataArea area : dataAreasList) {
+                fields.add(area.getField());
+            }
+            // 生成给Token，格式：clientId::[field1,field2,field3······]
+            // token里面包含了模块的字段名,这样在数据入口处可以进行过滤。
+            String token = ModuleTokenUtil.token(clientId + "::" + fields.toString());
+            newModule.setToken(token);
             iModuleService.save(newModule);
             // 给新的Module创建Topic
             // 数据上行
+
             MqttTopic s2cTopic = new MqttTopic();
             s2cTopic.setAccess(TOPIC_SUB)
                     .setType(MqttTopic.S2C)
@@ -250,9 +270,8 @@ public class DeviceController extends CurdController<Device> {
         /**
          * 提取KeySet集合
          */
-        List<FieldParam> deviceParamList = objectMapper.convertValue(device.getParameters(),
-                new TypeReference<List<FieldParam>>() {
-                });
+        List<FieldParam> deviceParamList = objectMapper.convertValue(device.getParameters(), new TypeReference<List<FieldParam>>() {
+        });
 
         Set<String> fields = new HashSet<>();
         for (FieldParam deviceParam : deviceParamList) {

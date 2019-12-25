@@ -71,6 +71,33 @@ public class R {
         this.data = data;
     }
 
+    /**
+     * 返回消息
+     * @return
+     */
+    public static R ok() {
+        R r = new R();
+        r.setCode(200);
+        r.setI18nMessage("操作成功!");
+        r.setMessage("Operate success!");
+        r.setData(null);
+        return r;
+    }
+
+    /**
+     * 返回数据
+     * @param data
+     * @return
+     */
+    public static R ok(Object data) {
+        R r = new R();
+        r.setCode(200);
+        r.setI18nMessage("操作成功!");
+        r.setMessage("Operate success!");
+        r.setData(data);
+        return r;
+    }
+
     @Override
     public String toString() {
         return "{\"appName\":\"" + appName + "\",\"code\":" + code + ",\"message\":\"" + message + "\",\"i18nMessage\":\"" + i18nMessage + "\",\"data\":" + data + "}";
