@@ -22,8 +22,8 @@ public class DisconnectedMessage extends EMQWebHookMessage {
     /**
      * 客户端ID
      */
-    @NotEmpty(message = "clientid can't null")
-    private String clientid;
+    @NotEmpty(message = "client_id can't null")
+    private String client_id;
     /**
      * MQTT Username
      */
@@ -32,19 +32,5 @@ public class DisconnectedMessage extends EMQWebHookMessage {
      * 离线原因
      */
     private String reason;
-    /**
-     * IP地址
-     */
-    private String ip;
 
-    @Override
-    public String toString() {
-        return "DisconnectedMessage{" +
-                "action='" + action + '\'' +
-                ", clientId='" + clientid + '\'' +
-                ", username='" + username + '\'' +
-                ", reason='" + reason + '\'' +
-                ", ip='" + ip + '\'' +
-                '}';
-    }
 }

@@ -44,11 +44,11 @@ public class DataEntryController {
      */
     @PostMapping("/connected")
     public R connected(@RequestBody @Valid ConnectedMessage message) throws XException {
-        System.out.println("设备 Clientid is:" + message.getClientid() + " Username is:" + message.getUsername() + " 上线");
-        if (message.getClientid().startsWith("ezlinker")) {
+        System.out.println("设备 Clientid is:" + message.getClient_id() + " Username is:" + message.getUsername() + " 上线");
+        if (message.getClient_id().startsWith("ezlinker")) {
             return new R();
         }
-        Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", message.getClientid()));
+        Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", message.getClient_id()));
         if (module == null) {
             throw new XException("Module not exist", "模块不存在");
         }
@@ -73,11 +73,11 @@ public class DataEntryController {
      */
     @PostMapping("/disconnected")
     public R disconnected(@RequestBody @Valid DisconnectedMessage message) throws XException {
-        if (message.getClientid().startsWith("ezlinker")) {
+        if (message.getClient_id().startsWith("ezlinker")) {
             return new R();
         }
-        System.out.println("设备 Clientid is:" + message.getClientid() + " Username is:" + message.getUsername() + " 下线");
-        Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", message.getClientid()));
+        System.out.println("设备 Clientid is:" + message.getClient_id() + " Username is:" + message.getUsername() + " 下线");
+        Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", message.getClient_id()));
         if (module == null) {
             throw new XException("Module not exist", "模块不存在");
         }
@@ -93,10 +93,10 @@ public class DataEntryController {
 
     @PostMapping("/publish")
     public R publish(@RequestBody @Valid PublishMessage message) {
-        if (message.getClientid().startsWith("ezlinker")) {
+        if (message.getFrom_client_id().startsWith("ezlinker")) {
             return new R();
         }
-        Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", message.getClientid()));
+        Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", message.getFrom_client_id()));
         System.out.println("RMQ Data:" + message);
         return new R();
     }

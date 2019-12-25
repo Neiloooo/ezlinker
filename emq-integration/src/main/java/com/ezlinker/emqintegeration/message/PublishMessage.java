@@ -15,30 +15,14 @@ import javax.validation.constraints.NotEmpty;
 @EqualsAndHashCode(callSuper = false)
 
 public class PublishMessage extends EMQWebHookMessage {
-    private String messageid;
     private String action;
-    @NotEmpty(message = "clientid can't null")
-
-    private String clientid;
-    private String username;
+    @NotEmpty(message = "from_client_id can't null")
+    private String from_client_id;
+    private String from_username;
     private String topic;
     private int qos;
     private boolean retain;
     private String payload;
-    private long timestamp;
+    private long ts;
 
-    @Override
-    public String toString() {
-        return "PublishMessage{" +
-                "messageid='" + messageid + '\'' +
-                ", action='" + action + '\'' +
-                ", clientid='" + clientid + '\'' +
-                ", username='" + username + '\'' +
-                ", topic='" + topic + '\'' +
-                ", qos=" + qos +
-                ", retain=" + retain +
-                ", payload='" + payload + '\'' +
-                ", timestamp=" + timestamp +
-                '}';
-    }
 }

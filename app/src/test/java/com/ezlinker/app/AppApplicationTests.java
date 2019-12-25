@@ -2,6 +2,9 @@ package com.ezlinker.app;
 
 
 import cn.hutool.crypto.SecureUtil;
+import com.ezlinker.app.modules.module.model.Module;
+import com.ezlinker.app.modules.module.service.IModuleService;
+import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
 import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.service.IUserService;
 import com.ezlinker.common.exception.XException;
@@ -13,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.annotation.Resource;
+
 @SpringBootTest
 class AppApplicationTests {
 
@@ -20,7 +25,8 @@ class AppApplicationTests {
     TemplateEngine templateEngine;
     @Autowired
     AliyunEmailUtil aliyunEmailUtil;
-//
+
+    //
     @Test
     void sendTemplateMail() throws XException {
         //创建邮件正文
@@ -30,9 +36,10 @@ class AppApplicationTests {
         context.setVariable("name", "安全控制器");
 
         String emailContent = templateEngine.process("warning", context);
-        aliyunEmailUtil.sendHtmlMail("751957846@qq.com","警告信息",emailContent);
+        aliyunEmailUtil.sendHtmlMail("751957846@qq.com", "警告信息", emailContent);
         System.out.println("邮件发送报告测试");
     }
+
     @Autowired
     IUserService iUserService;
 
@@ -53,9 +60,20 @@ class AppApplicationTests {
     }
 
     @Test
-    void getConnections(){
+    void getConnections() {
         EMQMonitor emqMonitor = new EMQMonitor("dec4f6b4added", "MjkwNTQyMTc3NjUyNjk5NDQzMjkzNTU3NzcxMzI1OTMxNTC", "http://112.74.44.130:8080/api/v3");
         String connections = emqMonitor.getClusterConnections(1, 10);
         System.out.println(connections);
+    }
+
+
+    @Resource
+    IModuleService iModuleService;
+    @Test
+    void addEzlinkerMqtttopic() {
+
+        Module ezlinkerWsProxy = new Module();
+        ezlinkerWsProxy.setClientId("ezlinker").setIsSuperuser(1).setUsername("ezlinker");
+        iModuleService.save(ezlinkerWsProxy);
     }
 }
