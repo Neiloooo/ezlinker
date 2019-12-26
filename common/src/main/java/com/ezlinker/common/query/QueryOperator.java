@@ -7,15 +7,41 @@ package com.ezlinker.common.query;
  * @create: 2019-12-20 17:38
  **/
 public enum QueryOperator {
-
+    /**
+     *
+     */
     EQUAL("="),
+    /**
+     *
+     */
     NOT_EQUAL("!="),
+    /**
+     *
+     */
     GREATER_EQUAL(">="),
+    /**
+     *
+     */
     LESS_EQUAL("<="),
+    /**
+     *
+     */
     GREATER(">"),
+    /**
+     *
+     */
     LESS("<"),
+    /**
+     *
+     */
     BETWEEN("BETWEEN"),
+    /**
+     *
+     */
     IN("IN"),
+    /**
+     *
+     */
     LIKE("LIKE");
 
     private String operator;

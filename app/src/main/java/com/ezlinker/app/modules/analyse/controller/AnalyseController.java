@@ -1,10 +1,12 @@
 package com.ezlinker.app.modules.analyse.controller;
 
 import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.product.service.IProductService;
 import com.ezlinker.app.modules.project.service.IProjectService;
 import com.ezlinker.app.modules.user.service.IUserService;
 import com.ezlinker.common.exchange.R;
+import com.ezlinker.common.utils.SystemPropertiesUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 /**
  * 数据统计
+ *
  * @author wangwenhai
  */
 @RestController
@@ -33,6 +36,8 @@ public class AnalyseController extends CurdController {
 
     @Resource
     IUserService iUserService;
+    @Resource
+    IDeviceService iDeviceService;
 
     /**
      * 获取一些统计数据
@@ -46,6 +51,21 @@ public class AnalyseController extends CurdController {
         data.put("projects", iProjectService.count());
         data.put("users", iUserService.count());
         data.put("products", iProductService.count());
+        data.put("devices", iDeviceService.count());
+
         return data(data);
     }
+
+    @GetMapping("/properties")
+    public R getSystemProperties() {
+        return data(SystemPropertiesUtil.getSystemProperties());
+    }
+
+
+    @GetMapping("/running")
+    public R running() {
+        return data(SystemPropertiesUtil.getRunning());
+    }
+
+
 }

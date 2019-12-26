@@ -7,8 +7,17 @@ package com.ezlinker.common.query;
  * @create: 2019-12-20 17:38
  **/
 public enum QueryLogic {
+    /**
+     *  无逻辑
+     */
     NONE("NONE"),
+    /**
+     * AND 查询
+     */
     AND("AND"),
+    /**
+     * OR 查询
+     */
     OR("OR");
 
     private String operator;

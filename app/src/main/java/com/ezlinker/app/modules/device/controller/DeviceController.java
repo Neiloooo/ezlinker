@@ -30,6 +30,7 @@ import com.ezlinker.app.utils.ModuleTokenUtil;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
+import com.ezlinker.common.query.QueryItem;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
@@ -378,5 +380,9 @@ public class DeviceController extends CurdController<Device> {
     }
 
 
+    @Override
+    protected R query(@RequestParam Integer current, @RequestParam Integer size, @RequestBody @Valid @NotNull List<QueryItem> queryItems) throws XException {
+        return success();
+    }
 }
 
