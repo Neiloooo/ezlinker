@@ -1,4 +1,4 @@
-package com.ezlinker.app.modules.monitor.pojo;
+package com.ezlinker.app.modules.analyse.controller;
 
 /**
  * ezlinker

@@ -31,12 +31,12 @@ public class EMQMonitor {
     /**
      * @param appId     appId
      * @param appSecret appSecret
-     * @param hostUrl   URL地址
+     * @param host      URL地址
      */
-    public EMQMonitor(String appId, String appSecret, String hostUrl) {
+    public EMQMonitor(String appId, String appSecret, Integer port, String host) {
         this.appId = appId;
         this.appSecret = appSecret;
-        this.hostUrl = hostUrl;
+        this.hostUrl = "http://" + host + ":" + port + "/api/v3";
     }
 
     /**

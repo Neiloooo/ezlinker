@@ -56,12 +56,20 @@ public class AnalyseController extends CurdController {
         return data(data);
     }
 
+    /**
+     * 系统参数
+     * @return
+     */
     @GetMapping("/properties")
     public R getSystemProperties() {
         return data(SystemPropertiesUtil.getSystemProperties());
     }
 
 
+    /**
+     * 运行参数
+     * @return
+     */
     @GetMapping("/running")
     public R running() {
         return data(SystemPropertiesUtil.getRunning());

@@ -4,7 +4,6 @@ package com.ezlinker.app;
 import cn.hutool.crypto.SecureUtil;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.service.IModuleService;
-import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
 import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.service.IUserService;
 import com.ezlinker.common.exception.XException;
@@ -61,7 +60,7 @@ class AppApplicationTests {
 
     @Test
     void getConnections() {
-        EMQMonitor emqMonitor = new EMQMonitor("dec4f6b4added", "MjkwNTQyMTc3NjUyNjk5NDQzMjkzNTU3NzcxMzI1OTMxNTC", "http://112.74.44.130:8080/api/v3");
+        EMQMonitor emqMonitor = new EMQMonitor("dec4f6b4added", "MjkwNTQyMTc3NjUyNjk5NDQzMjkzNTU3NzcxMzI1OTMxNTC", 8080, "112.74.44.130");
         String connections = emqMonitor.getClusterConnections(1, 10);
         System.out.println(connections);
     }
@@ -69,6 +68,7 @@ class AppApplicationTests {
 
     @Resource
     IModuleService iModuleService;
+
     @Test
     void addEzlinkerMqtttopic() {
 

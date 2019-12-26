@@ -92,4 +92,6 @@ aliyun:
 emqx:
   host: localhost
   tcp-port: 1883
-  api-port: 8080
+  apiport: 8080
+  appid: dec4f6b4added
+  appscret: MjkwNTQyMTc3NjUyNjk5NDQzMjkzNTU3NzcxMzI1OTMxNTC
