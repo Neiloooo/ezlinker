@@ -1,9 +1,8 @@
 package com.ezlinker.app.modules.module.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.model.Module;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ezlinker.app.modules.relation.model.RelationProductModule;
 
 import java.util.List;
 
@@ -17,7 +16,20 @@ import java.util.List;
  */
 public interface ModuleMapper extends BaseMapper<Module> {
 
+    /**
+     * 获取功能列表
+     *
+     * @param moduleId
+     * @return
+     */
     List<Feature> getFeatureList(Long moduleId);
+
+    /**
+     * 根据产品获取模块
+     *
+     * @param productId
+     * @return
+     */
     List<Module> listByProduct(Long productId);
 
 }

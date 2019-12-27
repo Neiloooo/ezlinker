@@ -33,8 +33,29 @@ import java.util.List;
 
 @TableName(value = "ez_module", autoResultMap = true)
 public class Module extends XEntity {
+    public static final long serialVersionUID = 1L;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * MQTT协议
+     */
+    public static final int MQTT = 1;
+    /**
+     * HTTP协议
+     */
+    public static final int HTTP = 2;
+    /**
+     * COAP协议
+     */
+    public static final int COAP = 3;
+    /**
+     * 原始TCP
+     */
+    public static final int RAW_TCP = 4;
+    /**
+     * UDP
+     */
+    public static final int UDP = 5;
+
 
     /**
      * 产品ID
@@ -103,8 +124,17 @@ public class Module extends XEntity {
      * MQTT的用户名和密码
      */
     private String clientId;
+    /**
+     * 用户名
+     */
     private String username;
+    /**
+     * 状态
+     */
     private Integer status;
+    /**
+     * 密码
+     */
     @JsonIgnore
     private String password;
 

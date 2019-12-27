@@ -63,6 +63,36 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
+  # Quartz
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+            instanceName: clusteredScheduler
+            jobStore:
+              acquireTriggersWithinLock: true
+              class: org.quartz.impl.jdbcjobstore.JobStoreTX
+              driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+              useProperties: true
+              tablePrefix: qrtz_
+              misfireThreshold: 60000
+              clusterCheckinInterval: 5000
+              isClustered: false
+            threadPool:
+              class: org.quartz.simpl.SimpleThreadPool
+              threadCount: 10
+              threadPriority: 5
+              threadsInheritContextClassLoaderOfInitializingThread: true
+    startup-delay: 30
+    overwrite-existing-jobs: true
+
+
+
 logging:
   level:
     root: info

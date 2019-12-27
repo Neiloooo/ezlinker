@@ -28,22 +28,22 @@ public class EmqxMonitorController extends XController {
      *
      * @return
      */
-    @Value("${emq.host}")
-    String host;
-    @Value("${emq.apiport}")
-    Integer apiPort;
-    @Value("${emq.appid}")
-    String appid;
-    @Value("${emq.appscret}")
-    String secret;
-
-    @Bean
-    public EMQMonitor emqMonitor() {
-        return new EMQMonitor(appid, secret, apiPort, host);
-    }
-
-    @Resource
-    EMQMonitor emqMonitor;
+//    @Value("${emq.host}")
+//    String host;
+//    @Value("${emq.apiport}")
+//    Integer apiPort;
+//    @Value("${emq.appid}")
+//    String appid;
+//    @Value("${emq.appscret}")
+//    String secret;
+//
+//    @Bean
+//    public EMQMonitor emqMonitor() {
+//        return new EMQMonitor(appid, secret, apiPort, host);
+//    }
+//
+//    @Resource
+//    EMQMonitor emqMonitor;
 
     public EmqxMonitorController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);

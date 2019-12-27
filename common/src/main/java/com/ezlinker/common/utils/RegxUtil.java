@@ -1,8 +1,10 @@
 package com.ezlinker.common.utils;
 
 
+import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -122,6 +124,21 @@ public class RegxUtil {
         return -1;
     }
 
+    /**
+     * 判断是否为合法Cron 表达式
+     * @param cronExpression
+     * @return
+     */
+    public boolean isCron(String cronExpression){
+        CronTriggerImpl trigger = new CronTriggerImpl();
+        try {
+            trigger.setCronExpression(cronExpression);
+            Date date = trigger.computeFirstFireTime(null);
+            return date != null && date.after(new Date());
+        } catch (Exception e) {
+        }
+        return false;
+    }
 
 }
 
