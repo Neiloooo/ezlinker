@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
  * ezlinker
  *
  * @author wangwenhai
- * @description 设备参数
+ * @description 设备参数,为设备建表使用
  * @create 2019-12-09 21:46
  **/
 @Data

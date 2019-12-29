@@ -153,6 +153,16 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/dataentry/controller/WebHookController.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/dataentry/model/WebHookInterfaceInfo.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/device/controller/DeviceController.java">
           <value>
             <PaintGroupHighlightMap />
@@ -213,12 +223,37 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/internalmessage/model/InternalMessage.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/internalmessage/service/InternalMessageService.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/internalmessage/service/impl/InternalMessageServiceImpl.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/module/controller/ModuleController.java">
           <value>
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/module/mapper/ModuleMapper.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/module/model/Module.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/module/model/ModuleLog.java">
           <value>
             <PaintGroupHighlightMap />
           </value>
@@ -229,6 +264,21 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/module/pojo/DataAreaValue.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/module/service/IModuleService.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/module/service/ModuleLogService.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/module/service/impl/ModuleServiceImpl.java">
           <value>
             <PaintGroupHighlightMap />
           </value>
@@ -373,6 +423,11 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/userlog/controller/UserLoginLogController.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/modules/usermanagement/controller/UserManagementController.java">
           <value>
             <PaintGroupHighlightMap />
@@ -444,6 +499,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/main/resources/application-devhome.yml">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/resources/application.yml">
           <value>
             <PaintGroupHighlightMap />
           </value>
@@ -554,6 +614,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/common/src/main/java/com/ezlinker/common/exchange/RCode.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/common/src/main/java/com/ezlinker/common/model/XEntity.java">
           <value>
             <PaintGroupHighlightMap />
           </value>

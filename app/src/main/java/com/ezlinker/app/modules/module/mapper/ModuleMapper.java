@@ -1,6 +1,7 @@
 package com.ezlinker.app.modules.module.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ezlinker.app.modules.dataentry.model.WebHookInterfaceInfo;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.model.Module;
 
@@ -31,5 +32,14 @@ public interface ModuleMapper extends BaseMapper<Module> {
      * @return
      */
     List<Module> listByProduct(Long productId);
+
+
+    /**
+     * 查询信息
+     * @param clientId
+     * @return
+     */
+
+    WebHookInterfaceInfo getWebHookInterfaceInfo(String clientId);
 
 }

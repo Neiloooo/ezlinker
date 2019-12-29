@@ -1,18 +1,17 @@
 package com.ezlinker.app.modules.internalmessage.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.internalmessage.model.InternalMessage;
 import com.ezlinker.app.modules.internalmessage.service.InternalMessageService;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 
 /**
  * <p>
@@ -46,29 +45,27 @@ public class InternalMessageController extends CurdController<InternalMessage> {
      */
     @Override
     protected R delete(@PathVariable Integer[] ids) throws XException {
-        boolean ok = internalMessageService.removeByIds(Arrays.asList(ids));
-        return ok ? success() : fail();
+        internalMessageService.removeByIds(ids);
+        return success();
     }
 
 
     /**
      * 分页检索
      *
-     * @param current   页码：必传
-     * @param size 页长：必传
+     * @param current 页码：必传
+     * @param size    页长：必传
      * @return
      * @throws XException
      */
     @GetMapping
     public R queryForPage(
             @RequestParam Integer current,
+            @RequestParam Integer marked,
             @RequestParam Integer size) throws XException {
-        QueryWrapper<InternalMessage> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", getUserDetail().getId()).eq("marked", 0);
-        queryWrapper.orderByDesc("create_time");
-        IPage<InternalMessage> internalMessagePage = internalMessageService.page(new Page<>(current, size), queryWrapper);
+        Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "_id"));
 
-        return data(internalMessagePage);
+        return data(internalMessageService.queryForPage(getUserDetail().getId(), marked, pageable));
     }
 
     /**
@@ -79,16 +76,12 @@ public class InternalMessageController extends CurdController<InternalMessage> {
      * @throws XException
      */
     @PutMapping("/mark/{id}")
-    public R mark(@PathVariable Long id) throws XException {
-        QueryWrapper<InternalMessage> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id", id);
-        InternalMessage internalMessage = internalMessageService.getById(id);
+    public R mark(@PathVariable String id) throws XException {
+        InternalMessage internalMessage = internalMessageService.getOne(id);
         if (internalMessage == null) {
             throw new XException("InternalMessage not exists!", "站内信不存在");
-
         }
-        internalMessage.setMarked(1);
-        boolean ok = internalMessageService.updateById(internalMessage);
-        return ok ? success() : fail();
+        internalMessageService.mark(id);
+        return data(internalMessage);
     }
 }

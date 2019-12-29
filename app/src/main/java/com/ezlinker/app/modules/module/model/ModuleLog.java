@@ -20,13 +20,14 @@ public class ModuleLog implements Serializable {
     // 掉线
     public static Integer DISCONNECT = 2;
 
+    private String id;
     private String sn;
     private String deviceName;
     private String moduleName;
     private Long moduleId;
     private Integer type;
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
 }

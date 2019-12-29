@@ -72,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public UserInfoView getUserInfo(@NotNull(message = "用户ID不能为空") Long userId) {
         UserInfoView userInfoView = userMapper.getUserInfo(userId);
-        long count = internalMessageService.count(new QueryWrapper<InternalMessage>().eq("user_id", userId).eq("marked", 0));
+        long count = internalMessageService.count(userId);
         userInfoView.setMsgCount(count);
         return userInfoView;
     }

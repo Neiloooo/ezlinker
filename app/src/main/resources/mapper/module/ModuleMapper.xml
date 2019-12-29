@@ -36,19 +36,35 @@
 
     <select id="getFeatureList" resultType="com.ezlinker.app.modules.feature.model.Feature">
 
-SELECT
-*
-FROM
-	( SELECT F.*, M_F.module_id, M_F.feature_id FROM `ez_feature` F LEFT JOIN ez_feature_module M_F ON ( F.id = M_F.feature_id ) )
-FS
-WHERE
-	FS.module_id = #{moduleId};
+        SELECT
+        *
+        FROM
+        ( SELECT F.*, M_F.module_id, M_F.feature_id FROM `ez_feature` F LEFT JOIN ez_feature_module M_F ON ( F.id =
+        M_F.feature_id ) )
+        FS
+        WHERE
+        FS.module_id = #{moduleId};
     </select>
 
 
     <select id="listByProduct" resultType="com.ezlinker.app.modules.module.model.Module">
 
 
+    </select>
+    <select id="getWebHookInterfaceInfo"
+            resultType="com.ezlinker.app.modules.dataentry.model.WebHookInterfaceInfo">
+
+        SELECT
+        A.id AS moduleId,
+        B.id AS deviceId,
+        A.`name` AS moduleName,
+        B.sn,
+        B.`name` AS deviceName
+        FROM
+        ez_module AS A
+        LEFT JOIN ez_device AS B ON ( A.device_id = B.id )
+        WHERE A.client_id = #{clientId,jdbcType=BIGINT}
+        ORDER BY A.id DESC LIMIT 1
     </select>
 
 </mapper>

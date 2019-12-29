@@ -46,7 +46,7 @@ public class ModuleLogService {
             query.addCriteria(Criteria.where("moduleId").is(moduleId));
         }
 
-        query.with(Sort.by(Sort.Direction.DESC, "id"));
+        query.with(Sort.by(Sort.Direction.DESC, "_id"));
         query.with(pageable);
 
         List<ModuleLog> list = mongoOperations.find(query, ModuleLog.class, "module_log");
@@ -55,7 +55,7 @@ public class ModuleLogService {
         return new IPage<ModuleLog>() {
             @Override
             public List<OrderItem> orders() {
-                return OrderItem.descs("id");
+                return OrderItem.descs("_id");
             }
 
             @Override

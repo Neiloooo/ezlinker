@@ -2,6 +2,8 @@ package com.ezlinker.app;
 
 
 import cn.hutool.crypto.SecureUtil;
+import com.ezlinker.app.modules.internalmessage.model.InternalMessage;
+import com.ezlinker.app.modules.internalmessage.service.InternalMessageService;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.ezlinker.app.modules.user.model.User;
@@ -16,6 +18,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 @SpringBootTest
 class AppApplicationTests {
@@ -76,4 +79,23 @@ class AppApplicationTests {
         ezlinkerWsProxy.setClientId("ezlinker").setIsSuperuser(1).setUsername("ezlinker");
         iModuleService.save(ezlinkerWsProxy);
     }
+
+    @Resource
+    InternalMessageService internalMessageService;
+
+    /**
+     * 添加测试站内信
+     */
+    @Test
+    void addInternalMessage() {
+        for (int i = 0; i < 52; i++) {
+            InternalMessage internalMessage = new InternalMessage();
+            internalMessage.setUserId(1L).setContent("hello world").setTitle("fuck you:" + i+" times").setMarked(0).setType(1).setCreateTime(new Date());
+            internalMessageService.save(internalMessage);
+        }
+
+
+    }
+
+
 }

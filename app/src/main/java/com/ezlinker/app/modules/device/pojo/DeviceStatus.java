@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
  * ezlinker
  *
  * @author wangwenhai
- * @description 设备的当前状态
+ * @description 设备的当前状态,可以有外部接口进行改变,一般是设备当前的运行时状态
  * @create 2019-12-09 21:37
  **/
 @Data

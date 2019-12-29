@@ -42,7 +42,7 @@ public class UserLoginLogController extends CurdController<UserLoginLog> {
      * @throws XException
      */
     @GetMapping
-    public R getLoginLog(@RequestParam Integer current, @RequestParam Integer size) throws XException {
+    public R queryForPage(@RequestParam Integer current, @RequestParam Integer size) throws XException {
         Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "id"));
 
         return data(iUserLoginLogService.queryForPage(getUserDetail().getId(), pageable));

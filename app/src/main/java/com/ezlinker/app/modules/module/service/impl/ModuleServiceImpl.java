@@ -1,5 +1,6 @@
 package com.ezlinker.app.modules.module.service.impl;
 
+import com.ezlinker.app.modules.dataentry.model.WebHookInterfaceInfo;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.mapper.ModuleMapper;
@@ -26,5 +27,10 @@ public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> impleme
     @Override
     public List<Feature> getFeatureList(Long moduleId) {
         return moduleMapper.getFeatureList(moduleId);
+    }
+
+    @Override
+    public WebHookInterfaceInfo getWebHookInterfaceInfo(String clientId) {
+        return moduleMapper.getWebHookInterfaceInfo(clientId);
     }
 }

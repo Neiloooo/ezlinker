@@ -40,34 +40,71 @@ spring:
 
   redis:
     database: 0
-    host: 116.196.90.9
-    password: tinycoder332211
+    host: localhost
     port: 6379
     timeout: 300
+    password: redis
 
   data:
     mongodb:
-      uri: mongodb://localhost:27017/ezlinker
+      uri: mongodb://localhost:27017
       # password: guest
       # username: guest
-#      port: 32768
-#      database: ezlinker
+      port: 27017
+      database: ezlinker
       authentication-database: admin
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-
   mvc:
     throw-exception-if-no-handler-found: true
 
   resources:
     add-mappings: false
 
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  # Quartz
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO
+            instanceName: clusteredScheduler
+            jobStore:
+              acquireTriggersWithinLock: true
+              class: org.quartz.impl.jdbcjobstore.JobStoreTX
+              driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+              useProperties: true
+              tablePrefix: qrtz_
+              misfireThreshold: 60000
+              clusterCheckinInterval: 5000
+              isClustered: false
+            threadPool:
+              class: org.quartz.simpl.SimpleThreadPool
+              threadCount: 10
+              threadPriority: 5
+              threadsInheritContextClassLoaderOfInitializingThread: true
+    startup-delay: 30
+    overwrite-existing-jobs: true
+
+
+
 logging:
   level:
     root: info
     org.springframework.data.mongodb.core: DEBUG
     com.baomidou.mybatisplus.core.mapper: DEBUG
+
+
+#mybatis-plus:
+#  global-config:
+#    db-config:
+#      id-type: auto
+#  mapper-locations: classpath*:/mapper/**/*.xml
 
 # Aliyun Mail push
 # "cn-hangzhou", "ULw8nLnKBktSbOhI", "hgAj2F2KtaMvLuXZzpVyVWZ0rl4SXR"
@@ -83,6 +120,8 @@ aliyun:
 
 # EMQ Config
 emqx:
-  host: 127.0.0.1
+  host: 112.74.44.130
   tcp-port: 1883
-  api-port: 8080
+  apiport: 8080
+  appid: dec4f6b4added
+  appscret: MjkwNTQyMTc3NjUyNjk5NDQzMjkzNTU3NzcxMzI1OTMxNTC
