@@ -42,8 +42,9 @@ public class ModuleLogService {
      */
     public IPage<ModuleLog> queryForPage(Long moduleId, Pageable pageable) {
         Query query = new Query();
-        Criteria criteria = Criteria.where("moduleId").is(moduleId);
-        query.addCriteria(criteria);
+        if (moduleId != null) {
+            query.addCriteria(Criteria.where("moduleId").is(moduleId));
+        }
 
         query.with(Sort.by(Sort.Direction.DESC, "id"));
         query.with(pageable);

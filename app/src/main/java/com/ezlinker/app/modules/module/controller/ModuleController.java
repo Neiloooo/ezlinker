@@ -124,6 +124,7 @@ public class ModuleController extends CurdController<Module> {
 
     /**
      * 分页查询
+     *
      * @param current
      * @param size
      * @param productId
@@ -189,7 +190,7 @@ public class ModuleController extends CurdController<Module> {
      * @return
      */
     @GetMapping("/logs")
-    public R logs(@RequestParam Integer current, @RequestParam Integer size, @RequestParam Long moduleId) {
+    public R logs(@RequestParam Integer current, @RequestParam Integer size, @RequestParam(required = false) Long moduleId) {
         Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "id"));
         return data(moduleLogService.queryForPage(moduleId, pageable));
     }

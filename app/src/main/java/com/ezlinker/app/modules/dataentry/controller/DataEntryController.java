@@ -57,6 +57,7 @@ public class DataEntryController {
         iModuleService.updateById(module);
         // 保存日志
         ModuleLog moduleLog = new ModuleLog();
+        module.setSn(module.getSn());
         moduleLog.setModuleId(module.getId());
         moduleLog.setType(ModuleLog.CONNECT);
         moduleLog.setCreateTime(new Date());

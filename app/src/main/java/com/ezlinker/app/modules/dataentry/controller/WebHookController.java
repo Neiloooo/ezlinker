@@ -2,6 +2,8 @@ package com.ezlinker.app.modules.dataentry.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ezlinker.app.modules.device.model.Device;
+import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.model.ModuleLog;
 import com.ezlinker.app.modules.module.service.IModuleService;
@@ -72,17 +74,26 @@ public class WebHookController {
      * @throws XException
      */
 
+    @Resource
+    IDeviceService iDeviceService;
+    //TODO 此处应该把模块和设备合为一个查询，避免多次查库。后期优化
+
     private void handConnect(String clientId) throws XException {
         log.info("客户端[{}]连接成功", clientId);
         Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", clientId));
         if (module == null) {
             throw new XException("Module not exist", "模块不存在");
         }
+        Device device = iDeviceService.getById(module.getDeviceId());
 
         module.setLastActiveTime(new Date());
+        module.setStatus(1);
         iModuleService.updateById(module);
         // 保存日志
         ModuleLog moduleLog = new ModuleLog();
+        moduleLog.setSn(device.getSn());
+        moduleLog.setDeviceName(device.getName());
+        moduleLog.setModuleName(module.getName());
         moduleLog.setModuleId(module.getId());
         moduleLog.setType(ModuleLog.CONNECT);
         moduleLog.setCreateTime(new Date());
@@ -102,8 +113,15 @@ public class WebHookController {
         if (module == null) {
             throw new XException("Module not exist", "模块不存在");
         }
+        Device device = iDeviceService.getById(module.getDeviceId());
+
+        module.setStatus(0);
+        iModuleService.updateById(module);
         // 保存日志
         ModuleLog moduleLog = new ModuleLog();
+        moduleLog.setSn(device.getSn());
+        moduleLog.setDeviceName(device.getName());
+        moduleLog.setModuleName(module.getName());
         moduleLog.setModuleId(module.getId());
         moduleLog.setType(ModuleLog.DISCONNECT);
         moduleLog.setCreateTime(new Date());

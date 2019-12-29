@@ -2,6 +2,8 @@ package com.ezlinker.app.modules.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ezlinker.app.modules.internalmessage.model.InternalMessage;
+import com.ezlinker.app.modules.internalmessage.service.InternalMessageService;
 import com.ezlinker.app.modules.permission.model.RolePermissionView;
 import com.ezlinker.app.modules.role.model.UserRoleView;
 import com.ezlinker.app.modules.user.mapper.UserMapper;
@@ -64,8 +66,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return userPermissions;
     }
 
+    @Resource
+    InternalMessageService internalMessageService;
+
     @Override
     public UserInfoView getUserInfo(@NotNull(message = "用户ID不能为空") Long userId) {
-        return userMapper.getUserInfo(userId);
+        UserInfoView userInfoView = userMapper.getUserInfo(userId);
+        long count = internalMessageService.count(new QueryWrapper<InternalMessage>().eq("user_id", userId).eq("marked", 0));
+        userInfoView.setMsgCount(count);
+        return userInfoView;
     }
 }

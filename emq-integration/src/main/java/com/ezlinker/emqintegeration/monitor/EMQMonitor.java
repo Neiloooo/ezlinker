@@ -39,6 +39,14 @@ public class EMQMonitor {
         this.hostUrl = "http://" + host + ":" + port + "/api/v3";
     }
 
+    public String getBrokers(){
+        String body = HttpRequest.get(StrUtil.format("{}{}", hostUrl, EmqUrl.BROKERS))
+                .basicAuth(appId, appSecret)
+                .execute()
+                .body();
+        return body;
+    }
+
     /**
      * 获取集群连接信息
      *
@@ -264,6 +272,9 @@ public class EMQMonitor {
 
 
     private static class EmqUrl {
+        private static final String BROKERS = "/brokers";
+
+
         /**
          * 获取连接信息
          */

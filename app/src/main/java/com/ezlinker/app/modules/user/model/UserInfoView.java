@@ -1,9 +1,9 @@
 package com.ezlinker.app.modules.user.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 public class UserInfoView implements Serializable {
@@ -84,5 +84,10 @@ public class UserInfoView implements Serializable {
 
     private String wechat;
 
+    /**
+     * 未读信息
+     */
+    @TableField
+    Long msgCount;
 
 }

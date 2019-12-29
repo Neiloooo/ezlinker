@@ -68,14 +68,14 @@ public class EntryController {
         if (user == null) {
 
             UserLoginLog userLoginLog = new UserLoginLog();
-            userLoginLog.setIp(ip).setStatus("WARNING").setUserId(0L).setRemark("未知用户尝试登陆失败").setLocation(getLocationWithIp(ip));
+            userLoginLog.setUsername(null).setIp(ip).setStatus("WARNING").setUserId(0L).setRemark("未知用户尝试登陆失败").setLocation(getLocationWithIp(ip));
             iUserLoginLogService.save(userLoginLog);
             throw new UserNotFoundException("Login failure,user not exists!", "登陆失败,用户不存在");
         }
 
         if (!user.getPassword().toUpperCase().equals(SecureUtil.md5(loginForm.getPassword()).toUpperCase())) {
             UserLoginLog userLoginLog = new UserLoginLog();
-            userLoginLog.setIp(ip).setStatus("WARNING").setUserId(user.getId()).setRemark("尝试登陆失败").setLocation(getLocationWithIp(ip));
+            userLoginLog.setUsername(user.getUsername()).setIp(ip).setStatus("WARNING").setUserId(user.getId()).setRemark("尝试登陆失败").setLocation(getLocationWithIp(ip));
             iUserLoginLogService.save(userLoginLog);
             throw new PasswordInvalidException("Login failure,password invalid!", "登陆失败,密码错误");
 
@@ -95,7 +95,7 @@ public class EntryController {
         String token = UserTokenUtil.token(userDetail, 24 * 60 * 60 * 1000L);
 
         UserLoginLog userLoginLog = new UserLoginLog();
-        userLoginLog.setIp(ip).setStatus("INFO").setUserId(user.getId()).setRemark("登陆成功").setLocation(getLocationWithIp(ip));
+        userLoginLog.setUsername(user.getUsername()).setIp(ip).setStatus("INFO").setUserId(user.getId()).setRemark("登陆成功").setLocation(getLocationWithIp(ip));
         iUserLoginLogService.save(userLoginLog);
         // 更新登陆信息
         user.setLastLoginIp(ip).setLastLoginTime(new Date());
@@ -127,10 +127,7 @@ public class EntryController {
             String result = HttpUtil.get("http://whois.pconline.com.cn/ipJson.jsp?json=true&ip=" + ip);
 
             JSONObject data = JSONObject.parseObject(result);
-            return "IP地址:" + data.getString("ip")
-                    + ";所在省:" + data.getString("pro")
-                    + ";所在城市:" + data.getString("city")
-                    + ";运营商信息:" + data.getString("addr");
+            return data.getString("pro") + data.getString("city") + data.getString("addr");
         } catch (Exception e) {
             log.error("IP获取失败，请检查IP查询接口是否正常.");
             return "IP详细信息获取失败";

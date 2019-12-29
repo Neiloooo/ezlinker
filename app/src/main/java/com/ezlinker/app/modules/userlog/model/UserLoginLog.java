@@ -1,8 +1,12 @@
 package com.ezlinker.app.modules.userlog.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -17,6 +21,7 @@ import lombok.experimental.Accessors;
 public class UserLoginLog {
 
     private String id;
+    private String username;
     @JsonIgnore
     private Long userId;
 
@@ -27,6 +32,11 @@ public class UserLoginLog {
     private String remark;
 
     private String location;
+
+
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date createTime;
 
 
 }
