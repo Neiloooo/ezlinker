@@ -15,7 +15,6 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author: wangwenhai
  * @create: 2019-12-16 15:09
  **/
-@Configuration
+//@Configuration
 @Slf4j
 public class SocketIOServerConfig {
     /**

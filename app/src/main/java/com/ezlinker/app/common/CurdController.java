@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
 import com.ezlinker.common.query.QueryItem;
-import org.quartz.SchedulerException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,11 +28,12 @@ public abstract class CurdController<T> extends XController {
 
     /**
      * 添加一个T
+     *
      * @param t
      * @return
      */
     @PostMapping
-    protected R add(T t) throws XException, SchedulerException {
+    protected R add(T t) throws XException {
         return success();
     }
 
@@ -79,14 +79,13 @@ public abstract class CurdController<T> extends XController {
      * @param size
      * @param queryItems
      * @return
-     * @throws XException
      */
     @PostMapping("/query")
     protected R query(Integer current,
                       Integer size,
-                      List<QueryItem> queryItems) throws XException {
+                      List<QueryItem> queryItems) {
 
-        return data(getQueryWrapper(queryItems));
+        return success();
     }
 
     /**
