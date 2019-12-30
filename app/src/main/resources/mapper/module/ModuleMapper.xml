@@ -39,7 +39,7 @@
         SELECT
         *
         FROM
-        ( SELECT F.*, M_F.module_id, M_F.feature_id FROM `ez_feature` F LEFT JOIN ez_feature_module M_F ON ( F.id =
+        ( SELECT F.*, M_F.module_id, M_F.feature_id FROM `ez_feature` F LEFT JOIN ez_relation_feature_module M_F ON ( F.id =
         M_F.feature_id ) )
         FS
         WHERE

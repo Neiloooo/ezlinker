@@ -15,6 +15,12 @@ import java.util.Map;
  * @since 2019-11-18
  */
 public interface MqttTopicMapper extends BaseMapper<MqttTopic> {
+    /**
+     * 根据模块查
+     * @param moduleId
+     * @return
+     */
+    List<MqttTopic> listByModule(Long moduleId);
 
     /**
      * 根据设备查Topic

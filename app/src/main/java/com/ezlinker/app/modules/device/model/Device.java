@@ -124,4 +124,6 @@ public class Device extends XEntity {
     @TableField(exist = false)
 
     List<Feature> features;
+
+
 }

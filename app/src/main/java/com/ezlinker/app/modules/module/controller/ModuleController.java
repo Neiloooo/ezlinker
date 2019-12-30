@@ -8,6 +8,7 @@ import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.ezlinker.app.modules.module.service.ModuleLogService;
+import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import com.ezlinker.common.exception.BizException;
 import com.ezlinker.common.exception.XException;
 import com.ezlinker.common.exchange.R;
@@ -45,6 +46,9 @@ public class ModuleController extends CurdController<Module> {
     @Resource
     IModuleService iModuleService;
 
+    @Resource
+    IMqttTopicService iMqttTopicService;
+
     public ModuleController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
     }
@@ -81,19 +85,19 @@ public class ModuleController extends CurdController<Module> {
     public R getType() {
         HashMap<String, Object> data1 = new HashMap<>();
         data1.put("label", "家用");
-        data1.put("value", "1");
+        data1.put("value", 1);
 
         HashMap<String, Object> data2 = new HashMap<>();
         data2.put("label", "工控");
-        data2.put("value", "2");
+        data2.put("value", 2);
 
         HashMap<String, Object> data3 = new HashMap<>();
         data3.put("label", "模组");
-        data3.put("value", "3");
+        data3.put("value", 3);
 
         HashMap<String, Object> data4 = new HashMap<>();
         data4.put("label", "单片机");
-        data4.put("value", "4");
+        data4.put("value", 4);
 
         List<HashMap<String, Object>> list = new ArrayList<>();
         list.add(data1);
@@ -111,7 +115,6 @@ public class ModuleController extends CurdController<Module> {
      * @param id
      * @param form
      * @return
-     * @throws XException
      */
     @Override
     protected R update(@PathVariable Long id, @RequestBody Module form) {
@@ -127,8 +130,6 @@ public class ModuleController extends CurdController<Module> {
      *
      * @param current
      * @param size
-     * @param productId
-     * @param type
      * @param name
      * @param protocol
      * @param model
@@ -139,15 +140,14 @@ public class ModuleController extends CurdController<Module> {
     public R queryForPage(
             @RequestParam Long current,
             @RequestParam Long size,
-            @RequestParam Long productId,
-            @RequestParam(required = false) Integer type,
+            @RequestParam Long deviceId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer protocol,
             @RequestParam(required = false) String model,
             @RequestParam(required = false) String sn) {
         QueryWrapper<Module> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("product_id", productId)
-                .eq(type != null, Module.Fields.type, type)
+        queryWrapper.eq("device_id", deviceId)
+                .eq(Module.Fields.type, Module.EXTERNAL)
                 .eq(protocol != null, Module.Fields.protocol, protocol)
                 .eq(model != null, Module.Fields.model, model)
                 .eq(sn != null, Module.Fields.sn, sn)
@@ -177,6 +177,7 @@ public class ModuleController extends CurdController<Module> {
 
         }
         module.setFeatureList(iModuleService.getFeatureList(module.getId()));
+        module.setMqttTopics(iMqttTopicService.listByModule(module.getId()));
         return data(module);
     }
 

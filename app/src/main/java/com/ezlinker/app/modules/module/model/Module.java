@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.pojo.DataArea;
+import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
 import com.ezlinker.common.model.XEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -34,6 +35,16 @@ import java.util.List;
 @TableName(value = "ez_module", autoResultMap = true)
 public class Module extends XEntity {
     public static final long serialVersionUID = 1L;
+
+
+    /**
+     * 内部的客户端
+     */
+    public static final int INTERNAL = 1;
+    /**
+     * 设备中断
+     */
+    public static final int EXTERNAL = 2;
 
     /**
      * MQTT协议
@@ -148,4 +159,10 @@ public class Module extends XEntity {
      * 最后在线时间
      */
     private Date lastActiveTime;
+
+    /**
+     * 用在详情,辅助性质
+     */
+    @TableField(exist = false)
+    List<MqttTopic> mqttTopics;
 }

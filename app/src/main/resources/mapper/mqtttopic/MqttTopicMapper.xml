@@ -51,5 +51,16 @@ topic
             )
         </if>
     </select>
+    <select id="listByModule" resultType="com.ezlinker.app.modules.mqtttopic.model.MqttTopic">
+        <if test="moduleId!=null">
+            SELECT
+            *
+            FROM
+            ez_mqtt_topic
+            WHERE
+            module_id = #{moduleId}
+        </if>
+
+    </select>
 
 </mapper>
