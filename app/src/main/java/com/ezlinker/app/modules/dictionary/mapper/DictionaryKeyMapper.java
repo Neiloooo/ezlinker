@@ -1,7 +1,7 @@
 package com.ezlinker.app.modules.dictionary.mapper;
 
-import com.ezlinker.app.modules.dictionary.model.DictionaryKey;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ezlinker.app.modules.dictionary.model.DictionaryKey;
 
 /**
  * <p>

@@ -103,5 +103,7 @@ public class DictionaryKeyController extends CurdController<DictionaryKey> {
         IPage<DictionaryKey> page = iDictionaryKeyService.page(new Page<>(current, size), queryWrapper);
         return data(page);
     }
+
+
 }
 
