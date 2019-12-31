@@ -10,6 +10,7 @@
         <module name="app" />
         <module name="emqintegration" />
         <module name="emq-integration" />
+        <module name="common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,6 +21,8 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="app" options="-parameters" />
       <module name="common" options="-parameters" />
+      <module name="emq-integration" options="-parameters" />
+      <module name="ezlinker" options="-parameters" />
     </option>
   </component>
 </project>

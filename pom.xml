@@ -3,56 +3,29 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
     <groupId>com.ezlinker</groupId>
     <artifactId>ezlinker</artifactId>
-    <packaging>pom</packaging>
     <version>0.0.1</version>
+    <packaging>pom</packaging>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <dockerfile.maven.version>1.4.0</dockerfile.maven.version>
-<!--        <docker.registry.name.prefix>192.168.6.37:80/galaxy</docker.registry.name.prefix>-->
     </properties>
     <modules>
         <module>common</module>
-        <module>app</module>
         <module>emq-integration</module>
+        <module>app</module>
+
     </modules>
 
-
-    <!--    <build>-->
-    <!--        <plugins>-->
-    <!--            <plugin>-->
-    <!--                <groupId>com.spotify</groupId>-->
-    <!--                <artifactId>docker-maven-plugin</artifactId>-->
-    <!--                <version>0.4.13</version>-->
-    <!--                <executions>-->
-    <!--                    <execution>-->
-    <!--                        <id>build-image</id>     &lt;!&ndash;定义一个执行命令的id&ndash;&gt;-->
-    <!--                        <phase>package</phase>   &lt;!&ndash;绑定mvn的哪个命令&ndash;&gt;-->
-    <!--                        <goals>-->
-    <!--                            <goal>build</goal>   &lt;!&ndash;要执行的命令 &ndash;&gt;-->
-    <!--                        </goals>-->
-    <!--                    </execution>-->
-    <!--                </executions>-->
-    <!--                <configuration>-->
-    <!--                    <forceTags>true</forceTags>    &lt;!&ndash;覆盖相同标签镜像&ndash;&gt;-->
-    <!--                    <imageName>ezlinker/ezlinker:0.0.1</imageName>  &lt;!&ndash;指定镜像名称 仓库/镜像名:标签&ndash;&gt;-->
-    <!--                    <baseImage>java-8</baseImage>    &lt;!&ndash;指定基础镜像，相当于dockerFile中的FROM<image> &ndash;&gt;-->
-    <!--                    <dockerHost>http://192.168.10.72:2375</dockerHost>  &lt;!&ndash; 指定仓库地址 &ndash;&gt;-->
-    <!--                    <entryPoint>["java","-jar","/${project.build.finalName}.jar"]</entryPoint> &lt;!&ndash; 容器启动执行的命令，相当于dockerFile的ENTRYPOINT &ndash;&gt;-->
-    <!--                    <resources>-->
-    <!--                        <resource>                                             &lt;!&ndash; 指定资源文件 &ndash;&gt;-->
-    <!--                            <targetPath>/</targetPath>                         &lt;!&ndash; 指定要复制的目录路径，这里是当前目录 &ndash;&gt;-->
-    <!--                            <directory>${project.build.directory}</directory>  &lt;!&ndash; 指定要复制的根目录，这里是target目录 &ndash;&gt;-->
-    <!--                            <include>${project.build.finalName}.jar</include>  &lt;!&ndash; 指定需要拷贝的文件，这里指最后生成的jar包 &ndash;&gt;-->
-    <!--                        </resource>-->
-    <!--                    </resources>-->
-    <!--                </configuration>-->
-    <!--            </plugin>-->
-    <!--        </plugins>-->
-    <!--    </build>-->
 
     <build>
         <plugins>

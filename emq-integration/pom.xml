@@ -10,6 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>emq-integration</artifactId>
+    <version>0.0.1</version>
+    <name>emq-integration</name>
+    <description>ezlinker emq integration</description>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
