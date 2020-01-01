@@ -66,13 +66,13 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-#logging:
-#  level:
-#    root: info
-#    org.springframework.data.mongodb.core: DEBUG
-#    com.baomidou.mybatisplus.core.mapper: DEBUG
-#
-#
+logging:
+  level:
+    root: info
+    org.springframework.data.mongodb.core: DEBUG
+    com.baomidou.mybatisplus.core.mapper: DEBUG
+
+
 
 aliyun:
   mail:
