@@ -1,7 +1,7 @@
 package com.ezlinker.app.config;
 
-import com.ezlinker.common.exception.XException;
-import com.ezlinker.common.exchange.R;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -1,8 +1,8 @@
 package com.ezlinker.app;
 
-import com.ezlinker.common.query.QueryItem;
-import com.ezlinker.common.query.QueryLogic;
-import com.ezlinker.common.query.QueryOperator;
+import com.ezlinker.app.common.query.QueryItem;
+import com.ezlinker.app.common.query.QueryLogic;
+import com.ezlinker.app.common.query.QueryOperator;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,9 +11,9 @@ import com.ezlinker.app.modules.relation.model.RelationProductTag;
 import com.ezlinker.app.modules.relation.service.IRelationProductTagService;
 import com.ezlinker.app.modules.tag.model.Tag;
 import com.ezlinker.app.modules.tag.service.ITagService;
-import com.ezlinker.common.exception.BizException;
-import com.ezlinker.common.exception.XException;
-import com.ezlinker.common.exchange.R;
+import com.ezlinker.app.common.exception.BizException;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

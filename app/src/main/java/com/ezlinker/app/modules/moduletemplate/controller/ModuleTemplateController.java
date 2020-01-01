@@ -7,9 +7,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.moduletemplate.model.ModuleTemplate;
 import com.ezlinker.app.modules.moduletemplate.service.IModuleTemplateService;
-import com.ezlinker.common.exception.BizException;
-import com.ezlinker.common.exception.XException;
-import com.ezlinker.common.exchange.R;
+import com.ezlinker.app.common.exception.BizException;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

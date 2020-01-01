@@ -8,9 +8,9 @@ import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.feature.service.IFeatureService;
 import com.ezlinker.app.modules.relation.model.RelationFeatureModule;
 import com.ezlinker.app.modules.relation.service.IRelationFeatureModuleService;
-import com.ezlinker.common.exception.BizException;
-import com.ezlinker.common.exception.XException;
-import com.ezlinker.common.exchange.R;
+import com.ezlinker.app.common.exception.BizException;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 

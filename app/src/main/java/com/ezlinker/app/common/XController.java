@@ -2,15 +2,11 @@ package com.ezlinker.app.common;
 
 import com.ezlinker.app.modules.user.model.UserDetail;
 import com.ezlinker.app.utils.UserTokenUtil;
-import com.ezlinker.common.exception.TokenException;
-import com.ezlinker.common.exception.XException;
-import com.ezlinker.common.exchange.R;
-import com.ezlinker.common.exchange.RCode;
+import com.ezlinker.app.common.exception.TokenException;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
+import com.ezlinker.app.common.exchange.RCode;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.pojo.DataArea;
 import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
-import com.ezlinker.common.model.XEntity;
+import com.ezlinker.app.common.model.XEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

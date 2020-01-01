@@ -3,7 +3,7 @@ package com.ezlinker.app.modules.user.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.ezlinker.common.model.XEntity;
+import com.ezlinker.app.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

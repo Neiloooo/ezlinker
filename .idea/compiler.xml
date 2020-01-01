@@ -9,11 +9,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="app" />
         <module name="emqintegration" />
-        <module name="emq-integration" />
-        <module name="common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="common" target="1.8" />
+      <module name="emq-integration" target="1.8" />
       <module name="emqintergration" target="1.5" />
     </bytecodeTargetLevel>
   </component>

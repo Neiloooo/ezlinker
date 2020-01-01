@@ -8,7 +8,7 @@ import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.device.pojo.FieldParam;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.model.Module;
-import com.ezlinker.common.model.XEntity;
+import com.ezlinker.app.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.dictionary.model.DictionaryValue;
 import com.ezlinker.app.modules.dictionary.service.IDictionaryValueService;
-import com.ezlinker.common.exception.XException;
-import com.ezlinker.common.exchange.R;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

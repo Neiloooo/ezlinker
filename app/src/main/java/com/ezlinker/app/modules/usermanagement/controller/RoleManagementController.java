@@ -3,7 +3,7 @@ package com.ezlinker.app.modules.usermanagement.controller;
 import com.ezlinker.app.common.CurdController;
 import com.ezlinker.app.modules.role.model.Role;
 import com.ezlinker.app.modules.role.service.IRoleService;
-import com.ezlinker.common.exchange.R;
+import com.ezlinker.app.common.exchange.R;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

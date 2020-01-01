@@ -1,9 +1,9 @@
 package com.ezlinker.app.common;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ezlinker.common.exception.XException;
-import com.ezlinker.common.exchange.R;
-import com.ezlinker.common.query.QueryItem;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
+import com.ezlinker.app.common.query.QueryItem;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

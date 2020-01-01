@@ -2,8 +2,8 @@ package com.ezlinker.app.modules.analyse.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ezlinker.app.common.XController;
-import com.ezlinker.common.exchange.R;
-import com.ezlinker.emqintegeration.monitor.EMQMonitor;
+import com.ezlinker.app.common.exchange.R;
+import com.ezlinker.app.emqintegeration.monitor.EMQMonitor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

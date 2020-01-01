@@ -1,13 +1,12 @@
 package com.ezlinker.app.modules.project.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ezlinker.common.model.XEntity;
+import com.ezlinker.app.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 /**
  * <p>

@@ -20,8 +20,6 @@
         <dockerfile.maven.version>1.4.0</dockerfile.maven.version>
     </properties>
     <modules>
-        <module>common</module>
-        <module>emq-integration</module>
         <module>app</module>
 
     </modules>

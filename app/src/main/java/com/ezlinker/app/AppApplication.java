@@ -1,6 +1,6 @@
 package com.ezlinker.app;
 
-import com.ezlinker.common.utils.AliyunMailProperties;
+import com.ezlinker.app.common.utils.AliyunMailProperties;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

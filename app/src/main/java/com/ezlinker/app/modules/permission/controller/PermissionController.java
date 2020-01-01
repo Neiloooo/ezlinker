@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.modules.permission.model.Permission;
 import com.ezlinker.app.modules.permission.service.IPermissionService;
-import com.ezlinker.common.exchange.R;
+import com.ezlinker.app.common.exchange.R;
 import org.springframework.web.bind.annotation.*;
 
 import com.ezlinker.app.common.CurdController;

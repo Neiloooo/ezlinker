@@ -1,7 +1,7 @@
 package com.ezlinker.app.modules.userrole.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ezlinker.common.model.XEntity;
+import com.ezlinker.app.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

@@ -1,9 +1,9 @@
 package com.ezlinker.app.modules.captcha;
 
 import cn.hutool.core.util.RandomUtil;
-import com.ezlinker.common.exception.InternalServerException;
-import com.ezlinker.common.exchange.R;
-import com.ezlinker.common.utils.RedisUtil;
+import com.ezlinker.app.common.exception.InternalServerException;
+import com.ezlinker.app.common.exchange.R;
+import com.ezlinker.app.common.utils.RedisUtil;
 import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
 import lombok.extern.slf4j.Slf4j;

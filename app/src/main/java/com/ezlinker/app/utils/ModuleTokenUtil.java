@@ -4,8 +4,8 @@ import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import com.ezlinker.common.exception.TokenException;
-import com.ezlinker.common.exception.XException;
+import com.ezlinker.app.common.exception.TokenException;
+import com.ezlinker.app.common.exception.XException;
 
 /**
  * 组件的Token生成器

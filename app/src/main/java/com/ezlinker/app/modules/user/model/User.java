@@ -1,8 +1,8 @@
 package com.ezlinker.app.modules.user.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ezlinker.common.model.XEntity;
-import java.time.LocalDateTime;
+import com.ezlinker.app.common.model.XEntity;
+
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,7 +12,6 @@ import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 /**
  * <p>

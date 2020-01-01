@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.modules.role.model.Role;
 import com.ezlinker.app.modules.role.service.IRoleService;
-import com.ezlinker.common.exception.XException;
-import com.ezlinker.common.exchange.R;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
 import org.springframework.web.bind.annotation.*;
 
 import com.ezlinker.app.common.CurdController;
