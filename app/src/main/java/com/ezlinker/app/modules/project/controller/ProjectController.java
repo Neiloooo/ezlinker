@@ -4,7 +4,7 @@ package com.ezlinker.app.modules.project.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.project.model.Project;
 import com.ezlinker.app.modules.project.service.IProjectService;
 import com.ezlinker.app.common.exception.XException;

@@ -123,6 +123,16 @@
             <PaintGroupHighlightMap />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/config/xss/HTMLFilter.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/config/xss/XssHttpServletRequestWrapper.java">
+          <value>
+            <PaintGroupHighlightMap />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/java/com/ezlinker/app/filter/LoggingFilter.java">
           <value>
             <PaintGroupHighlightMap />

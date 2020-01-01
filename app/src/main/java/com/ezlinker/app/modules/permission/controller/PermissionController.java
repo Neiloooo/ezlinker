@@ -9,7 +9,7 @@ import com.ezlinker.app.modules.permission.service.IPermissionService;
 import com.ezlinker.app.common.exchange.R;
 import org.springframework.web.bind.annotation.*;
 
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;

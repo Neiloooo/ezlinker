@@ -4,7 +4,7 @@ package com.ezlinker.app.modules.module.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.ezlinker.app.modules.module.service.ModuleLogService;

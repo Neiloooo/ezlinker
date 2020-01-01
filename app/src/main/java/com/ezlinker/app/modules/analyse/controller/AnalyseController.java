@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.analyse.controller;
 
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.product.service.IProductService;
 import com.ezlinker.app.modules.project.service.IProjectService;

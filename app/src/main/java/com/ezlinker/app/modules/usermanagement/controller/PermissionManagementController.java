@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.usermanagement.controller;
 
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.permission.model.Permission;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

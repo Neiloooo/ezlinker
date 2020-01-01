@@ -1,7 +1,7 @@
 package com.ezlinker.app.modules.scheduleinfo.controller;
 
 
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.config.quartz.QuartzService;
 import com.ezlinker.app.modules.scheduleinfo.job.ScheduleSendDataJob;
 import com.ezlinker.app.modules.scheduleinfo.model.ScheduleInfo;

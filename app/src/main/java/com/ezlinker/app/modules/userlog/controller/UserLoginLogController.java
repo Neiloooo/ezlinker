@@ -1,7 +1,7 @@
 package com.ezlinker.app.modules.userlog.controller;
 
 
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.userlog.model.UserLoginLog;
 import com.ezlinker.app.modules.userlog.service.IUserLoginLogService;
 import com.ezlinker.app.common.exception.XException;

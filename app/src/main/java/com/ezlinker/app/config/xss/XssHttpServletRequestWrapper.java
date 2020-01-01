@@ -1,4 +1,4 @@
-package com.ezlinker.app.common.web;
+package com.ezlinker.app.config.xss;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
@@ -14,13 +14,6 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * xss 过滤处理
- * 实现了HttpServletRequestWrapper的类，就可以成为HttpRequestWrapper的装饰类
- *
- * @author wujiaxing
- * @date 2019-07-10
- */
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     /**

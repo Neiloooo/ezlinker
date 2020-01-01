@@ -3,7 +3,7 @@ package com.ezlinker.app.modules.user.controller;
 
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.user.form.AddUserForm;
 import com.ezlinker.app.modules.user.form.ResetPasswordForm;
 import com.ezlinker.app.modules.user.form.UserUpdateForm;

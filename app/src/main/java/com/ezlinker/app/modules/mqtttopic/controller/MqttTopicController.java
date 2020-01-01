@@ -2,7 +2,7 @@ package com.ezlinker.app.modules.mqtttopic.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.mqtttopic.model.MqttTopic;
 import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import com.ezlinker.app.common.exception.XException;

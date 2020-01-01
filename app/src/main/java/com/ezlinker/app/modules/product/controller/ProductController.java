@@ -4,7 +4,7 @@ package com.ezlinker.app.modules.product.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.XController;
+import com.ezlinker.app.common.web.XController;
 import com.ezlinker.app.modules.product.model.Product;
 import com.ezlinker.app.modules.product.service.IProductService;
 import com.ezlinker.app.modules.relation.model.RelationProductTag;

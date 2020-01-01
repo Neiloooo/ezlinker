@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.internalmessage.controller;
 
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.internalmessage.model.InternalMessage;
 import com.ezlinker.app.modules.internalmessage.service.InternalMessageService;
 import com.ezlinker.app.common.exception.XException;

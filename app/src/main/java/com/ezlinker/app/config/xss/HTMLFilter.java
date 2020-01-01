@@ -1,4 +1,4 @@
-package com.ezlinker.app.common.web;
+package com.ezlinker.app.config.xss;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

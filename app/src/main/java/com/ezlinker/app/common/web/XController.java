@@ -1,4 +1,4 @@
-package com.ezlinker.app.common;
+package com.ezlinker.app.common.web;
 
 import com.ezlinker.app.modules.user.model.UserDetail;
 import com.ezlinker.app.utils.UserTokenUtil;

@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.usermanagement.controller;
 
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.role.model.Role;
 import com.ezlinker.app.modules.role.service.IRoleService;
 import com.ezlinker.app.common.exchange.R;

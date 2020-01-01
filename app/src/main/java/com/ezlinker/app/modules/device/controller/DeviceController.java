@@ -5,7 +5,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.constants.DeviceState;
 import com.ezlinker.app.modules.device.model.Device;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;

@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.tag.controller;
 
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.tag.model.Tag;
 import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.app.common.exception.XException;

@@ -3,7 +3,7 @@ package com.ezlinker.app.modules.feature.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.CurdController;
+import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.feature.service.IFeatureService;
 import com.ezlinker.app.modules.relation.model.RelationFeatureModule;

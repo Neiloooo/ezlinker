@@ -1,4 +1,4 @@
-package com.ezlinker.app.common;
+package com.ezlinker.app.common.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ezlinker.app.common.exception.XException;

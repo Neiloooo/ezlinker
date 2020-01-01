@@ -1,6 +1,6 @@
 package com.ezlinker.app.modules.analyse.controller;
 
-import com.ezlinker.app.common.XController;
+import com.ezlinker.app.common.web.XController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
