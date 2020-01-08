@@ -1,7 +1,6 @@
 package com.ezlinker.app.config;
 
 import com.ezlinker.app.config.mqtt.MqttProxyClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,19 +20,8 @@ public class MqttProxyClientConfig {
     Integer tcpPort;
 
     @Bean
-    public MqttConnectOptions mqttConnectOptions() {
-        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
-        mqttConnectOptions.setUserName("ezlinker");
-        mqttConnectOptions.setPassword("ezlinker".toCharArray());
-        mqttConnectOptions.setConnectionTimeout(10);
-        mqttConnectOptions.setCleanSession(true);
-        mqttConnectOptions.setAutomaticReconnect(true);
-        return mqttConnectOptions;
-    }
-
-    @Bean
     public MqttProxyClient mqttClient() throws MqttException {
 
-        return new MqttProxyClient("tcp://" + emqxHost + ":" + tcpPort, "ezlinker");
+        return new MqttProxyClient("tcp://" + emqxHost + ":" + tcpPort, "ezlinker_proxy_6&IJhY&ou68iJUA");
     }
 }

@@ -3,6 +3,7 @@ package com.ezlinker.app.config;
 import com.alibaba.fastjson.JSONObject;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
+import com.ezlinker.app.config.internalevent.InternalMessage;
 import com.ezlinker.app.config.mqtt.MqttProxyClient;
 import com.ezlinker.app.config.socketio.C2SMessage;
 import com.ezlinker.app.config.socketio.EchoMessage;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 
 import javax.annotation.Resource;
@@ -30,7 +32,10 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 //@Configuration
 @Slf4j
-public class SocketIOServerConfig {
+public class SocketIOServerConfig implements ApplicationListener<InternalMessage> {
+    @Resource
+    IDeviceService iDeviceService;
+
     /**
      * MQTT代理
      */
@@ -44,6 +49,13 @@ public class SocketIOServerConfig {
 
     @Resource
     IMqttTopicService iMqttTopicService;
+
+    @Override
+    public void onApplicationEvent(InternalMessage internalMessage) {
+        System.out.println("内部消息:" + internalMessage);
+    }
+
+
     /**
      * 记录连接进来的WS,支持多个客户端同时连接
      * K:SessionId
@@ -56,7 +68,7 @@ public class SocketIOServerConfig {
      */
     private static ConcurrentHashMap<UUID, String> publishMqttTopicStore = new ConcurrentHashMap<>();
     /**
-     *
+     * K
      */
     private static ConcurrentHashMap<String, Long> moduleMqttTopicStore = new ConcurrentHashMap<>();
 
@@ -125,7 +137,6 @@ public class SocketIOServerConfig {
          * 离线回调
          */
         server.addDisconnectListener(client -> {
-            String sessionId = client.getSessionId().toString();
             socketIoClientStore.clear();
             publishMqttTopicStore.clear();
             moduleMqttTopicStore.clear();
@@ -213,8 +224,6 @@ public class SocketIOServerConfig {
      * @param ioClient
      * @return
      */
-    @Resource
-    IDeviceService iDeviceService;
 
     private void connectToEmqx(Long deviceId, SocketIOClient ioClient) {
         /**
@@ -252,7 +261,6 @@ public class SocketIOServerConfig {
              * 查询Topic
              *
              */
-            // List<MqttTopic> mqttTopics = iMqttTopicService.list(new QueryWrapper<MqttTopic>().eq("client_id", module.getClientId()));
 
             List<MqttTopic> mqttTopics = iMqttTopicService.listByDevice(deviceId);
             for (MqttTopic topic : mqttTopics) {

@@ -2,15 +2,17 @@ package com.ezlinker.app.modules.dataentry.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
+import com.ezlinker.app.config.internalevent.InternalMessage;
 import com.ezlinker.app.modules.device.model.Device;
 import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.model.ModuleLog;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.ezlinker.app.modules.module.service.ModuleLogService;
-import com.ezlinker.app.common.exception.XException;
-import com.ezlinker.app.common.exchange.R;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,8 @@ import java.util.Date;
 @RequestMapping("/data")
 @Slf4j
 public class WebHookController {
+    @Resource
+    ApplicationContext applicationContext;
     @Resource
     IModuleService iModuleService;
 
@@ -59,7 +63,7 @@ public class WebHookController {
                 handDisconnect(message.getString("clientid"));
                 break;
             case "message_publish":
-                handMessage(message);
+                // handMessage(message);
                 break;
             default:
                 break;
@@ -80,6 +84,8 @@ public class WebHookController {
 
     private void handConnect(String clientId) throws XException {
         log.info("客户端[{}]连接成功", clientId);
+        applicationContext.publishEvent(new InternalMessage(clientId, 1, clientId));
+
         Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", clientId));
         if (module == null) {
             throw new XException("Module not exist", "模块不存在");
@@ -109,6 +115,7 @@ public class WebHookController {
      */
     private void handDisconnect(String clientId) throws XException {
         log.info("客户端[{}]离线", clientId);
+        applicationContext.publishEvent(new InternalMessage(clientId, 0, clientId));
         Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", clientId));
         if (module == null) {
             throw new XException("Module not exist", "模块不存在");

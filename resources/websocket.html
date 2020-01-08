@@ -40,6 +40,9 @@
         window.console.log("来自服务器的回应:", data);
     });
 
+    socket.on('echoEvent', data => {
+        window.console.log("来自服务器的回应:", data);
+    });
 
 </script>
 
