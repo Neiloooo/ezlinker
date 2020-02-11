@@ -12,6 +12,8 @@
 
 ## 前端地址
 https://github.com/ssloth/ezlinker-frontend.git
+## 文档地址
+https://www.getpostman.com/collections/4ba4516ff3809712513d，打开postman，然后导入这个地址即可。
 ## 其他
 - COAP协议测试工具:https://github.com/wwhai/EZCoapTester.git
 - Arduino SDK :https://github.com/wwhai/ezlinker_arduino_sdk.git
