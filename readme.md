@@ -7,6 +7,9 @@
 0I==>[1%]===========================================I100
 
 目前还在填坑,问题很大.不建议尝试.
+
+联系QQ：751957846
+
 ## 前端地址
 https://github.com/ssloth/ezlinker-frontend.git
 ## 其他
@@ -32,3 +35,8 @@ https://github.com/ssloth/ezlinker-frontend.git
 ### 内置基本类
 - CurdController:有统一CURD业务场景时继承
 - XController:简单接口继承
+
+# 运行步骤
+1. git 或者IDE直接倒入代码；
+2. 等待依赖安装成功以后，配置好Mysql。MongoDB，Redis
+3. 指定配置文件，然后启动
