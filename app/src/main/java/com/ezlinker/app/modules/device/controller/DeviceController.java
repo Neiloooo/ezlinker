@@ -401,12 +401,12 @@ public class DeviceController extends CurdController<Device> {
 
 
     /**
-     * 获取日志
+     * 获取数据
      *
      * @return
      * @throws XException
      */
-    @GetMapping("/logs/{deviceId}")
+    @GetMapping("/{deviceId}/data")
     public R queryForPage(@PathVariable Long deviceId, @RequestParam Integer current, @RequestParam Integer size) throws XException {
         Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "id"));
 
