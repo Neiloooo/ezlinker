@@ -1,6 +1,7 @@
 package com.ezlinker.app.modules.dataentry.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class DeviceData {
+    @JsonIgnore
     private Long deviceId;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-mm-dd HH:mm:ss")

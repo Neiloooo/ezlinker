@@ -30,6 +30,7 @@ public class DeviceDataService {
     public IPage<DeviceData> queryForPage(Long deviceId, org.springframework.data.domain.Pageable pageable) {
         Query query = new Query();
         Criteria criteria = Criteria.where("deviceId").is(deviceId);
+        query.fields().include("createTime").include("data");
         query.addCriteria(criteria);
 
         query.with(Sort.by(Sort.Direction.DESC, "id"));
