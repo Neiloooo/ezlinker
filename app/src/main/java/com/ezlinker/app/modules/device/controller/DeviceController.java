@@ -5,8 +5,12 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ezlinker.app.common.exception.BizException;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
 import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.constants.DeviceState;
+import com.ezlinker.app.modules.dataentry.service.DeviceDataService;
 import com.ezlinker.app.modules.device.model.Device;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.device.pojo.FieldParam;
@@ -28,11 +32,11 @@ import com.ezlinker.app.modules.tag.model.Tag;
 import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.app.utils.IDKeyUtil;
 import com.ezlinker.app.utils.ModuleTokenUtil;
-import com.ezlinker.app.common.exception.BizException;
-import com.ezlinker.app.common.exception.XException;
-import com.ezlinker.app.common.exchange.R;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,6 +61,8 @@ public class DeviceController extends CurdController<Device> {
     // 订阅权限
     private static final int TOPIC_SUB = 2;
 
+    @Resource
+    DeviceDataService deviceDataService;
     @Resource
     IModuleService iModuleService;
     @Resource
@@ -381,6 +387,7 @@ public class DeviceController extends CurdController<Device> {
 
     /**
      * 推送指令
+     *
      * @param ids
      * @param cmdValues
      * @return
@@ -392,6 +399,19 @@ public class DeviceController extends CurdController<Device> {
         return data(cmdValues);
     }
 
+
+    /**
+     * 获取日志
+     *
+     * @return
+     * @throws XException
+     */
+    @GetMapping("/logs/{deviceId}")
+    public R queryForPage(@PathVariable Long deviceId, @RequestParam Integer current, @RequestParam Integer size) throws XException {
+        Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        return data(deviceDataService.queryForPage(deviceId, pageable));
+    }
 
 }
 
