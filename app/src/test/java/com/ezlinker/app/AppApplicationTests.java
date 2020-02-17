@@ -7,7 +7,9 @@ import com.ezlinker.app.modules.dataentry.service.DeviceDataService;
 import com.ezlinker.app.modules.internalmessage.model.InternalMessage;
 import com.ezlinker.app.modules.internalmessage.service.InternalMessageService;
 import com.ezlinker.app.modules.module.model.Module;
+import com.ezlinker.app.modules.module.model.ModuleData;
 import com.ezlinker.app.modules.module.service.IModuleService;
+import com.ezlinker.app.modules.module.service.ModuleDataService;
 import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.service.IUserService;
 import com.ezlinker.app.common.exception.XException;
@@ -106,7 +108,7 @@ class AppApplicationTests {
     DeviceDataService deviceDataService;
 
     @Test
-    void addTestData() {
+    void addTestDeviceData() {
 
         for (int i = 0; i < 348; i++) {
             DeviceData deviceData = new DeviceData();
@@ -115,6 +117,21 @@ class AppApplicationTests {
             map.put("K2", i % 5 == 0);
             deviceData.setDeviceId(11L).setCreateTime(new Date()).setData(map);
             deviceDataService.save(deviceData);
+        }
+    }
+    @Resource
+    ModuleDataService moduleDataService;
+    @Test
+
+    void addTestModuleData() {
+
+        for (int i = 0; i < 348; i++) {
+            ModuleData moduleData = new ModuleData();
+            Map<String, Object> map = new HashMap<>();
+            map.put("K1", i % 2 == 0);
+            map.put("K2", i % 5 == 0);
+            moduleData.setModuleId(6L).setCreateTime(new Date()).setData(map);
+            moduleDataService.save(moduleData);
         }
     }
 }

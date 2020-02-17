@@ -409,8 +409,18 @@ public class DeviceController extends CurdController<Device> {
     @GetMapping("/{deviceId}/data")
     public R queryForPage(@PathVariable Long deviceId, @RequestParam Integer current, @RequestParam Integer size) throws XException {
         Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "id"));
-
-        return data(deviceDataService.queryForPage(deviceId, pageable));
+        Device device = iDeviceService.getById(deviceId);
+        if (device == null) {
+            throw new BizException("Device not exist", "设备不存在");
+        }
+        /**
+         * 表结构定义
+         */
+        List<FieldParam> parameters = device.getParameters();
+        Map<String, Object> map = new HashMap<>();
+        map.put("parameters", parameters);
+        map.put("data", deviceDataService.queryForPage(deviceId, pageable));
+        return data(map);
     }
 
 }
