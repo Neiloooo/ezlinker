@@ -3,12 +3,12 @@ package com.ezlinker.app.modules.device.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.ezlinker.app.common.model.XEntity;
 import com.ezlinker.app.constants.DeviceState;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.device.pojo.FieldParam;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.model.Module;
-import com.ezlinker.app.common.model.XEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -126,4 +126,9 @@ public class Device extends XEntity {
     List<Feature> features;
 
 
+//    /**
+//     * 所有模块的数据结构
+//     */
+//    @TableField(exist = false)
+//    private List<Map<String, Object>> moduleDataAreas;
 }
