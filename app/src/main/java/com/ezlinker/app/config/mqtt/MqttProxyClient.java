@@ -28,7 +28,6 @@ public class MqttProxyClient extends MqttClient {
     @Override
     public void subscribe(String topicFilter) throws MqttException {
         super.subscribe(topicFilter);
-        System.out.println("订阅成功");
     }
 
 

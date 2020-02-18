@@ -5,8 +5,12 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ezlinker.app.common.exception.BizException;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
 import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.constants.DeviceState;
+import com.ezlinker.app.modules.dataentry.service.DeviceDataService;
 import com.ezlinker.app.modules.device.model.Device;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.device.pojo.FieldParam;
@@ -28,11 +32,11 @@ import com.ezlinker.app.modules.tag.model.Tag;
 import com.ezlinker.app.modules.tag.service.ITagService;
 import com.ezlinker.app.utils.IDKeyUtil;
 import com.ezlinker.app.utils.ModuleTokenUtil;
-import com.ezlinker.app.common.exception.BizException;
-import com.ezlinker.app.common.exception.XException;
-import com.ezlinker.app.common.exchange.R;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,6 +61,8 @@ public class DeviceController extends CurdController<Device> {
     // 订阅权限
     private static final int TOPIC_SUB = 2;
 
+    @Resource
+    DeviceDataService deviceDataService;
     @Resource
     IModuleService iModuleService;
     @Resource
@@ -221,12 +227,60 @@ public class DeviceController extends CurdController<Device> {
         if (device == null) {
             throw new BizException("Device not exist", "设备不存在");
         }
+
         addTags(device);
         addModules(device);
         addFeatures(device);
         return data(device);
     }
 
+    /**
+     * 查询模块数据定义
+     *
+     * @param deviceId
+     * @return
+     * @throws XException
+     */
+    @GetMapping("/queryDataStructureByDeviceId")
+    public R queryDataStructureByDeviceId(@RequestParam Long deviceId) throws XException {
+        Device device = iDeviceService.getById(deviceId);
+        if (device == null) {
+            throw new BizException("Device not exist", "设备不存在");
+        }
+        List<Module> moduleList = iModuleService.list(new QueryWrapper<Module>().eq("device_id", device.getId()));
+        List<Map<String, Object>> moduleDataDefineList = new ArrayList<>();
+        Map<String, Object> data = new HashMap<>();
+        List<Map<String, Object>> featureCmdKeyDefineList = new ArrayList<>();
+
+        for (Module module : moduleList) {
+            Long moduleId = module.getId();
+            List<DataArea> dataAreas = module.getDataAreas();
+            Map<String, Object> moduleMap = new HashMap<>();
+            moduleMap.put("moduleId", moduleId);
+            moduleMap.put("deviceId", deviceId);
+            moduleMap.put("structure", dataAreas);
+            List<Feature> featureList = iFeatureService.list(new QueryWrapper<Feature>().eq("product_id", device.getProductId()));
+            for (Feature feature : featureList) {
+                Map<String, Object> featureMap = new HashMap<>();
+                featureMap.put("featureId", feature.getId());
+                featureMap.put("cmdKey", feature.getCmdKey());
+                featureMap.put("productId", device.getProductId());
+                featureCmdKeyDefineList.add(featureMap);
+            }
+
+            moduleDataDefineList.add(moduleMap);
+        }
+        data.put("modules", moduleDataDefineList);
+        data.put("features", featureCmdKeyDefineList);
+        data.put("parameter", device.getParameters());
+        return data(data);
+    }
+
+    /**
+     * 增加Tag
+     *
+     * @param device
+     */
     private void addTags(Device device) {
         List<Tag> tagList = iTagService.list(new QueryWrapper<Tag>().eq("link_id", device.getProductId()));
         Set<String> tags = new HashSet<>();
@@ -381,6 +435,7 @@ public class DeviceController extends CurdController<Device> {
 
     /**
      * 推送指令
+     *
      * @param ids
      * @param cmdValues
      * @return
@@ -392,6 +447,29 @@ public class DeviceController extends CurdController<Device> {
         return data(cmdValues);
     }
 
+
+    /**
+     * 获取数据
+     *
+     * @return
+     * @throws XException
+     */
+    @GetMapping("/{deviceId}/data")
+    public R queryForPage(@PathVariable Long deviceId, @RequestParam Integer current, @RequestParam Integer size) throws XException {
+        Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "id"));
+        Device device = iDeviceService.getById(deviceId);
+        if (device == null) {
+            throw new BizException("Device not exist", "设备不存在");
+        }
+        /**
+         * 表结构定义
+         */
+        List<FieldParam> parameters = device.getParameters();
+        Map<String, Object> map = new HashMap<>();
+        map.put("parameters", parameters);
+        map.put("data", deviceDataService.queryForPage(deviceId, pageable));
+        return data(map);
+    }
 
 }
 

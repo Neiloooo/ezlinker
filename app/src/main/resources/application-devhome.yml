@@ -120,7 +120,7 @@ aliyun:
 
 # EMQ Config
 emqx:
-  host: 112.74.44.130
+  host: localhost
   tcp-port: 1883
   apiport: 8080
   appid: dec4f6b4added

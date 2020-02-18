@@ -5,10 +5,14 @@
 [![l1PIts.md.png](https://s2.ax1x.com/2019/12/31/l1PIts.md.png)](https://imgchr.com/i/l1PIts)
 ## 当前进度
 0I==>[1%]===========================================I100
+> 目前还在填坑,问题很大.不建议尝试.
+> 如果有能力开发，可联系QQ：751957846
 
-目前还在填坑,问题很大.不建议尝试.
 ## 前端地址
 https://github.com/ssloth/ezlinker-frontend.git
+## 文档地址
+https://www.getpostman.com/collections/4ba4516ff3809712513d
+> 打开postman，然后导入这个地址即可。
 ## 其他
 - COAP协议测试工具:https://github.com/wwhai/EZCoapTester.git
 - Arduino SDK :https://github.com/wwhai/ezlinker_arduino_sdk.git
@@ -32,3 +36,8 @@ https://github.com/ssloth/ezlinker-frontend.git
 ### 内置基本类
 - CurdController:有统一CURD业务场景时继承
 - XController:简单接口继承
+
+# 运行步骤
+1. git 或者IDE直接倒入代码；
+2. 等待依赖安装成功以后，配置好Mysql。MongoDB，Redis
+3. 指定配置文件，然后启动

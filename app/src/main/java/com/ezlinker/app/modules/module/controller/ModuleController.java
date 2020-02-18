@@ -4,14 +4,15 @@ package com.ezlinker.app.modules.module.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.web.CurdController;
-import com.ezlinker.app.modules.module.model.Module;
-import com.ezlinker.app.modules.module.service.IModuleService;
-import com.ezlinker.app.modules.module.service.ModuleLogService;
-import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import com.ezlinker.app.common.exception.BizException;
 import com.ezlinker.app.common.exception.XException;
 import com.ezlinker.app.common.exchange.R;
+import com.ezlinker.app.common.web.CurdController;
+import com.ezlinker.app.modules.module.model.Module;
+import com.ezlinker.app.modules.module.service.IModuleService;
+import com.ezlinker.app.modules.module.service.ModuleDataService;
+import com.ezlinker.app.modules.module.service.ModuleLogService;
+import com.ezlinker.app.modules.mqtttopic.service.IMqttTopicService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -48,6 +49,9 @@ public class ModuleController extends CurdController<Module> {
 
     @Resource
     IMqttTopicService iMqttTopicService;
+
+    @Resource
+    ModuleDataService moduleDataService;
 
     public ModuleController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
@@ -194,6 +198,24 @@ public class ModuleController extends CurdController<Module> {
     public R logs(@RequestParam Integer current, @RequestParam Integer size, @RequestParam(required = false) Long moduleId) {
         Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "id"));
         return data(moduleLogService.queryForPage(moduleId, pageable));
+    }
+
+
+    /**
+     * 获取数据
+     *
+     * @return
+     * @throws XException
+     */
+    @GetMapping("/{moduleId}/data")
+    public R queryForPage(@PathVariable Long moduleId, @RequestParam Integer current, @RequestParam Integer size) throws XException {
+        Pageable pageable = PageRequest.of(current, size, Sort.by(Sort.Direction.DESC, "id"));
+        Module module = iModuleService.getById(moduleId);
+        if (module == null) {
+            throw new BizException("Device not exist", "设备不存在");
+        }
+
+        return data(moduleDataService.queryForPage(moduleId, pageable));
     }
 
 }

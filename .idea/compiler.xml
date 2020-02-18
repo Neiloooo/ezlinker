@@ -7,13 +7,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="app" />
         <module name="emqintegration" />
+        <module name="app" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="common" target="1.8" />
-      <module name="emq-integration" target="1.8" />
+      <module name="emq-integration" target="11" />
       <module name="emqintergration" target="1.5" />
     </bytecodeTargetLevel>
   </component>

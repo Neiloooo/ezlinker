@@ -48,8 +48,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017
-      # password: guest
-      # username: guest
+#      password: 123456
+#      username: admin
       port: 27017
       database: ezlinker
       authentication-database: admin
