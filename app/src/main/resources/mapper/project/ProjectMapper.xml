@@ -23,5 +23,16 @@
         create_time,
         name, logo, user_id, description, location
     </sql>
+    <select id="listAllAuthorizeProjectByUserId" resultType="com.ezlinker.app.modules.project.model.Project">
+SELECT
+A.*,
+B.user_id,
+B.project_id
+FROM
+ez_project AS A
+LEFT JOIN ez_relation_user_project AS B ON ( A.id = B.project_id )
+WHERE
+B.user_id = #{userId};
+    </select>
 
 </mapper>

@@ -4,8 +4,12 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ezlinker.app.common.exception.BizException;
 import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.constants.UserAccountActionConstant;
+import com.ezlinker.app.modules.project.service.IProjectService;
+import com.ezlinker.app.modules.relation.model.RelationUserProject;
+import com.ezlinker.app.modules.relation.service.IRelationUserProjectService;
 import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.model.UserProfile;
 import com.ezlinker.app.modules.user.service.IUserProfileService;
@@ -18,6 +22,7 @@ import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -186,5 +191,79 @@ public class UserManagementController extends CurdController<User> {
         private String content;
     }
 
+    /**
+     * ------------------------------------------------------------------------------------------------
+     * |项目授权操作 2020-2-19
+     * ------------------------------------------------------------------------------------------------
+     */
+
+
+    @Resource
+    IRelationUserProjectService iRelationUserProjectService;
+
+    @Resource
+    IProjectService iProjectService;
+
+    /**
+     * 授权项目
+     *
+     * @param userId
+     * @param projectId
+     * @return
+     * @throws XException
+     */
+    @PostMapping("/authorizeProject")
+    public R authorizeProject(@RequestParam Long userId, @RequestParam Long projectId) throws XException {
+        // 判断用户是否存在
+        if (iUserService.getById(userId) == null) {
+            throw new BizException("User not exist!", "用户不存在");
+
+        }
+        // 项目是否存在
+        if (iProjectService.getById(projectId) == null) {
+            throw new BizException("Project not exist!", "项目不存在");
+
+        }
+        RelationUserProject temp = iRelationUserProjectService.getOne(new QueryWrapper<RelationUserProject>().eq(RelationUserProject.USER_ID, userId).eq(RelationUserProject.PROJECT_ID, projectId));
+        if (temp != null) {
+            throw new BizException("Relation has exist!", "该项目已经授权于该用户操作权限，请勿重复授权");
+
+        }
+        // 构建关系
+        RelationUserProject relationUserProject = new RelationUserProject();
+        relationUserProject.setUserId(userId).setProjectId(projectId);
+        iRelationUserProjectService.save(relationUserProject);
+        return success();
+    }
+
+    /**
+     * 取消授权
+     *
+     * @param userId
+     * @param projectId
+     * @return
+     * @throws XException
+     */
+    @PutMapping("/unAuthorizeProject")
+    public R unAuthorizeProject(@RequestParam Long userId, @RequestParam Long projectId) throws XException {
+        // 判断用户是否存在
+        if (iUserService.getById(userId) == null) {
+            throw new BizException("User not exist!", "用户不存在");
+
+        }
+        // 项目是否存在
+        if (iProjectService.getById(projectId) == null) {
+            throw new BizException("Project not exist!", "项目不存在");
+
+        }
+        RelationUserProject relationUserProject = iRelationUserProjectService.getOne(new QueryWrapper<RelationUserProject>().eq(RelationUserProject.USER_ID, userId).eq(RelationUserProject.PROJECT_ID, projectId));
+        if (relationUserProject == null) {
+            throw new BizException("Relation not exist!", "该用户和项目没有绑定关系");
+
+        }
+        // 删除关系
+        iRelationUserProjectService.removeById(relationUserProject);
+        return success();
+    }
 
 }
