@@ -461,14 +461,7 @@ public class DeviceController extends CurdController<Device> {
         if (device == null) {
             throw new BizException("Device not exist", "设备不存在");
         }
-        /**
-         * 表结构定义
-         */
-        List<FieldParam> parameters = device.getParameters();
-        Map<String, Object> map = new HashMap<>();
-        map.put("parameters", parameters);
-        map.put("data", deviceDataService.queryForPage(deviceId, pageable));
-        return data(map);
+        return data(deviceDataService.queryForPage(deviceId, pageable));
     }
 
 }

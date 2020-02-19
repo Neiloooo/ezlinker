@@ -42,7 +42,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
                 throw new XException(402, "No permission", "没有权限");
             }
             String resource = request.getServletPath();
-            System.out.println("HttpMethod:" + httpMethod + " resource:" + resource);
+            System.out.println("请求的资源 方法:" + httpMethod + " 路径:" + resource);
 
             Map<String, Object> allow = new HashMap<>();
             Map<String, Object> methods = new HashMap<>();
@@ -51,6 +51,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
                 allow.put(permissionDetail.getResource(), permissionDetail.getAllow());
                 methods.put(permissionDetail.getResource(), permissionDetail.getMethods());
             }
+            System.out.println("已有的授权:" + allow.toString() + "\n资源权限:" + methods.toString());
 
             return true;
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,6 +71,15 @@ public class Exception4xxHandlerConfig {
         return new R(400, e.getMessage(), e.getParameterType() + "类型的参数:'" + e.getParameterName() + "'缺失", null);
     }
 
+
+    //MethodArgumentTypeMismatchException
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseBody
+    public R handMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+
+        return new R(400, e.getMessage(), "路径参数错误", null);
+    }
 
     /**
      * 参数验证失败

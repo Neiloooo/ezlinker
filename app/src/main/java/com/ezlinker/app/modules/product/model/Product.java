@@ -65,7 +65,7 @@ public class Product extends XEntity {
      */
 
 
-    @NotEmpty(message = "参数内容不可为空")
+    //@NotEmpty(message = "参数内容不可为空")
     @TableField(typeHandler = JacksonTypeHandler.class)
     private List<FieldParam> parameters;
 

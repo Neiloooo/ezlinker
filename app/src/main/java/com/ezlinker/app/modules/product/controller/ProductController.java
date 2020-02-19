@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezlinker.app.common.web.XController;
+import com.ezlinker.app.modules.device.model.Device;
+import com.ezlinker.app.modules.device.service.IDeviceService;
 import com.ezlinker.app.modules.product.model.Product;
 import com.ezlinker.app.modules.product.service.IProductService;
 import com.ezlinker.app.modules.relation.model.RelationProductTag;
@@ -38,6 +40,9 @@ public class ProductController extends XController {
 
     @Resource
     IProductService iProductService;
+
+    @Resource
+    IDeviceService iDeviceService;
 
     public ProductController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
@@ -97,12 +102,23 @@ public class ProductController extends XController {
      * @throws XException
      */
     @PutMapping("/{id}")
-    public R update(@PathVariable Long id, @RequestBody @Valid Product newProduct) {
-
+    public R update(@PathVariable Long id, @RequestBody @Valid Product newProduct) throws BizException {
         Product product = iProductService.getById(id);
-        newProduct.setId(product.getId());
+        if (product == null) {
+            throw new BizException("Product not exists!", "产品不存在");
+        }
+        // 判断是否该产品下面已经有了设备，如果有设备，就不允许修改表结构
+        long count = iDeviceService.count(new QueryWrapper<Device>().eq("product_id", id));
+
+        if (count > 0) {
+            if (newProduct.getParameters() != null) {
+                throw new BizException("Forbidden!", "该产品已经存在设备，不可修改数据定义！");
+
+            }
+        }
+        newProduct.setId(id);
         boolean ok = iProductService.updateById(newProduct);
-        return ok ? data(product) : fail();
+        return ok ? data(newProduct) : fail();
     }
 
 
