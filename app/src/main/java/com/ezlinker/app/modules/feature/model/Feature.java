@@ -28,11 +28,6 @@ import java.util.List;
 public class Feature extends XEntity {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * 名称
-     */
-    @NotEmpty(message = "名称不可为空值")
-    private String name;
 
     /**
      * 标签

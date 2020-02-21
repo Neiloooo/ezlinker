@@ -4,16 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ezlinker.app.modules.feature.model.Feature">
-    <result column="id" property="id" />
-    <result column="record_version" property="recordVersion" />
-    <result column="x" property="x" />
-    <result column="create_time" property="createTime" />
-        <result column="label" property="label" />
-        <result column="name" property="name" />
-        <result column="type" property="type" />
-        <result column="product_id" property="productId" />
-        <result column="cmd_key" property="cmdKey" />
-        <result column="cmd_values" property="cmd_values" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result column="id" property="id"/>
+        <result column="record_version" property="recordVersion"/>
+        <result column="x" property="x"/>
+        <result column="create_time" property="createTime"/>
+        <result column="label" property="label"/>
+        <result column="type" property="type"/>
+        <result column="product_id" property="productId"/>
+        <result column="cmd_key" property="cmdKey"/>
+        <result column="cmd_values" property="cmdValues"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -22,7 +22,7 @@
         record_version,
         x,
         create_time,
-        label, `name`, `type`, product_id, cmd_key, cmd_values
+        label, `type`, product_id, cmd_key, cmd_values
     </sql>
 
 </mapper>

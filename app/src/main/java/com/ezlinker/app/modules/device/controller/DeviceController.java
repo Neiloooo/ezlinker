@@ -441,8 +441,8 @@ public class DeviceController extends CurdController<Device> {
      * @return
      */
     @PostMapping("/{ids}/action")
-    public R pushCmd(@PathVariable List<Long> ids, @RequestBody List<Cmd> cmdValues) {
-
+    public R pushCmd(@PathVariable List<Long> ids, @RequestBody Cmd cmdValues) {
+        System.out.println("给设备：" + ids.toString() + " 发送成功！");
 
         return data(cmdValues);
     }
