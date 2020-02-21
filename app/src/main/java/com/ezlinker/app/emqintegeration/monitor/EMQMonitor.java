@@ -1,6 +1,7 @@
 package com.ezlinker.app.emqintegeration.monitor;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import lombok.Data;
@@ -39,7 +40,7 @@ public class EMQMonitor {
         this.hostUrl = "http://" + host + ":" + port + "/api/v3";
     }
 
-    public String getBrokers(){
+    public String getBrokers() {
         String body = HttpRequest.get(StrUtil.format("{}{}", hostUrl, EmqUrl.BROKERS))
                 .basicAuth(appId, appSecret)
                 .execute()
@@ -270,6 +271,41 @@ public class EMQMonitor {
         return body;
     }
 
+    /**
+     * Publish Message
+     * <p>
+     * Definition:
+     * <p>
+     * POST api/v3/mqtt/publish
+     * Request JSON Parameter:
+     * <p>
+     * {
+     * "topic": "test_topic",
+     * "payload": "hello",
+     * "qos": 1,
+     * "retain": false,
+     * "clientid": "mqttjs_ab9069449e"
+     * }
+     * Example Request:
+     * <p>
+     * POST api/v3/mqtt/publish
+     * Response:
+     * <p>
+     * {
+     * "code": 0
+     * }
+     *
+     * @return
+     */
+    public String publish(String body) {
+        String result = HttpRequest.post(hostUrl + EmqUrl.PUBLISH)
+                .basicAuth(appId, appSecret)
+                .body(body)
+                .contentType(ContentType.JSON.toString())
+                .execute()
+                .body();
+        return result;
+    }
 
     private static class EmqUrl {
         private static final String BROKERS = "/brokers";
@@ -299,7 +335,12 @@ public class EMQMonitor {
          * 黑名单
          */
         private static final String BANNED = "/banned/";
+        /**
+         * 发布消息
+         */
+        private static final String PUBLISH = "/mqtt/publish/";
     }
+
 
     @Data
     private static class Banned implements Serializable {

@@ -4,14 +4,14 @@ package com.ezlinker.app.modules.project.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.exchange.R;
 import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.modules.project.model.Project;
 import com.ezlinker.app.modules.project.service.IProjectService;
-import com.ezlinker.app.common.exception.XException;
-import com.ezlinker.app.common.exchange.R;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ import java.util.Arrays;
 @RestController
 @RequestMapping("/projects")
 public class ProjectController extends CurdController<Project> {
-    @Autowired
+    @Resource
     IProjectService iProjectService;
 
 
@@ -97,16 +97,14 @@ public class ProjectController extends CurdController<Project> {
     }
 
 
-
-
     /**
      * 条件检索
      *
      * @param self     如果传self，则查询和自己有关的，不传则查询所有：选传
      * @param name     项目名称：选传
      * @param location 项目位置：选传
-     * @param current   页码：必传
-     * @param size 页长：必传
+     * @param current  页码：必传
+     * @param size     页长：必传
      * @return
      * @throws XException
      */

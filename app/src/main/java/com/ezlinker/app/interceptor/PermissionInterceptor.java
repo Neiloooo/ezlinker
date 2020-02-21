@@ -39,7 +39,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
             String httpMethod = request.getMethod().toUpperCase();
             UserDetail userDetail = UserTokenUtil.parse(request.getHeader("token"));
             if (userDetail.getPermissions().size() < 1) {
-                throw new XException(402, "No permission", "没有权限");
+                //throw new XException(402, "No permission", "没有权限");
             }
             String resource = request.getServletPath();
             System.out.println("请求的资源 方法:" + httpMethod + " 路径:" + resource);

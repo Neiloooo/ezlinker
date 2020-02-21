@@ -2,6 +2,7 @@ package com.ezlinker.app.modules.device.controller;
 
 
 import cn.hutool.crypto.SecureUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -10,6 +11,7 @@ import com.ezlinker.app.common.exception.XException;
 import com.ezlinker.app.common.exchange.R;
 import com.ezlinker.app.common.web.CurdController;
 import com.ezlinker.app.constants.DeviceState;
+import com.ezlinker.app.emqintegeration.monitor.EMQMonitor;
 import com.ezlinker.app.modules.dataentry.service.DeviceDataService;
 import com.ezlinker.app.modules.device.model.Device;
 import com.ezlinker.app.modules.device.pojo.DeviceStatus;
@@ -61,6 +63,8 @@ public class DeviceController extends CurdController<Device> {
     // 订阅权限
     private static final int TOPIC_SUB = 2;
 
+    @Resource
+    EMQMonitor emqMonitor;
     @Resource
     DeviceDataService deviceDataService;
     @Resource
@@ -122,6 +126,7 @@ public class DeviceController extends CurdController<Device> {
         iDeviceService.save(device);
 
 
+        // 从设计好的产品模板里面拿数据
         List<ModuleTemplate> moduleTemplates = iModuleTemplateService.list(new QueryWrapper<ModuleTemplate>().eq("product_id", product.getId()));
 
 
@@ -133,9 +138,6 @@ public class DeviceController extends CurdController<Device> {
             newModule.setName(moduleTemplate.getName()).setDataAreas(moduleTemplate.getDataAreas());
             newModule.setClientId(clientId).setUsername(username).setPassword(password).setDeviceId(device.getId()).setProtocol(moduleTemplate.getProtocol());
             // Token
-            List<DataArea> dataAreas = moduleTemplate.getDataAreas();
-
-
             ObjectMapper objectMapper = new ObjectMapper();
             List<DataArea> dataAreasList = objectMapper.convertValue(moduleTemplate.getDataAreas(), new TypeReference<List<DataArea>>() {
             });
@@ -158,7 +160,7 @@ public class DeviceController extends CurdController<Device> {
                     .setType(MqttTopic.S2C)
                     .setClientId(clientId)
                     .setModuleId(newModule.getId())
-                    .setTopic("mqtt/out/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/s2c")
+                    .setTopic("mqtt/out/" + clientId + "/" + SecureUtil.md5(newModule.getId().toString()) + "/s2c")
                     .setUsername(username);
             // 数据下行
             MqttTopic c2sTopic = new MqttTopic();
@@ -166,7 +168,7 @@ public class DeviceController extends CurdController<Device> {
                     .setType(MqttTopic.C2S)
                     .setModuleId(newModule.getId())
                     .setClientId(clientId)
-                    .setTopic("mqtt/in/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/c2s")
+                    .setTopic("mqtt/in/" + clientId + "/" + SecureUtil.md5(newModule.getId().toString()) + "/c2s")
                     .setUsername(username);
             // 状态上报
             MqttTopic statusTopic = new MqttTopic();
@@ -175,7 +177,7 @@ public class DeviceController extends CurdController<Device> {
                     .setUsername(username)
                     .setClientId(clientId)
                     .setModuleId(newModule.getId())
-                    .setTopic("mqtt/in/" + SecureUtil.md5(device.getId().toString()) + "/" + clientId + "/status");
+                    .setTopic("mqtt/in/" + clientId + "/" + SecureUtil.md5(newModule.getId().toString()) + "/status");
             //生成
             iMqttTopicService.save(s2cTopic);
             iMqttTopicService.save(c2sTopic);
@@ -442,7 +444,37 @@ public class DeviceController extends CurdController<Device> {
      */
     @PostMapping("/{ids}/action")
     public R pushCmd(@PathVariable List<Long> ids, @RequestBody Cmd cmdValues) {
+        //1 判断EMQ是否启动
+        //2 判断是否可请求
+        //3 发送消息到WEB接口
         System.out.println("给设备：" + ids.toString() + " 发送成功！");
+        /**
+         * {
+         *   "topic": "test_topic",
+         *   "payload": "hello",
+         *   "qos": 1,
+         *   "retain": false,
+         *   "clientid": "mqttjs_ab9069449e"
+         * }
+         */
+        int total = ids.size();
+        int success = 0;
+        int failure = 0;
+        for (Long id : ids) {
+            Module module = iModuleService.getById(id);
+            if (module != null) {
+                Map<String, Object> messageMap = new HashMap<>();
+                //topic 取的是S2C 从服务器给设备模块推送
+                messageMap.put("topic", "mqtt/out/" + (module.getClientId()) + "/" + SecureUtil.md5(module.getId().toString()) + "/s2c");
+                messageMap.put("payload", JSONObject.toJSONString(cmdValues));
+                messageMap.put("retain", true);
+                messageMap.put("clientid", "ezlinker");
+                String result = emqMonitor.publish(JSONObject.toJSONString(messageMap));
+                System.out.println("Result:" + result);
+
+            }
+
+        }
 
         return data(cmdValues);
     }

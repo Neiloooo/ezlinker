@@ -22,64 +22,63 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/monitor/emqx")
 public class EmqxMonitorController extends XController {
 
-
-    EMQMonitor emqMonitor = new EMQMonitor("admin", "public", 8005,"localhost",  "v4");
+    @Resource
+    EMQMonitor emqMonitor;
 
     public EmqxMonitorController(HttpServletRequest httpServletRequest) {
         super(httpServletRequest);
     }
 
     @GetMapping("/brokers")
-    public R brokers(){
+    public R brokers() {
         String body = emqMonitor.getBrokers();
-        if (body!=null && body.length()>10){
+        if (body != null && body.length() > 10) {
             return data(JSONObject.parseObject(body).getJSONArray("data"));
         }
         return fail();
     }
 
     @GetMapping("/stats")
-    public R nodes(){
+    public R nodes() {
         String body = emqMonitor.getClusterStats();
-        if (body!=null && body.length()>10){
+        if (body != null && body.length() > 10) {
             return data(JSONObject.parseObject(body).getJSONArray("data"));
         }
         return fail();
     }
 
     @GetMapping("/metrics")
-    public R stats(){
+    public R stats() {
         String body = emqMonitor.getClusterMetrics();
-        if (body!=null && body.length()>10){
+        if (body != null && body.length() > 10) {
             return data(JSONObject.parseObject(body).getJSONArray("data"));
         }
         return fail();
     }
 
 
-
     @GetMapping("/alarms/present")
-    public R alarmsPresent(){
+    public R alarmsPresent() {
         String body = emqMonitor.getClusterAlarmsPresent();
-        if (body!=null && body.length()>10){
+        if (body != null && body.length() > 10) {
             return data(JSONObject.parseObject(body).getJSONArray("data"));
         }
-      return fail();
+        return fail();
     }
 
     @GetMapping("/alarms/history")
-    public R alarmsHistory(){
+    public R alarmsHistory() {
         String body = emqMonitor.getClusterAlarmsHistory();
-        if (body!=null && body.length()>10){
+        if (body != null && body.length() > 10) {
             return data(JSONObject.parseObject(body).getJSONArray("data"));
         }
         return fail();
     }
 
     @GetMapping("/banned")
-    public R banned(){
+    public R banned() {
         String body = emqMonitor.getBanned();
-        if (body!=null && body.length()>10){
+        if (body != null && body.length() > 10) {
             return data(JSONObject.parseObject(body).getJSONArray("data"));
         }
         return fail();
