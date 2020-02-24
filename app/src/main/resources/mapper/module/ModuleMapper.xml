@@ -4,67 +4,22 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ezlinker.app.modules.module.model.Module">
-        <result column="id" property="id"/>
-        <result column="record_version" property="recordVersion"/>
-        <result column="x" property="x"/>
-        <result column="create_time" property="createTime"/>
-        <result column="device_id" property="deviceId"/>
-        <result column="type" property="type"/>
-        <result column="name" property="name"/>
-        <result column="status" property="status"/>
-        <result column="protocol" property="protocol"/>
-        <result column="model" property="model"/>
-        <result column="sn" property="sn"/>
-        <result column="token" property="token"/>
-        <result column="last_active_time" property="lastActiveTime"/>
-        <result column="is_superuser" property="isSuperuser"/>
-        <result column="data_areas" property="dataAreas"
-                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
-        <result column="description" property="description"/>
+    <result column="id" property="id" />
+    <result column="record_version" property="recordVersion" />
+    <result column="x" property="x" />
+    <result column="create_time" property="createTime" />
+        <result column="device_id" property="deviceId" />
+        <result column="protocol" property="protocol" />
+        <result column="type" property="type" />
+        <result column="status" property="status" />
+        <result column="name" property="name" />
+        <result column="model" property="model" />
+        <result column="last_active_time" property="lastActiveTime" />
+        <result column="data_areas" property="dataAreas" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result column="description" property="description" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id,
-        record_version,
-        x,
-        create_time,
-        last_active_time,
-        device_id, `type`, `name`, protocol, model, sn, token, is_superuser, data_areas, description
-    </sql>
 
-
-    <select id="getFeatureList" resultType="com.ezlinker.app.modules.feature.model.Feature">
-
-        SELECT
-        *
-        FROM
-        ( SELECT F.*, M_F.module_id, M_F.feature_id FROM `ez_feature` F LEFT JOIN ez_relation_feature_module M_F ON ( F.id =
-        M_F.feature_id ) )
-        FS
-        WHERE
-        FS.module_id = #{moduleId};
-    </select>
-
-
-    <select id="listByProduct" resultType="com.ezlinker.app.modules.module.model.Module">
-
-
-    </select>
-    <select id="getWebHookInterfaceInfo"
-            resultType="com.ezlinker.app.modules.dataentry.model.WebHookInterfaceInfo">
-
-        SELECT
-        A.id AS moduleId,
-        B.id AS deviceId,
-        A.`name` AS moduleName,
-        B.sn,
-        B.`name` AS deviceName
-        FROM
-        ez_module AS A
-        LEFT JOIN ez_device AS B ON ( A.device_id = B.id )
-        WHERE A.client_id = #{clientId,jdbcType=BIGINT}
-        ORDER BY A.id DESC LIMIT 1
-    </select>
 
 </mapper>

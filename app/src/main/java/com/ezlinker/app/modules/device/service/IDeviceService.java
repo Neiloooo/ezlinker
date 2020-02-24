@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author wangwenhai
- * @since 2019-11-19
+ * @since 2020-02-23
  */
 public interface IDeviceService extends IService<Device> {
 

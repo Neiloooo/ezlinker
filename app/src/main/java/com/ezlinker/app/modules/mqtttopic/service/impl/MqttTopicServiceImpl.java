@@ -27,8 +27,4 @@ public class MqttTopicServiceImpl extends ServiceImpl<MqttTopicMapper, MqttTopic
         return mqttTopicMapper.listByDevice(deviceId);
     }
 
-    @Override
-    public List<MqttTopic> listByModule(Long moduleId) {
-        return mqttTopicMapper.listByModule(moduleId);
-    }
 }

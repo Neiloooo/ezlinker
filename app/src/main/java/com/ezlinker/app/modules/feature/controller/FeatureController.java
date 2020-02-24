@@ -3,15 +3,13 @@ package com.ezlinker.app.modules.feature.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezlinker.app.common.exception.BadRequestException;
-import com.ezlinker.app.common.web.CurdController;
-import com.ezlinker.app.modules.feature.model.Feature;
-import com.ezlinker.app.modules.feature.service.IFeatureService;
-import com.ezlinker.app.modules.relation.model.RelationFeatureModule;
-import com.ezlinker.app.modules.relation.service.IRelationFeatureModuleService;
 import com.ezlinker.app.common.exception.BizException;
 import com.ezlinker.app.common.exception.XException;
 import com.ezlinker.app.common.exchange.R;
+import com.ezlinker.app.common.web.CurdController;
+import com.ezlinker.app.modules.feature.model.Feature;
+import com.ezlinker.app.modules.feature.service.IFeatureService;
+import com.ezlinker.app.modules.relation.service.IRelationFeatureModuleService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,6 +91,7 @@ public class FeatureController extends CurdController<Feature> {
         return data(iFeatureService.page(new Page<>(current, size), queryWrapper));
     }
 
+
     /**
      * 添加
      *
@@ -104,16 +103,8 @@ public class FeatureController extends CurdController<Feature> {
     @Transactional(rollbackFor = Exception.class)
     protected R add(@RequestBody @Valid Feature feature) throws XException {
 
-        if (feature.getModuleId() != null) {
-            RelationFeatureModule featureModule = new RelationFeatureModule();
-            featureModule.setFeatureId(feature.getId()).setModuleId(feature.getModuleId());
-            iRelationFeatureModuleService.save(featureModule);
-
-            boolean ok = iFeatureService.save(feature);
-            return ok ? data(feature) : fail();
-        }else {
-            throw new BadRequestException("Module can't be null!","模块不可为空");
-        }
+        boolean ok = iFeatureService.save(feature);
+        return ok ? data(feature) : fail();
 
     }
 

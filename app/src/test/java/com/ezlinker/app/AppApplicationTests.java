@@ -2,19 +2,18 @@ package com.ezlinker.app;
 
 
 import cn.hutool.crypto.SecureUtil;
+import com.ezlinker.app.common.exception.XException;
+import com.ezlinker.app.common.utils.AliyunEmailUtil;
+import com.ezlinker.app.emqintegeration.monitor.EMQMonitor;
 import com.ezlinker.app.modules.dataentry.model.DeviceData;
 import com.ezlinker.app.modules.dataentry.service.DeviceDataService;
 import com.ezlinker.app.modules.internalmessage.model.InternalMessage;
 import com.ezlinker.app.modules.internalmessage.service.InternalMessageService;
-import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.model.ModuleData;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.ezlinker.app.modules.module.service.ModuleDataService;
 import com.ezlinker.app.modules.user.model.User;
 import com.ezlinker.app.modules.user.service.IUserService;
-import com.ezlinker.app.common.exception.XException;
-import com.ezlinker.app.common.utils.AliyunEmailUtil;
-import com.ezlinker.app.emqintegeration.monitor.EMQMonitor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -78,13 +77,6 @@ class AppApplicationTests {
     @Resource
     IModuleService iModuleService;
 
-    @Test
-    void addEzlinkerMqtttopic() {
-
-        Module ezlinkerWsProxy = new Module();
-        ezlinkerWsProxy.setClientId("ezlinker").setIsSuperuser(1).setUsername("ezlinker");
-        iModuleService.save(ezlinkerWsProxy);
-    }
 
     @Resource
     InternalMessageService internalMessageService;

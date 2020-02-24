@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.ezlinker.app.common.model.XEntity;
-import com.ezlinker.app.constants.DeviceState;
-import com.ezlinker.app.modules.device.pojo.DeviceStatus;
 import com.ezlinker.app.modules.device.pojo.FieldParam;
 import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.model.Module;
@@ -13,8 +11,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -24,12 +21,12 @@ import java.util.Set;
  * </p>
  *
  * @author wangwenhai
- * @since 2019-11-19
+ * @since 2020-02-23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName(value = "ez_device", autoResultMap = true)
+@TableName("ez_device")
 public class Device extends XEntity {
 
     private static final long serialVersionUID = 1L;
@@ -42,7 +39,6 @@ public class Device extends XEntity {
     /**
      * 产品
      */
-    @NotNull(message = "产品不可为空值")
     private Long productId;
 
     /**
@@ -66,12 +62,6 @@ public class Device extends XEntity {
     private String model;
 
     /**
-     * 标签
-     */
-    @TableField(exist = false)
-    private Set<String> tags;
-
-    /**
      * 厂家
      */
     private String industry;
@@ -86,35 +76,53 @@ public class Device extends XEntity {
      */
     private String type;
 
+    private LocalDateTime lastActive;
+
+    /**
+     * 1:在线;2:离线;3未激活
+     */
+    private Integer state;
+
+    /**
+     * 运行的状态
+     */
+    private String statuses;
+
+    /**
+     * MQTT用户名
+     */
+    private String username;
+
+    /**
+     * MQTT ClientID
+     */
+    private String clientid;
+
+    /**
+     * MQTT密码
+     */
+    private String password;
+
+    /**
+     * 是否超级权限
+     */
+    private Integer isSuperuser;
+
+    /**
+     * 认证token
+     */
+    private String token;
+
     /**
      * 参数
      */
-
     @TableField(typeHandler = JacksonTypeHandler.class)
-
     private List<FieldParam> parameters;
 
-
-    /**
-     * 设备当前状态
-     */
-    @TableField(typeHandler = JacksonTypeHandler.class)
-    private List<DeviceStatus> statuses;
     /**
      * 描述
      */
     private String description;
-
-
-    /**
-     * 活跃时间
-     */
-    private Date lastActive;
-
-    /**
-     * 状态
-     */
-    private Integer state = DeviceState.UN_ACTIVE;
 
     /**
      * 模块
@@ -122,13 +130,46 @@ public class Device extends XEntity {
     @TableField(exist = false)
     private List<Module> modules;
     @TableField(exist = false)
-
     List<Feature> features;
+    @TableField(exist = false)
+    Set<String> tags;
 
+    public static final String PROJECT_ID = "project_id";
 
-//    /**
-//     * 所有模块的数据结构
-//     */
-//    @TableField(exist = false)
-//    private List<Map<String, Object>> moduleDataAreas;
+    public static final String PRODUCT_ID = "product_id";
+
+    public static final String NAME = "name";
+
+    public static final String LOGO = "logo";
+
+    public static final String LOCATION = "location";
+
+    public static final String MODEL = "model";
+
+    public static final String INDUSTRY = "industry";
+
+    public static final String SN = "sn";
+
+    public static final String TYPE = "type";
+
+    public static final String LAST_ACTIVE = "last_active";
+
+    public static final String STATE = "state";
+
+    public static final String STATUSES = "statuses";
+
+    public static final String USERNAME = "username";
+
+    public static final String CLIENTID = "clientid";
+
+    public static final String PASSWORD = "password";
+
+    public static final String IS_SUPERUSER = "is_superuser";
+
+    public static final String TOKEN = "token";
+
+    public static final String PARAMETERS = "parameters";
+
+    public static final String DESCRIPTION = "description";
+
 }

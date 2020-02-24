@@ -1,15 +1,10 @@
 package com.ezlinker.app.modules.module.service.impl;
 
-import com.ezlinker.app.modules.dataentry.model.WebHookInterfaceInfo;
-import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.model.Module;
 import com.ezlinker.app.modules.module.mapper.ModuleMapper;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>
@@ -17,20 +12,9 @@ import java.util.List;
  * </p>
  *
  * @author wangwenhai
- * @since 2019-11-15
+ * @since 2020-02-23
  */
 @Service
 public class ModuleServiceImpl extends ServiceImpl<ModuleMapper, Module> implements IModuleService {
-    @Resource
-    ModuleMapper moduleMapper;
 
-    @Override
-    public List<Feature> getFeatureList(Long moduleId) {
-        return moduleMapper.getFeatureList(moduleId);
-    }
-
-    @Override
-    public WebHookInterfaceInfo getWebHookInterfaceInfo(String clientId) {
-        return moduleMapper.getWebHookInterfaceInfo(clientId);
-    }
 }

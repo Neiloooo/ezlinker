@@ -9,8 +9,8 @@
         <result column="x" property="x"/>
         <result column="create_time" property="createTime"/>
         <result column="label" property="label"/>
-        <result column="type" property="type"/>
         <result column="product_id" property="productId"/>
+        <result column="type" property="type"/>
         <result column="cmd_key" property="cmdKey"/>
         <result column="cmd_values" property="cmdValues"
                 typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
@@ -21,8 +21,9 @@
         id,
         record_version,
         x,
+        product_id,
         create_time,
-        label, `type`, product_id, cmd_key, cmd_values
+        label, `type`, cmd_key, cmd_values
     </sql>
 
 </mapper>

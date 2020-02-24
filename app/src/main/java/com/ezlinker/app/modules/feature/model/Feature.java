@@ -29,6 +29,8 @@ public class Feature extends XEntity {
 
     private static final long serialVersionUID = 1L;
 
+    // 所属项目
+    private Long productId;
     /**
      * 标签
      */
@@ -43,12 +45,6 @@ public class Feature extends XEntity {
 
     private Integer type;
 
-    /**
-     * 产品ID
-     */
-    @NotNull(message = "产品不可为空值")
-
-    private Integer productId;
 
     /**
      * 命令Key
@@ -63,7 +59,5 @@ public class Feature extends XEntity {
     @TableField(typeHandler = JacksonTypeHandler.class)
     private List<CmdValue> cmdValues;
 
-    @TableField(exist = false)
-    private Long moduleId;
 
 }

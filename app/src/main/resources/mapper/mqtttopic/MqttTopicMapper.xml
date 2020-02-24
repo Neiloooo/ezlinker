@@ -12,7 +12,7 @@
         <result column="ip" property="ip"/>
         <result column="username" property="username"/>
         <result column="client_id" property="clientId"/>
-        <result column="module_id" property="moduleId"/>
+        <result column="device_id" property="deviceId"/>
         <result column="access" property="access"/>
         <result column="topic" property="topic"/>
     </resultMap>
@@ -27,38 +27,20 @@ allow,
 ip,
 username,
 client_id,
-module_id,
+device_id,
 access,
 topic
     </sql>
 
 
     <select id="listByDevice" resultType="com.ezlinker.app.modules.mqtttopic.model.MqttTopic">
-
-        <if test="deviceId!=null">
-            SELECT
-            *
-            FROM
-            ez_mqtt_topic
-            WHERE
-            client_id IN (
-            SELECT
-            client_id
-            FROM
-            ez_module
-            WHERE
-            device_id = #{deviceId}
-            )
-        </if>
-    </select>
-    <select id="listByModule" resultType="com.ezlinker.app.modules.mqtttopic.model.MqttTopic">
         <if test="moduleId!=null">
             SELECT
             *
             FROM
             ez_mqtt_topic
             WHERE
-            module_id = #{moduleId}
+            device_id = #{deviceId}
         </if>
 
     </select>

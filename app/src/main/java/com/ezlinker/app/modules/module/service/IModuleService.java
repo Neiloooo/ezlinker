@@ -1,11 +1,7 @@
 package com.ezlinker.app.modules.module.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.ezlinker.app.modules.dataentry.model.WebHookInterfaceInfo;
-import com.ezlinker.app.modules.feature.model.Feature;
 import com.ezlinker.app.modules.module.model.Module;
-
-import java.util.List;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -13,10 +9,8 @@ import java.util.List;
  * </p>
  *
  * @author wangwenhai
- * @since 2019-11-15
+ * @since 2020-02-23
  */
 public interface IModuleService extends IService<Module> {
-    List<Feature> getFeatureList(Long moduleId);
-    WebHookInterfaceInfo getWebHookInterfaceInfo(String clientId);
 
 }
