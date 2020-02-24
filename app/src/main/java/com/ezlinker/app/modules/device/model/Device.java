@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -76,7 +76,7 @@ public class Device extends XEntity {
      */
     private String type;
 
-    private LocalDateTime lastActive;
+    private Date lastActive;
 
     /**
      * 1:在线;2:离线;3未激活
@@ -134,42 +134,5 @@ public class Device extends XEntity {
     @TableField(exist = false)
     Set<String> tags;
 
-    public static final String PROJECT_ID = "project_id";
-
-    public static final String PRODUCT_ID = "product_id";
-
-    public static final String NAME = "name";
-
-    public static final String LOGO = "logo";
-
-    public static final String LOCATION = "location";
-
-    public static final String MODEL = "model";
-
-    public static final String INDUSTRY = "industry";
-
-    public static final String SN = "sn";
-
-    public static final String TYPE = "type";
-
-    public static final String LAST_ACTIVE = "last_active";
-
-    public static final String STATE = "state";
-
-    public static final String STATUSES = "statuses";
-
-    public static final String USERNAME = "username";
-
-    public static final String CLIENTID = "clientid";
-
-    public static final String PASSWORD = "password";
-
-    public static final String IS_SUPERUSER = "is_superuser";
-
-    public static final String TOKEN = "token";
-
-    public static final String PARAMETERS = "parameters";
-
-    public static final String DESCRIPTION = "description";
 
 }

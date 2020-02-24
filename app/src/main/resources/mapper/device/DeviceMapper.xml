@@ -29,13 +29,4 @@
         <result column="description" property="description" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id,
-        record_version,
-        x,
-        create_time,
-        project_id, product_id, name, logo, location, model, industry, sn, type, last_active, state, statuses, username, clientid, password, is_superuser, token, parameters, description
-    </sql>
-
 </mapper>

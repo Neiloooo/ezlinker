@@ -53,7 +53,6 @@ public class DataEntryController {
             throw new XException("Module not exist", "模块不存在");
         }
 
-        module.setLastActiveTime(new Date());
         iModuleService.updateById(module);
         // 保存日志
         ModuleLog moduleLog = new ModuleLog();

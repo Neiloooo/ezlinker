@@ -1,14 +1,9 @@
 package com.ezlinker.app.modules.dataentry.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ezlinker.app.common.exception.XException;
 import com.ezlinker.app.common.exchange.R;
-import com.ezlinker.app.config.internalevent.InternalMessage;
-import com.ezlinker.app.modules.device.model.Device;
 import com.ezlinker.app.modules.device.service.IDeviceService;
-import com.ezlinker.app.modules.module.model.Module;
-import com.ezlinker.app.modules.module.model.ModuleLog;
 import com.ezlinker.app.modules.module.service.IModuleService;
 import com.ezlinker.app.modules.module.service.ModuleLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.Date;
 
 /**
  * @program: ezlinker
@@ -84,26 +78,7 @@ public class WebHookController {
 
     private void handConnect(String clientId) throws XException {
         log.info("客户端[{}]连接成功", clientId);
-        applicationContext.publishEvent(new InternalMessage(clientId, 1, clientId));
 
-        Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", clientId));
-        if (module == null) {
-            throw new XException("Module not exist", "模块不存在");
-        }
-        Device device = iDeviceService.getById(module.getDeviceId());
-
-        module.setLastActiveTime(new Date());
-        module.setStatus(1);
-        iModuleService.updateById(module);
-        // 保存日志
-        ModuleLog moduleLog = new ModuleLog();
-        moduleLog.setSn(device.getSn());
-        moduleLog.setDeviceName(device.getName());
-        moduleLog.setModuleName(module.getName());
-        moduleLog.setModuleId(module.getId());
-        moduleLog.setType(ModuleLog.CONNECT);
-        moduleLog.setCreateTime(new Date());
-        moduleLogService.save(moduleLog);
 
     }
 
@@ -115,24 +90,24 @@ public class WebHookController {
      */
     private void handDisconnect(String clientId) throws XException {
         log.info("客户端[{}]离线", clientId);
-        applicationContext.publishEvent(new InternalMessage(clientId, 0, clientId));
-        Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", clientId));
-        if (module == null) {
-            throw new XException("Module not exist", "模块不存在");
-        }
-        Device device = iDeviceService.getById(module.getDeviceId());
-
-        module.setStatus(0);
-        iModuleService.updateById(module);
-        // 保存日志
-        ModuleLog moduleLog = new ModuleLog();
-        moduleLog.setSn(device.getSn());
-        moduleLog.setDeviceName(device.getName());
-        moduleLog.setModuleName(module.getName());
-        moduleLog.setModuleId(module.getId());
-        moduleLog.setType(ModuleLog.DISCONNECT);
-        moduleLog.setCreateTime(new Date());
-        moduleLogService.save(moduleLog);
+//        applicationContext.publishEvent(new InternalMessage(clientId, 0, clientId));
+//        Module module = iModuleService.getOne(new QueryWrapper<Module>().eq("client_id", clientId));
+//        if (module == null) {
+//            throw new XException("Module not exist", "模块不存在");
+//        }
+//        Device device = iDeviceService.getById(module.getDeviceId());
+//
+//        module.setStatus(0);
+//        iModuleService.updateById(module);
+//        // 保存日志
+//        ModuleLog moduleLog = new ModuleLog();
+//        moduleLog.setSn(device.getSn());
+//        moduleLog.setDeviceName(device.getName());
+//        moduleLog.setModuleName(module.getName());
+//        moduleLog.setModuleId(module.getId());
+//        moduleLog.setType(ModuleLog.DISCONNECT);
+//        moduleLog.setCreateTime(new Date());
+//        moduleLogService.save(moduleLog);
 
     }
 

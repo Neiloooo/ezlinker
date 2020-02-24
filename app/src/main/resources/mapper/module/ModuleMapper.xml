@@ -4,19 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ezlinker.app.modules.module.model.Module">
-    <result column="id" property="id" />
-    <result column="record_version" property="recordVersion" />
-    <result column="x" property="x" />
-    <result column="create_time" property="createTime" />
-        <result column="device_id" property="deviceId" />
-        <result column="protocol" property="protocol" />
-        <result column="type" property="type" />
-        <result column="status" property="status" />
-        <result column="name" property="name" />
-        <result column="model" property="model" />
-        <result column="last_active_time" property="lastActiveTime" />
-        <result column="data_areas" property="dataAreas" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
-        <result column="description" property="description" />
+        <result column="id" property="id"/>
+        <result column="record_version" property="recordVersion"/>
+        <result column="x" property="x"/>
+        <result column="create_time" property="createTime"/>
+        <result column="name" property="name"/>
+        <result column="model" property="model"/>
+        <result column="device_id" property="deviceId"/>
+        <result column="data_areas" property="dataAreas"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result column="description" property="description"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->

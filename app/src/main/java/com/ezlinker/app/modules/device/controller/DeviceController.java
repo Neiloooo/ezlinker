@@ -188,8 +188,7 @@ public class DeviceController extends CurdController<Device> {
             Module newModule = new Module();
             newModule.setName(moduleTemplate.getName())
                     .setDataAreas(moduleTemplate.getDataAreas())
-                    .setDeviceId(device.getId())
-                    .setProtocol(moduleTemplate.getProtocol());
+                    .setDeviceId(device.getId());
             // Token
             ObjectMapper objectMapper = new ObjectMapper();
             List<DataArea> dataAreasList = objectMapper.convertValue(moduleTemplate.getDataAreas(), new TypeReference<List<DataArea>>() {
